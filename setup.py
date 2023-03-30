@@ -45,7 +45,7 @@ orchestration_extras = {
     "git": ["dulwich >= 0.19.7"],
     "github": ["PyGithub >= 1.51"],
     "gitlab": ["python-gitlab >= 2.5.0"],
-    "kubernetes": ["kubernetes >= 9.0.0a1.0"],
+    "kubernetes": ["kubernetes >= 9.0.0a1"],
 }
 
 extras = {
@@ -140,7 +140,7 @@ cmdclass = {
 cmdclass.update(versioneer.get_cmdclass())
 
 setup(
-    name="prefect",
+    name="prefectlegacy",
     version=versioneer.get_version(),
     cmdclass=cmdclass,
     install_requires=install_requires,
