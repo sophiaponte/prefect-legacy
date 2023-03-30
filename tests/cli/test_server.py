@@ -6,9 +6,9 @@ from click.testing import CliRunner
 import pytest
 import yaml
 
-import prefect
-from prefect.cli.server import server, setup_compose_env, setup_compose_file
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy.cli.server import server, setup_compose_env, setup_compose_file
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 @pytest.fixture()
@@ -149,7 +149,7 @@ class TestSetupComposeEnv:
             "POSTGRES_USER": "F",
             "PREFECT_API_HEALTH_URL": "http://graphql:3/health",
             "PREFECT_API_URL": f"http://graphql:3/G",
-            "PREFECT_CORE_VERSION": prefect.__version__,
+            "PREFECT_CORE_VERSION": prefectlegacy.__version__,
             "PREFECT_SERVER_DB_CMD": "prefect-server database upgrade -y",
             "PREFECT_SERVER_TAG": "A",
             "PREFECT_UI_TAG": "B",
@@ -204,7 +204,7 @@ class TestSetupComposeEnv:
             "HASURA_WS_URL": "ws://hasura:2/v1alpha1/graphql",
             "PREFECT_API_HEALTH_URL": "http://graphql:3/health",
             "PREFECT_API_URL": f"http://graphql:3/G",
-            "PREFECT_CORE_VERSION": prefect.__version__,
+            "PREFECT_CORE_VERSION": prefectlegacy.__version__,
             "PREFECT_SERVER_DB_CMD": "prefect-server database upgrade -y",
             "PREFECT_SERVER_TAG": "A",
             "PREFECT_UI_TAG": "B",
@@ -327,7 +327,7 @@ def test_server_help():
 class TestPrefectServerStart:
     def test_server_start_setup_and_teardown(self, macos_platform, mock_subprocess):
         # Pull current version information to test default values
-        base_version = prefect.__version__.split("+")
+        base_version = prefectlegacy.__version__.split("+")
         if len(base_version) > 1:
             default_tag = "master"
         else:
@@ -336,13 +336,13 @@ class TestPrefectServerStart:
         expected_env = setup_compose_env(
             version=default_tag,
             ui_version=default_tag,
-            ui_port=prefect.config.server.ui.host_port,
-            hasura_port=prefect.config.server.hasura.host_port,
-            graphql_port=prefect.config.server.graphql.host_port,
-            postgres_port=prefect.config.server.database.host_port,
-            server_port=prefect.config.server.host_port,
+            ui_port=prefectlegacy.config.server.ui.host_port,
+            hasura_port=prefectlegacy.config.server.hasura.host_port,
+            graphql_port=prefectlegacy.config.server.graphql.host_port,
+            postgres_port=prefectlegacy.config.server.database.host_port,
+            server_port=prefectlegacy.config.server.host_port,
             no_upgrade=False,
-            volume_path=prefect.config.server.database.volume_path,
+            volume_path=prefectlegacy.config.server.database.volume_path,
         )
 
         CliRunner().invoke(server, ["start"])
@@ -478,7 +478,7 @@ class TestPrefectServerStart:
 class TestPrefectServerConfig:
     def test_server_config_setup(self, mock_subprocess):
         # Pull current version information to test default values
-        base_version = prefect.__version__.split("+")
+        base_version = prefectlegacy.__version__.split("+")
         if len(base_version) > 1:
             default_tag = "master"
         else:
@@ -487,13 +487,13 @@ class TestPrefectServerConfig:
         expected_env = setup_compose_env(
             version=default_tag,
             ui_version=default_tag,
-            ui_port=prefect.config.server.ui.host_port,
-            hasura_port=prefect.config.server.hasura.host_port,
-            graphql_port=prefect.config.server.graphql.host_port,
-            postgres_port=prefect.config.server.database.host_port,
-            server_port=prefect.config.server.host_port,
+            ui_port=prefectlegacy.config.server.ui.host_port,
+            hasura_port=prefectlegacy.config.server.hasura.host_port,
+            graphql_port=prefectlegacy.config.server.graphql.host_port,
+            postgres_port=prefectlegacy.config.server.database.host_port,
+            server_port=prefectlegacy.config.server.host_port,
             no_upgrade=False,
-            volume_path=prefect.config.server.database.volume_path,
+            volume_path=prefectlegacy.config.server.database.volume_path,
         )
 
         CliRunner().invoke(server, ["config"])
@@ -513,7 +513,7 @@ class TestPrefectServerConfig:
         self, monkeypatch, mock_subprocess, with_flags
     ):
         mock = MagicMock()
-        monkeypatch.setattr("prefect.cli.server.setup_compose_file", mock)
+        monkeypatch.setattr("prefectlegacy.cli.server.setup_compose_file", mock)
 
         cmd = ["config"]
         if with_flags:
@@ -543,7 +543,7 @@ class TestPrefectServerConfig:
 
 def test_create_tenant(monkeypatch, cloud_api):
     create_tenant = MagicMock(return_value="my_id")
-    monkeypatch.setattr("prefect.client.Client.create_tenant", create_tenant)
+    monkeypatch.setattr("prefectlegacy.client.Client.create_tenant", create_tenant)
 
     result = CliRunner().invoke(
         server,

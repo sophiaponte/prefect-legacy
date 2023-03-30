@@ -1,9 +1,9 @@
 import pytest
 
-from prefect.storage import Docker, Local
-from prefect.run_configs import KubernetesRun, LocalRun
-from prefect.utilities.agent import get_flow_image, get_flow_run_command
-from prefect.utilities.graphql import GraphQLResult
+from prefectlegacy.storage import Docker, Local
+from prefectlegacy.run_configs import KubernetesRun, LocalRun
+from prefectlegacy.utilities.agent import get_flow_image, get_flow_run_command
+from prefectlegacy.utilities.graphql import GraphQLResult
 
 
 @pytest.mark.parametrize("run_config", [KubernetesRun(), LocalRun(), None])

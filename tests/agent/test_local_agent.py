@@ -9,9 +9,9 @@ from marshmallow.exceptions import ValidationError
 from testfixtures.popen import MockPopen
 from testfixtures import compare, LogCapture
 
-import prefect
-from prefect.agent.local import LocalAgent
-from prefect.storage import (
+import prefectlegacy
+from prefectlegacy.agent.local import LocalAgent
+from prefectlegacy.storage import (
     Docker,
     Local,
     Azure,
@@ -22,9 +22,9 @@ from prefect.storage import (
     Bitbucket,
     CodeCommit,
 )
-from prefect.run_configs import LocalRun, KubernetesRun, UniversalRun
-from prefect.utilities.configuration import set_temporary_config
-from prefect.utilities.graphql import GraphQLResult
+from prefectlegacy.run_configs import LocalRun, KubernetesRun, UniversalRun
+from prefectlegacy.utilities.configuration import set_temporary_config
+from prefectlegacy.utilities.graphql import GraphQLResult
 
 DEFAULT_AGENT_LABELS = [
     socket.gethostname(),
@@ -99,7 +99,7 @@ def test_populate_env_vars(monkeypatch, backend, config_with_api_key):
         {
             "PYTHONPATH": os.getcwd() + os.pathsep + expected.get("PYTHONPATH", ""),
             "PREFECT__BACKEND": backend,
-            "PREFECT__CLOUD__API": prefect.config.cloud.api,
+            "PREFECT__CLOUD__API": prefectlegacy.config.cloud.api,
             "PREFECT__CLOUD__API_KEY": config_with_api_key.cloud.api_key,
             "PREFECT__CLOUD__TENANT_ID": config_with_api_key.cloud.tenant_id,
             "PREFECT__CLOUD__AGENT__LABELS": str(DEFAULT_AGENT_LABELS),
@@ -108,7 +108,7 @@ def test_populate_env_vars(monkeypatch, backend, config_with_api_key):
             "PREFECT__CLOUD__USE_LOCAL_SECRETS": "false",
             "PREFECT__CLOUD__SEND_FLOW_RUN_LOGS": "true",
             "PREFECT__LOGGING__LEVEL": "INFO",
-            "PREFECT__ENGINE__FLOW_RUNNER__DEFAULT_CLASS": "prefect.engine.cloud.CloudFlowRunner",
+            "PREFECT__ENGINE__FLOW_RUNNER__DEFAULT_CLASS": "prefectlegacy.engine.cloud.CloudFlowRunner",
         }
     )
 
@@ -151,7 +151,7 @@ def test_environment_has_api_key_from_disk(monkeypatch):
     tenant_id = str(uuid.uuid4())
 
     monkeypatch.setattr(
-        "prefect.Client.load_auth_from_disk",
+        "prefectlegacy.Client.load_auth_from_disk",
         MagicMock(return_value={"api_key": "TEST_KEY", "tenant_id": tenant_id}),
     )
     with set_temporary_config({"cloud.tenant_id": None}):
@@ -290,7 +290,7 @@ def test_prefect_logging_level_override_logic(
 )
 def test_local_agent_deploy_processes_valid_storage(storage, monkeypatch):
     popen = MagicMock()
-    monkeypatch.setattr("prefect.agent.local.agent.Popen", popen)
+    monkeypatch.setattr("prefectlegacy.agent.local.agent.Popen", popen)
 
     agent = LocalAgent()
     agent.deploy_flow(
@@ -314,7 +314,7 @@ def test_local_agent_deploy_processes_valid_storage(storage, monkeypatch):
 
 def test_local_agent_deploy_raises_unsupported_storage(monkeypatch):
     popen = MagicMock()
-    monkeypatch.setattr("prefect.agent.local.agent.Popen", popen)
+    monkeypatch.setattr("prefectlegacy.agent.local.agent.Popen", popen)
 
     agent = LocalAgent()
 
@@ -340,10 +340,10 @@ def test_local_agent_deploy_storage_fails_none(monkeypatch):
     client = MagicMock()
     set_state = MagicMock()
     client.return_value.set_flow_run_state = set_state
-    monkeypatch.setattr("prefect.agent.agent.Client", client)
+    monkeypatch.setattr("prefectlegacy.agent.agent.Client", client)
 
     popen = MagicMock()
-    monkeypatch.setattr("prefect.agent.local.agent.Popen", popen)
+    monkeypatch.setattr("prefectlegacy.agent.local.agent.Popen", popen)
 
     agent = LocalAgent()
 
@@ -368,7 +368,7 @@ def test_local_agent_deploy_storage_fails_none(monkeypatch):
 
 def test_local_agent_deploy_unsupported_run_config(monkeypatch):
     popen = MagicMock()
-    monkeypatch.setattr("prefect.agent.local.agent.Popen", popen)
+    monkeypatch.setattr("prefectlegacy.agent.local.agent.Popen", popen)
 
     agent = LocalAgent()
 
@@ -397,7 +397,7 @@ def test_local_agent_deploy_unsupported_run_config(monkeypatch):
 @pytest.mark.parametrize("run_config", [None, UniversalRun()])
 def test_local_agent_deploy_null_or_univeral_run_config(monkeypatch, run_config):
     popen = MagicMock()
-    monkeypatch.setattr("prefect.agent.local.agent.Popen", popen)
+    monkeypatch.setattr("prefectlegacy.agent.local.agent.Popen", popen)
 
     agent = LocalAgent()
 
@@ -422,7 +422,7 @@ def test_local_agent_deploy_null_or_univeral_run_config(monkeypatch, run_config)
 @pytest.mark.parametrize("working_dir", [None, "existing"])
 def test_local_agent_deploy_run_config_working_dir(monkeypatch, working_dir, tmpdir):
     popen = MagicMock()
-    monkeypatch.setattr("prefect.agent.local.agent.Popen", popen)
+    monkeypatch.setattr("prefectlegacy.agent.local.agent.Popen", popen)
 
     if working_dir is not None:
         working_dir = str(tmpdir)
@@ -450,7 +450,7 @@ def test_local_agent_deploy_run_config_working_dir(monkeypatch, working_dir, tmp
 
 def test_local_agent_deploy_run_config_missing_working_dir(monkeypatch, tmpdir):
     popen = MagicMock()
-    monkeypatch.setattr("prefect.agent.local.agent.Popen", popen)
+    monkeypatch.setattr("prefectlegacy.agent.local.agent.Popen", popen)
 
     working_dir = str(tmpdir.join("missing"))
 
@@ -519,7 +519,7 @@ def test_local_agent_heartbeat(monkeypatch, returncode, show_flow_logs, logs):
         returncode=returncode,
         poll_count=2,
     )
-    monkeypatch.setattr("prefect.agent.local.agent.Popen", popen)
+    monkeypatch.setattr("prefectlegacy.agent.local.agent.Popen", popen)
 
     agent = LocalAgent(import_paths=["paths"], show_flow_logs=show_flow_logs)
     agent.deploy_flow(

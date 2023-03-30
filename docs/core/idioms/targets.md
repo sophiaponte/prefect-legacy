@@ -13,8 +13,8 @@ For example: the `LocalResult` below has an optional `dir` kwargs which accepts 
 :::: tabs
 ::: tab Functional API
 ```python
-from prefect import task, Flow
-from prefect.engine.results import LocalResult
+from prefectlegacy import task, Flow
+from prefectlegacy.engine.results import LocalResult
 
 @task(result=LocalResult(), target="{task_name}-{today}")
 def get_data():
@@ -33,8 +33,8 @@ with Flow("using-targets") as flow:
 
 ::: tab Imperative API
 ```python
-from prefect import Task, Flow
-from prefect.engine.results import LocalResult
+from prefectlegacy import Task, Flow
+from prefectlegacy.engine.results import LocalResult
 
 class GetData(Task):
     def run(self):

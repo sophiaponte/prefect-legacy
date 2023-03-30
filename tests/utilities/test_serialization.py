@@ -7,8 +7,8 @@ import pytest
 import pytz
 from box import Box
 
-import prefect
-from prefect.utilities.serialization import (
+import prefectlegacy
+from prefectlegacy.utilities.serialization import (
     UUID,
     Bytes,
     DateTimeTZ,
@@ -327,7 +327,7 @@ class TestObjectSchema:
             x = marshmallow.fields.Int()
 
         serialized = Schema().dump(TestObject(x=5))
-        assert serialized == {"__version__": prefect.__version__, "x": 5}
+        assert serialized == {"__version__": prefectlegacy.__version__, "x": 5}
 
     def test_schema_doesnt_mutate_object_on_load(self):
         class TestObject:
@@ -343,7 +343,7 @@ class TestObjectSchema:
         serialized = Schema().dump(TestObject(x=5))
 
         Schema().load(serialized)
-        assert serialized == {"__version__": prefect.__version__, "x": 5}
+        assert serialized == {"__version__": prefectlegacy.__version__, "x": 5}
 
     def test_schema_creates_object(self):
         class TestObject:

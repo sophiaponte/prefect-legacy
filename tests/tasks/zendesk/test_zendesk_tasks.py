@@ -1,6 +1,6 @@
 import pytest
-from prefect.engine.signals import FAIL
-from prefect.tasks.zendesk import ZendeskTicketsIncrementalExportTask
+from prefectlegacy.engine.signals import FAIL
+from prefectlegacy.tasks.zendesk import ZendeskTicketsIncrementalExportTask
 
 import responses
 

@@ -13,9 +13,9 @@ contact_links:
     about: The Heart of Gold
     
   - name: Chat in Slack 💬
-    url: https://www.prefect.io/slack
+    url: https://www.prefectlegacy.io/slack
     about: Don't panic
 
   - name: Chat in Discourse 💬
-    url: https://discourse.prefect.io/
+    url: https://discourse.prefectlegacy.io/
     about: The Knowledge Base about Prefect

@@ -14,10 +14,10 @@ Then you most likely will need to configure the Docker image in which your Flow 
 
 ### Building a custom base image
 
-As a motivating example, let's consider the case where we have an ETL Flow that talks to a Microsoft SQL Server Database through [`pyodbc`](https://github.com/mkleehammer/pyodbc).  The first thing you might notice is that this introduces a dependency on a Python package that is not required by Prefect.  To ensure such a requirement is always added into your Flow's Docker image, we can use the `python_dependencies` keyword argument:
+As a motivating example, let's consider the case where we have an ETL Flow that talks to a Microsoft SQL Server Database through [`pyodbc`](https://github.com/mkleehammer/pyodbc).  The first thing you might notice is that this introduces a dependency on a Python package that is not required by prefectlegacy.  To ensure such a requirement is always added into your Flow's Docker image, we can use the `python_dependencies` keyword argument:
 
 ```python
-from prefect.storage import Docker
+from prefectlegacy.storage import Docker
 
 # Create our Docker storage object
 storage = Docker(registry_url="gcr.io/dev/", python_dependencies=["pyodbc"])
@@ -36,7 +36,7 @@ If we attempt a dry-run build of this docker image by calling `storage.build()`,
 Without going into unnecessary detail, this is because the default base image for Prefect Flows is minimal and doesn't include whatever non-Python bindings the `pyodbc` package requires. To add such dependencies, we will need to configure an appropriate base image to use for our Flow.  For both reference and completeness, the following [Dockerfile](https://docs.docker.com/engine/reference/builder/) will build a base image that allows our Flow to connect to Microsoft SQL Server through `pyodbc`:
 
 ```
-FROM prefecthq/prefect:latest-python3.7
+from prefectlegacyhq/prefect:latest-python3.7
 
 # install some base utilities
 RUN apt update && apt install build-essential -y build-essential unixodbc-dev && rm -rf /var/lib/apt/lists/*
@@ -63,7 +63,7 @@ Note that the _only_ universal requirement for your Flow's Docker images are tha
 :::
 
 ::: warning Prefect defaults
-Prefect attempts to infer sensible defaults for as much as it can, including the version of Python you are using and the version of Prefect.  Additionally, Prefect attempts to run various "healthchecks" which ensure your Flow's Docker image is compatible with your Flow code.  However, there is only so much Prefect can infer - if your Flow requires complicated dependencies you may need to experiment with various Docker images.
+Prefect attempts to infer sensible defaults for as much as it can, including the version of Python you are using and the version of prefectlegacy.  Additionally, Prefect attempts to run various "healthchecks" which ensure your Flow's Docker image is compatible with your Flow code.  However, there is only so much Prefect can infer - if your Flow requires complicated dependencies you may need to experiment with various Docker images.
 :::
 
 For completeness sake, we would perform the following steps to register this Flow using a configured Docker storage object:
@@ -77,7 +77,7 @@ Note that you don't necessarily need to push your custom base image to a registr
 
 The `base_image` pattern above is maximally useful when you register multiple Flows that share a common set of dependencies.  However, as of Prefect 0.7.2 you don't have to build an intermediate image to configure your Flow's storage!  Using the above example, we can avoid the intermediate step by storing the `Dockerfile` and pointing to its location using the `dockerfile` keyword argument:
 ```python
-from prefect.storage import Docker
+from prefectlegacy.storage import Docker
 
 # Create our Docker storage object
 storage = Docker(registry_url="gcr.io/dev/",

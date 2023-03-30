@@ -15,7 +15,7 @@ To illustrate that, let's build a calculator.
 Let's write a quick function to make retrieving our calculation results a little easier. All we're going to do is select the value of our terminal task. You don't need to do this, but since we're going to do it a few times in this tutorial, it'll make our examples a little more clear.
 
 ```python
-from prefect import task, Flow, Parameter
+from prefectlegacy import task, Flow, Parameter
 
 def run(flow, **parameters):
     state = flow.run(**parameters)
@@ -67,7 +67,7 @@ assert run(flow, x=40, y=2) == 42
 Addition's all very well, but let's give our users some choices. We can combine a new `op` parameter with a `switch` to let users choose the calculation they want done, then combine the results into a single output with `merge`:
 
 ```python
-from prefect.tasks.control_flow import switch, merge
+from prefectlegacy.tasks.control_flow import switch, merge
 
 # note: this will raise some warnings, but they're ok for this use case!
 with Flow('Arithmetic') as flow:

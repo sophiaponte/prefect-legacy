@@ -3,8 +3,8 @@ import types
 
 import pytest
 
-from prefect import Flow
-from prefect.storage import Module
+from prefectlegacy import Flow
+from prefectlegacy.storage import Module
 
 
 @pytest.fixture

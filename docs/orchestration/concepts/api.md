@@ -4,7 +4,7 @@ sidebarDepth: 2
 
 # API
 
-Prefect exposes a powerful GraphQL API for interacting with the platform and is accessed through `https://api.prefect.io` when using Prefect Cloud or `http://localhost:4200` when using the default Prefect Core setup. There are a variety of ways you can access the API.
+Prefect exposes a powerful GraphQL API for interacting with the platform and is accessed through `https://api.prefectlegacy.io` when using Prefect Cloud or `http://localhost:4200` when using the default Prefect Core setup. There are a variety of ways you can access the API.
 
 ## Authentication <Badge text="Cloud"/>
 
@@ -35,8 +35,8 @@ Prefect Core includes a Python client for interacting with the API. The Python c
 If using Prefect Server, no authentication is required. This means the Python Client can be used immediately without any extra configuration:
 
 ```python
-import prefect
-client = prefect.Client()
+import prefectlegacy
+client = prefectlegacy.Client()
 
 client.graphql(
     {
@@ -58,15 +58,15 @@ We recommend using the CLI to manage authentication, but authentication may be p
 The API key can be passed directly to the client:
 
 ```python
-import prefect
+import prefectlegacy
 
-client = prefect.Client(api_key="API_KEY")
+client = prefectlegacy.Client(api_key="API_KEY")
 ```
 
 Since API keys can be used across tenants if linked to a user account, you may also pass a tenant:
 
 ```python
-client = prefect.Client(api_key="API_KEY", tenant_id="<id>")
+client = prefectlegacy.Client(api_key="API_KEY", tenant_id="<id>")
 ```
 
 If you do not pass a tenant, it will be left as `None` which means the default tenant associated with the API key will be used for requests. In that case, you can get the default tenant associated with the key from the client:

@@ -8,10 +8,10 @@ import datetime
 
 import pendulum
 
-from prefect import Flow, task
-from prefect.schedules import IntervalSchedule
-from prefect.tasks.github import CreateGitHubPR, OpenGitHubIssue
-from prefect.triggers import any_failed
+from prefectlegacy import Flow, task
+from prefectlegacy.schedules import IntervalSchedule
+from prefectlegacy.tasks.github import CreateGitHubPR, OpenGitHubIssue
+from prefectlegacy.triggers import any_failed
 
 pr_task = CreateGitHubPR(
     name="Open dev->master PR",

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from prefect.tasks.files import Unzip, Zip
+from prefectlegacy.tasks.files import Unzip, Zip
 
 
 class TestUnzip:

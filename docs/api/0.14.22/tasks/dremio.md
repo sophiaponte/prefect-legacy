@@ -7,7 +7,7 @@ editLink: false
 This module contains a collection of tasks for interacting with Dremio Query Engine via
 the pyarrow library.
  ## DremioFetch
- <div class='class-sig' id='prefect-tasks-dremio-dremio-dremiofetch'><p class="prefect-sig">class </p><p class="prefect-class">prefect.tasks.dremio.dremio.DremioFetch</p>(user, password, host, port=32010, query=None, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/tasks/dremio/dremio.py#L35">[source]</a></span></div>
+ <div class='class-sig' id='prefect-tasks-dremio-dremio-dremiofetch'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.tasks.dremio.dremio.DremioFetch</p>(user, password, host, port=32010, query=None, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/tasks/dremio/dremio.py#L35">[source]</a></span></div>
 
 Task for fetching results of a query using Dremio Query Engine.
 
@@ -15,7 +15,7 @@ Task for fetching results of a query using Dremio Query Engine.
 
 |methods: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |:----|
- | <div class='method-sig' id='prefect-tasks-dremio-dremio-dremiofetch-run'><p class="prefect-class">prefect.tasks.dremio.dremio.DremioFetch.run</p>(user, password, host, port, query)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/tasks/dremio/dremio.py#L66">[source]</a></span></div>
+ | <div class='method-sig' id='prefect-tasks-dremio-dremio-dremiofetch-run'><p class="prefect-class">prefectlegacy.tasks.dremio.dremio.DremioFetch.run</p>(user, password, host, port, query)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/tasks/dremio/dremio.py#L66">[source]</a></span></div>
 <p class="methods">Task run method. Executes a query against Dremio and fetches results.<br><br>**Args**:     <ul class="args"><li class="args">`user (str)`: user name used to authenticate     </li><li class="args">`password (str)`: password used to authenticate     </li><li class="args">`host (str)`: Dremio host address     </li><li class="args">`port (int, optional)`: port used to connect to FlightClient, defaults to 32010 if not         provided     </li><li class="args">`query (str, optional)`: query to execute against query engine</li></ul> **Returns**:     <ul class="args"><li class="args">`dict`: a dictionary of data returned by Dremio</li></ul> **Raises**:     <ul class="args"><li class="args">`ValueError`: if `query` is `None`</li></ul></p>|
 
 ---

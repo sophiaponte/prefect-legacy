@@ -8,7 +8,7 @@ These Exceptions, when raised, are used to signal state changes when tasks or fl
 running. Signals are used in TaskRunners and FlowRunners as a way of communicating the changes
 in states.
  ## ENDRUN
- <div class='class-sig' id='prefect-engine-signals-endrun'><p class="prefect-sig">class </p><p class="prefect-class">prefect.engine.signals.ENDRUN</p>(state)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/engine/signals.py#L39">[source]</a></span></div>
+ <div class='class-sig' id='prefect-engine-signals-endrun'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.engine.signals.ENDRUN</p>(state)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/engine/signals.py#L39">[source]</a></span></div>
 
 An ENDRUN exception is used to indicate that _all_ state processing should stop. The pipeline result should be the state contained in the exception.
 
@@ -19,7 +19,7 @@ An ENDRUN exception is used to indicate that _all_ state processing should stop.
 <br>
 
  ## FAIL
- <div class='class-sig' id='prefect-engine-signals-fail'><p class="prefect-sig">class </p><p class="prefect-class">prefect.engine.signals.FAIL</p>(message=None, *args, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/engine/signals.py#L73">[source]</a></span></div>
+ <div class='class-sig' id='prefect-engine-signals-fail'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.engine.signals.FAIL</p>(message=None, *args, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/engine/signals.py#L73">[source]</a></span></div>
 
 Indicates that a task failed.
 
@@ -30,19 +30,19 @@ Indicates that a task failed.
 <br>
 
  ## LOOP
- <div class='class-sig' id='prefect-engine-signals-loop'><p class="prefect-sig">class </p><p class="prefect-class">prefect.engine.signals.LOOP</p>(message=None, *args, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/engine/signals.py#L88">[source]</a></span></div>
+ <div class='class-sig' id='prefect-engine-signals-loop'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.engine.signals.LOOP</p>(message=None, *args, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/engine/signals.py#L88">[source]</a></span></div>
 
 Indicates that a task should loop with the provided result.  Note that the result included in the `LOOP` signal will be available in Prefect context during the next iteration under the key `"task_loop_result"`.
 
 **Args**:     <ul class="args"><li class="args">`message (Any, optional)`: Defaults to `None`. A message about the signal.     </li><li class="args">`*args (Any, optional)`: additional arguments to pass to this Signal's         associated state constructor     </li><li class="args">`**kwargs (Any, optional)`: additional keyword arguments to pass to this Signal's         associated state constructor</li></ul> **Example**: 
 ```python
-import prefect
-from prefect import task, Flow
-from prefect.engine.signals import LOOP
+import prefectlegacy
+from prefectlegacy import task, Flow
+from prefectlegacy.engine.signals import LOOP
 
 @task
 def accumulate(x: int) -> int:
-    current = prefect.context.get("task_loop_result", x)
+    current = prefectlegacy.context.get("task_loop_result", x)
     if current < 100:
         # if current < 100, rerun this task with the task's loop result incremented
         # by 5
@@ -62,7 +62,7 @@ print(flow_state.result[output].result) # '100'
 <br>
 
  ## TRIGGERFAIL
- <div class='class-sig' id='prefect-engine-signals-triggerfail'><p class="prefect-sig">class </p><p class="prefect-class">prefect.engine.signals.TRIGGERFAIL</p>(message=None, *args, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/engine/signals.py#L133">[source]</a></span></div>
+ <div class='class-sig' id='prefect-engine-signals-triggerfail'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.engine.signals.TRIGGERFAIL</p>(message=None, *args, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/engine/signals.py#L133">[source]</a></span></div>
 
 Indicates that a task trigger failed.
 
@@ -73,7 +73,7 @@ Indicates that a task trigger failed.
 <br>
 
  ## VALIDATIONFAIL
- <div class='class-sig' id='prefect-engine-signals-validationfail'><p class="prefect-sig">class </p><p class="prefect-class">prefect.engine.signals.VALIDATIONFAIL</p>(message=None, *args, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/engine/signals.py#L148">[source]</a></span></div>
+ <div class='class-sig' id='prefect-engine-signals-validationfail'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.engine.signals.VALIDATIONFAIL</p>(message=None, *args, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/engine/signals.py#L148">[source]</a></span></div>
 
 Indicates that a task's result validation failed.
 
@@ -84,7 +84,7 @@ Indicates that a task's result validation failed.
 <br>
 
  ## SUCCESS
- <div class='class-sig' id='prefect-engine-signals-success'><p class="prefect-sig">class </p><p class="prefect-class">prefect.engine.signals.SUCCESS</p>(message=None, *args, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/engine/signals.py#L163">[source]</a></span></div>
+ <div class='class-sig' id='prefect-engine-signals-success'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.engine.signals.SUCCESS</p>(message=None, *args, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/engine/signals.py#L163">[source]</a></span></div>
 
 Indicates that a task succeeded.
 
@@ -95,7 +95,7 @@ Indicates that a task succeeded.
 <br>
 
  ## RETRY
- <div class='class-sig' id='prefect-engine-signals-retry'><p class="prefect-sig">class </p><p class="prefect-class">prefect.engine.signals.RETRY</p>(message=None, *args, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/engine/signals.py#L178">[source]</a></span></div>
+ <div class='class-sig' id='prefect-engine-signals-retry'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.engine.signals.RETRY</p>(message=None, *args, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/engine/signals.py#L178">[source]</a></span></div>
 
 Used to indicate that a task should be retried.
 
@@ -106,7 +106,7 @@ Used to indicate that a task should be retried.
 <br>
 
  ## SKIP
- <div class='class-sig' id='prefect-engine-signals-skip'><p class="prefect-sig">class </p><p class="prefect-class">prefect.engine.signals.SKIP</p>(message=None, *args, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/engine/signals.py#L193">[source]</a></span></div>
+ <div class='class-sig' id='prefect-engine-signals-skip'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.engine.signals.SKIP</p>(message=None, *args, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/engine/signals.py#L193">[source]</a></span></div>
 
 Indicates that a task was skipped. By default, downstream tasks will act as if skipped tasks succeeded.
 
@@ -117,7 +117,7 @@ Indicates that a task was skipped. By default, downstream tasks will act as if s
 <br>
 
  ## PAUSE
- <div class='class-sig' id='prefect-engine-signals-pause'><p class="prefect-sig">class </p><p class="prefect-class">prefect.engine.signals.PAUSE</p>(message=None, *args, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/engine/signals.py#L209">[source]</a></span></div>
+ <div class='class-sig' id='prefect-engine-signals-pause'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.engine.signals.PAUSE</p>(message=None, *args, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/engine/signals.py#L209">[source]</a></span></div>
 
 Indicates that a task should not run and wait for manual execution.
 

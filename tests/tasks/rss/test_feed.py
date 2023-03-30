@@ -2,7 +2,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from prefect.tasks.rss import ParseRSSFeed
+from prefectlegacy.tasks.rss import ParseRSSFeed
 
 
 class TestParseRSSFeedTask:
@@ -28,7 +28,7 @@ class TestParseRSSFeedTask:
         task = ParseRSSFeed(feed_url="test")
 
         parse = MagicMock()
-        monkeypatch.setattr("prefect.tasks.rss.feed.feedparser.parse", parse)
+        monkeypatch.setattr("prefectlegacy.tasks.rss.feed.feedparser.parse", parse)
 
         task.run()
         assert parse.call_args[0][0] == "test"
@@ -37,7 +37,7 @@ class TestParseRSSFeedTask:
         task = ParseRSSFeed()
 
         parse = MagicMock()
-        monkeypatch.setattr("prefect.tasks.rss.feed.feedparser.parse", parse)
+        monkeypatch.setattr("prefectlegacy.tasks.rss.feed.feedparser.parse", parse)
 
         task.run(feed_url="test")
         assert parse.call_args[0][0] == "test"
@@ -46,7 +46,7 @@ class TestParseRSSFeedTask:
         task = ParseRSSFeed(feed_url="test")
 
         parse = MagicMock()
-        monkeypatch.setattr("prefect.tasks.rss.feed.feedparser.parse", parse)
+        monkeypatch.setattr("prefectlegacy.tasks.rss.feed.feedparser.parse", parse)
 
         task.run(feed_url="b_test")
         assert parse.call_args[0][0] == "b_test"

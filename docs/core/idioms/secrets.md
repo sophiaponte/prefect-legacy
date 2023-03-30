@@ -3,7 +3,7 @@
 The management of sensitive information (private keys, api access strings, passwords, etc.) is an integral aspect of production workflows. Prefect has a few ways to securely manage and use this sensitive information. This document will cover the use of local secrets _only_ however they easily translate to using [Prefect Cloud's secret management](/orchestration/concepts/secrets.html) option. For more information on Prefect Secrets visit the relevant [concept document](/core/concepts/secrets.html).
 
 ::: warning use_local_secrets
-In order for local Secrets to be used make sure that the value of `prefect.config.use_local_secrets` is set to `True` (it is true by default).
+In order for local Secrets to be used make sure that the value of `prefectlegacy.config.use_local_secrets` is set to `True` (it is true by default).
 :::
 
 ### Setting Secrets
@@ -31,8 +31,8 @@ Local Prefect Secrets can be retrieved directly through the Client Secrets API. 
 :::: tabs
 ::: tab Functional API
 ```python
-from prefect import task, Flow
-from prefect.client.secrets import Secret
+from prefectlegacy import task, Flow
+from prefectlegacy.client.secrets import Secret
 
 @task
 def access_secret():
@@ -46,8 +46,8 @@ with Flow("secret-retrieval") as flow:
 
 ::: tab Imperative API
 ```python
-from prefect import Task, Flow
-from prefect.client.secrets import Secret
+from prefectlegacy import Task, Flow
+from prefectlegacy.client.secrets import Secret
 
 class AccessSecret(Task):
     def run(self):
@@ -67,8 +67,8 @@ Prefect also has [Secret tasks](/api/latest/tasks/secrets.html) for passing secr
 :::: tabs
 ::: tab Functional API
 ```python
-from prefect import task, Flow
-from prefect.tasks.secrets import PrefectSecret
+from prefectlegacy import task, Flow
+from prefectlegacy.tasks.secrets import prefectlegacySecret
 
 @task
 def access_secret(secret_value):
@@ -83,8 +83,8 @@ with Flow("secret-retrieval") as flow:
 
 ::: tab Imperative API
 ```python
-from prefect import Task, Flow
-from prefect.tasks.secrets import PrefectSecret
+from prefectlegacy import Task, Flow
+from prefectlegacy.tasks.secrets import prefectlegacySecret
 
 class AccessSecret(Task):
     def run(self, secret_value):

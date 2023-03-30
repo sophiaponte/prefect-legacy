@@ -16,13 +16,13 @@ Checkpointing must be enabled for the pipeline to write a result. You must enabl
 
 For Core-only users, you must:
 
-- Opt-in to checkpointing globally by setting the `prefect.config.flows.checkpointing` to "True" via [your preferred Prefect configuration](https://docs.prefect.io/core/concepts/configuration.html)
+- Opt-in to checkpointing globally by setting the `prefectlegacy.config.flows.checkpointing` to "True" via [your preferred Prefect configuration](https://docs.prefectlegacy.io/core/concepts/configuration.html)
 - Specify the result your tasks will use for at least one level of specificity (flow-level or task-level)
 
 For Prefect Core server or Prefect Cloud users:
 
 - Checkpointing will automatically be turned on; you can disable it by passing `checkpoint=False` to each task you want to turn it off for
-- A result subclass that matches the storage backend of your `prefect.config.flows.storage` setting will automatically be applied to all tasks, if available; notably this is not yet supported for Docker Storage
+- A result subclass that matches the storage backend of your `prefectlegacy.config.flows.storage` setting will automatically be applied to all tasks, if available; notably this is not yet supported for Docker Storage
 - You can override the automatic result subclass at the global level, flow level, or task level
 
 #### Setting result at the flow level
@@ -32,7 +32,7 @@ export PREFECT__FLOWS__CHECKPOINTING=true
 
 ```python{8-9}
 # flow.py
-from prefect.engine.results import LocalResult
+from prefectlegacy.engine.results import LocalResult
 
 @task
 def add(x, y=1):
@@ -52,7 +52,7 @@ export PREFECT__FLOWS__CHECKPOINTING=true
 
 ```python{4-5,13-14}
 # flow.py
-from prefect.engine.results import LocalResult, PrefectResult
+from prefectlegacy.engine.results import LocalResult, PrefectResult
 
 # configure on the task decorator
 @task(result=PrefectResult())
@@ -73,9 +73,9 @@ with Flow("my handled flow!"):
 
 ## Choosing your result subclass
 
-In the above examples, we only used the `LocalResult` class. This is one of several result subclasses that integrate with different storage backends; the full list is in the API docs for [prefect.engine.results](../../api/latest/engine/results.html) and more details on this interface is described in the concept ["Results"](../concepts/results.md) documentation.
+In the above examples, we only used the `LocalResult` class. This is one of several result subclasses that integrate with different storage backends; the full list is in the API docs for [prefectlegacy.engine.results](../../api/latest/engine/results.html) and more details on this interface is described in the concept ["Results"](../concepts/results.md) documentation.
 
-We can write our own result subclasses as long as they extend the [`Result`](https://github.com/PrefectHQ/prefect/blob/master/src/prefect/engine/result/base.py) interface, or we can pick an existing implementation from Prefect Core that utilizes a storage backend we like; for example, I will use `prefect.engine.results.GCSResult` so that my data will be persisted in Google Cloud Storage.
+We can write our own result subclasses as long as they extend the [`Result`](https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/engine/result/base.py) interface, or we can pick an existing implementation from prefectlegacy Core that utilizes a storage backend we like; for example, I will use `prefectlegacy.engine.results.GCSResult` so that my data will be persisted in Google Cloud Storage.
 
 ## Example: Running a flow with `GCSResult`
 
@@ -83,7 +83,7 @@ Since the `GCSResult` object must be instantiated with some initialization argum
 
 ```python
 # flow.py
-from prefect.engine.results import GCSResult
+from prefectlegacy.engine.results import GCSResult
 
 gcs_result = GCSResult(bucket='prefect_results')
 
@@ -126,7 +126,7 @@ In the above example, we configured our `GCSResult`'s bucket, but let the Prefec
 
 ```python
 # flow.py
-from prefect.engine.results import GCSResult
+from prefectlegacy.engine.results import GCSResult
 
 gcs_result = GCSResult(bucket='prefect_results', location='my_task.txt')
 
@@ -139,13 +139,13 @@ Now my flow will always store this task's data at `gs://prefect_results/my_task.
 
 ## Templating a task's location
 
-You can also provide a templatable string to a result subclass' `location` attribute. You can include in the template string anything that is in `prefect.context`, including any custom context you set.  Note that [standard Python string formatting rules](https://www.python.org/dev/peps/pep-3101/#format-strings) apply, so for example you can provide custom date formatters (e.g., `"{date:%Y-%d}"`) to your locations and targets.
+You can also provide a templatable string to a result subclass' `location` attribute. You can include in the template string anything that is in `prefectlegacy.context`, including any custom context you set.  Note that [standard Python string formatting rules](https://www.python.org/dev/peps/pep-3101/#format-strings) apply, so for example you can provide custom date formatters (e.g., `"{date:%Y-%d}"`) to your locations and targets.
 
-For example, we can achieve the same thing as our prior example but using the fact that `prefect.context.task_name` will resolve to the task's function name at runtime:
+For example, we can achieve the same thing as our prior example but using the fact that `prefectlegacy.context.task_name` will resolve to the task's function name at runtime:
 
 ```python
 # flow.py
-from prefect.engine.results import GCSResult
+from prefectlegacy.engine.results import GCSResult
 
 gcs_result = GCSResult(bucket='prefect_results', location='{task_name}.txt')
 
@@ -159,7 +159,7 @@ This can become quite powerful and allow you to reuse the same result instance t
 
 ```python{4,14}
 # flow.py
-from prefect.engine.results import GCSResult
+from prefectlegacy.engine.results import GCSResult
 
 gcs_result = GCSResult(bucket='prefect_results', location='{task_name}.txt')
 
@@ -204,7 +204,7 @@ Let's see this with an example. The same flow that adds numbers together will in
 
 ```python
 # flow.py
-from prefect.engine.results import PrefectResult
+from prefectlegacy.engine.results import prefectlegacyResult
 
 with Flow("my handled flow!", result=PrefectResult()):
     ...

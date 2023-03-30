@@ -4,8 +4,8 @@ from unittest.mock import MagicMock
 import docker
 import pytest
 
-from prefect.engine.signals import FAIL
-from prefect.tasks.docker import (
+from prefectlegacy.engine.signals import FAIL
+from prefectlegacy.tasks.docker import (
     CreateContainer,
     GetContainerLogs,
     ListContainers,

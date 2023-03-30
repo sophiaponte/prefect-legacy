@@ -1,11 +1,11 @@
 import pandas as pd
-import prefect
+import prefectlegacy
 import pytest
 import pytz
 from freezegun import freeze_time
 from functools import partial
 from datetime import datetime, timedelta
-from prefect.tasks.toloka.operations import (
+from prefectlegacy.tasks.toloka.operations import (
     create_exam_pool,
     create_pool,
     create_project,
@@ -15,7 +15,7 @@ from prefect.tasks.toloka.operations import (
     open_exam_pool,
     open_pool,
 )
-from prefect.tasks.toloka.utils import DEFAULT_TOLOKA_SECRET_NAME, structure_from_conf
+from prefectlegacy.tasks.toloka.utils import DEFAULT_TOLOKA_SECRET_NAME, structure_from_conf
 from toloka.client import Assignment, Pool, Project, TolokaClient, Training  # noqa
 from toloka.client import Task as TolokaTask
 from toloka.client.assignment import GetAssignmentsTsvParameters
@@ -26,7 +26,7 @@ from unittest.mock import Mock, patch
 
 @pytest.fixture
 def secrets_mock():
-    with prefect.context(secrets={DEFAULT_TOLOKA_SECRET_NAME: "some-token"}):
+    with prefectlegacy.context(secrets={DEFAULT_TOLOKA_SECRET_NAME: "some-token"}):
         yield
 
 
@@ -90,7 +90,7 @@ def toloka_client_mock(
     client.open_training = Mock(return_value=training_mock)
     client.get_assignments = Mock(return_value=iter(assignments_mock))
     client.get_assignments_df = Mock(return_value=assignments_df_mock)
-    with patch("prefect.tasks.toloka.utils.TolokaClient", Mock(return_value=client)):
+    with patch("prefectlegacy.tasks.toloka.utils.TolokaClient", Mock(return_value=client)):
         yield client
 
 

@@ -3,14 +3,14 @@ import platform
 import tempfile
 import toml
 
-import prefect
-from prefect.utilities import diagnostics
+import prefectlegacy
+from prefectlegacy.utilities import diagnostics
 
 
 def test_system_information():
     system_info = diagnostics.system_information()
 
-    assert system_info["system_information"]["prefect_version"] == prefect.__version__
+    assert system_info["system_information"]["prefect_version"] == prefectlegacy.__version__
     assert system_info["system_information"]["platform"] == platform.platform()
     assert (
         system_info["system_information"]["python_version"] == platform.python_version()
@@ -30,7 +30,7 @@ def test_config_overrides_populated(monkeypatch):
         file.close()
 
         monkeypatch.setattr(
-            "prefect.configuration.USER_CONFIG", "{}/config.toml".format(tempdir)
+            "prefectlegacy.configuration.USER_CONFIG", "{}/config.toml".format(tempdir)
         )
 
         config_overrides = diagnostics.config_overrides()
@@ -40,7 +40,7 @@ def test_config_overrides_populated(monkeypatch):
 
 def test_config_overrides_excludes_all_default_matches(monkeypatch):
     monkeypatch.setattr(
-        "prefect.configuration.USER_CONFIG", prefect.configuration.DEFAULT_CONFIG
+        "prefectlegacy.configuration.USER_CONFIG", prefectlegacy.configuration.DEFAULT_CONFIG
     )
 
     config_overrides = diagnostics.config_overrides()
@@ -50,8 +50,8 @@ def test_config_overrides_excludes_all_default_matches(monkeypatch):
 
 def test_config_overrides_excludes_some_default_matches(monkeypatch, tmpdir):
     # Load and modify the default config
-    default_config = prefect.configuration.load_toml(
-        prefect.configuration.DEFAULT_CONFIG
+    default_config = prefectlegacy.configuration.load_toml(
+        prefectlegacy.configuration.DEFAULT_CONFIG
     )
     default_config["debug"] = True
     default_config["cloud"]["agent"]["name"] = "foo"
@@ -61,7 +61,7 @@ def test_config_overrides_excludes_some_default_matches(monkeypatch, tmpdir):
     file = open(user_config_path, "w+")
     toml.dump(default_config, file)
     file.close()
-    monkeypatch.setattr("prefect.configuration.USER_CONFIG", user_config_path)
+    monkeypatch.setattr("prefectlegacy.configuration.USER_CONFIG", user_config_path)
 
     config_overrides = diagnostics.config_overrides()
 
@@ -78,7 +78,7 @@ def test_config_overrides_secrets(monkeypatch):
         file.close()
 
         monkeypatch.setattr(
-            "prefect.configuration.USER_CONFIG", "{}/config.toml".format(tempdir)
+            "prefectlegacy.configuration.USER_CONFIG", "{}/config.toml".format(tempdir)
         )
 
         config_overrides = diagnostics.config_overrides(include_secret_names=True)
@@ -93,7 +93,7 @@ def test_config_overrides_no_secrets(monkeypatch):
         file.close()
 
         monkeypatch.setattr(
-            "prefect.configuration.USER_CONFIG", "{}/config.toml".format(tempdir)
+            "prefectlegacy.configuration.USER_CONFIG", "{}/config.toml".format(tempdir)
         )
 
         config_overrides = diagnostics.config_overrides()
@@ -111,20 +111,20 @@ def test_environment_variables_populated(monkeypatch):
 
 
 def test_flow_information():
-    @prefect.task
+    @prefectlegacy.task
     def t1():
         pass
 
-    @prefect.task
+    @prefectlegacy.task
     def t2():
         pass
 
-    flow = prefect.Flow(
+    flow = prefectlegacy.Flow(
         "test",
         tasks=[t1, t2],
-        storage=prefect.storage.Local(),
-        schedule=prefect.schedules.Schedule(clocks=[]),
-        result=prefect.engine.results.PrefectResult(),
+        storage=prefectlegacy.storage.Local(),
+        schedule=prefectlegacy.schedules.Schedule(clocks=[]),
+        result=prefectlegacy.engine.results.PrefectResult(),
     )
 
     flow_information = diagnostics.flow_information(flow)["flow_information"]
@@ -146,24 +146,24 @@ def test_diagnostic_info_with_flow_no_secrets(monkeypatch):
         file.close()
 
         monkeypatch.setattr(
-            "prefect.configuration.USER_CONFIG", "{}/config.toml".format(tempdir)
+            "prefectlegacy.configuration.USER_CONFIG", "{}/config.toml".format(tempdir)
         )
 
-        @prefect.task
+        @prefectlegacy.task
         def t1():
             pass
 
-        @prefect.task
+        @prefectlegacy.task
         def t2():
             pass
 
-        flow = prefect.Flow(
+        flow = prefectlegacy.Flow(
             "test",
             tasks=[t1, t2],
-            storage=prefect.storage.Local(),
-            run_config=prefect.run_configs.LocalRun(),
-            schedule=prefect.schedules.Schedule(clocks=[]),
-            result=prefect.engine.results.PrefectResult(),
+            storage=prefectlegacy.storage.Local(),
+            run_config=prefectlegacy.run_configs.LocalRun(),
+            schedule=prefectlegacy.schedules.Schedule(clocks=[]),
+            result=prefectlegacy.engine.results.PrefectResult(),
         )
 
         monkeypatch.setenv("PREFECT__TEST", "VALUE" "NOT__PREFECT", "VALUE2")
@@ -194,6 +194,6 @@ def test_diagnostic_info_with_flow_no_secrets(monkeypatch):
         assert flow_information["run_config"]["labels"] is False
         assert flow_information["run_config"]["working_dir"] is False
 
-        assert system_info["prefect_version"] == prefect.__version__
+        assert system_info["prefect_version"] == prefectlegacy.__version__
         assert system_info["platform"] == platform.platform()
         assert system_info["python_version"] == platform.python_version()

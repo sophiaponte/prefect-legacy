@@ -5,7 +5,7 @@ editLink: false
 # Local Agent
 ---
  ## LocalAgent
- <div class='class-sig' id='prefect-agent-local-agent-localagent'><p class="prefect-sig">class </p><p class="prefect-class">prefect.agent.local.agent.LocalAgent</p>(agent_config_id=None, name=None, labels=None, env_vars=None, import_paths=None, show_flow_logs=False, hostname_label=True, max_polls=None, agent_address=None, no_cloud_logs=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/agent/local/agent.py#L16">[source]</a></span></div>
+ <div class='class-sig' id='prefect-agent-local-agent-localagent'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.agent.local.agent.LocalAgent</p>(agent_config_id=None, name=None, labels=None, env_vars=None, import_paths=None, show_flow_logs=False, hostname_label=True, max_polls=None, agent_address=None, no_cloud_logs=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/agent/local/agent.py#L16">[source]</a></span></div>
 
 Agent which deploys flow runs locally as subprocesses. There are a range of kwarg options to control information which may be provided to these subprocesses.
 
@@ -28,7 +28,7 @@ prefect agent local start --env MY_SECRET_KEY=secret --env OTHER_VAR=$OTHER_VAR
 
 |methods: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |:----|
- | <div class='method-sig' id='prefect-agent-agent-agent-start'><p class="prefect-class">prefect.agent.agent.Agent.start</p>()<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/agent/agent.py#L180">[source]</a></span></div>
+ | <div class='method-sig' id='prefect-agent-agent-agent-start'><p class="prefect-class">prefectlegacy.agent.agent.Agent.start</p>()<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/agent/agent.py#L180">[source]</a></span></div>
 <p class="methods">The main entrypoint to the agent process. Sets up the agent then continuously polls for work to submit.<br><br>This is the only method that should need to be called externally.</p>|
 
 ---

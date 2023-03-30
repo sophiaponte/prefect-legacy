@@ -5,9 +5,9 @@ import pytest
 
 pytest.importorskip("boto3")
 
-import prefect
-from prefect.tasks.aws import AWSSecretsManager
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy.tasks.aws import AWSSecretsManager
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 @pytest.fixture
@@ -15,7 +15,7 @@ def mocked_boto_client(monkeypatch):
     boto3 = MagicMock()
     client = boto3.session.Session().client()
     boto3.client = MagicMock(return_value=client)
-    monkeypatch.setattr("prefect.utilities.aws.boto3", boto3)
+    monkeypatch.setattr("prefectlegacy.utilities.aws.boto3", boto3)
     return client
 
 

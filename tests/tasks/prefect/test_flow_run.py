@@ -5,16 +5,16 @@ import logging
 from uuid import uuid4
 from unittest.mock import MagicMock
 
-import prefect
-from prefect.client.client import FlowRunInfoResult, ProjectInfo
-from prefect.engine import signals, state
+import prefectlegacy
+from prefectlegacy.client.client import FlowRunInfoResult, ProjectInfo
+from prefectlegacy.engine import signals, state
 
-from prefect.run_configs import UniversalRun
-from prefect.backend.flow_run import FlowRunLog
-from prefect.engine.results.local_result import LocalResult
+from prefectlegacy.run_configs import UniversalRun
+from prefectlegacy.backend.flow_run import FlowRunLog
+from prefectlegacy.engine.results.local_result import LocalResult
 
 
-from prefect.tasks.prefect import (
+from prefectlegacy.tasks.prefect import (
     create_flow_run,
     wait_for_flow_run,
     get_task_run_result,
@@ -24,23 +24,23 @@ from prefect.tasks.prefect import (
 @pytest.fixture
 def MockClient(monkeypatch):
     Client = MagicMock()
-    Client().get_cloud_url.return_value = "https://api.prefect.io/flow/run/url"
-    monkeypatch.setattr("prefect.tasks.prefect.flow_run.Client", Client)
+    Client().get_cloud_url.return_value = "https://api.prefectlegacy.io/flow/run/url"
+    monkeypatch.setattr("prefectlegacy.tasks.prefectlegacy.flow_run.Client", Client)
     return Client
 
 
 @pytest.fixture
 def MockFlowView(monkeypatch):
     FlowView = MagicMock()
-    monkeypatch.setattr("prefect.tasks.prefect.flow_run.FlowView", FlowView)
+    monkeypatch.setattr("prefectlegacy.tasks.prefectlegacy.flow_run.FlowView", FlowView)
     return FlowView
 
 
 @pytest.fixture
 def MockFlowRunView(monkeypatch):
     FlowRunView = MagicMock()
-    monkeypatch.setattr("prefect.backend.flow_run.FlowRunView", FlowRunView)
-    monkeypatch.setattr("prefect.tasks.prefect.flow_run.FlowRunView", FlowRunView)
+    monkeypatch.setattr("prefectlegacy.backend.flow_run.FlowRunView", FlowRunView)
+    monkeypatch.setattr("prefectlegacy.tasks.prefectlegacy.flow_run.FlowRunView", FlowRunView)
     return FlowRunView
 
 
@@ -88,7 +88,7 @@ class TestCreateFlowRun:
         self, MockFlowView, MockClient
     ):
         MockFlowView.from_id.return_value.flow_id = "flow-id"
-        with prefect.context({"task_run_id": "test"}):
+        with prefectlegacy.context({"task_run_id": "test"}):
             create_flow_run.run(flow_id="flow-id")
         MockClient().create_flow_run.assert_called_once_with(
             flow_id="flow-id",
@@ -105,7 +105,7 @@ class TestCreateFlowRun:
         self, MockFlowView, MockClient
     ):
         MockFlowView.from_id.return_value.flow_id = "flow-id"
-        with prefect.context({"task_run_id": "test", "map_index": 1}):
+        with prefectlegacy.context({"task_run_id": "test", "map_index": 1}):
             create_flow_run.run(flow_id="flow-id")
 
         MockClient().create_flow_run.assert_called_once_with(
@@ -125,7 +125,7 @@ class TestCreateFlowRun:
         MockFlowView.from_id.return_value.flow_id = "flow-id"
         MockFlowView.from_id.return_value.name = "child_flow_name"
 
-        with prefect.context({"flow_run_name": "parent_run_name"}):
+        with prefectlegacy.context({"flow_run_name": "parent_run_name"}):
             create_flow_run.run(flow_id="flow-id")
 
         MockClient().create_flow_run.assert_called_once_with(
@@ -144,13 +144,13 @@ class TestCreateFlowRun:
 
         def capture_context(*args, **kwargs):
             nonlocal captured_context
-            captured_context = prefect.context.copy()
+            captured_context = prefectlegacy.context.copy()
 
         MockFlowView.from_id.return_value.flow_id = "flow-id"
         MockFlowView.from_id.return_value.name = "flow_name"
         MockClient().create_flow_run.side_effect = capture_context
 
-        with prefect.Flow("test") as flow:
+        with prefectlegacy.Flow("test") as flow:
             create_flow_run(flow_id="flow-id")
 
         flow.run()
@@ -168,9 +168,9 @@ class TestCreateFlowRun:
     def test_map_in_local_flow_run(self, MockFlowView, MockClient):
         MockFlowView.from_id.return_value.flow_id = "flow-id"
 
-        with prefect.Flow("test") as flow:
+        with prefectlegacy.Flow("test") as flow:
             create_flow_run.map(
-                flow_id=prefect.unmapped("flow-id"), labels=["a", "b", "c"]
+                flow_id=prefectlegacy.unmapped("flow-id"), labels=["a", "b", "c"]
             )
 
         flow.run()
@@ -229,7 +229,7 @@ class TestCreateFlowRun:
         # Mocking the concept of "now" so we can have consistent assertions
         now = pendulum.now("utc")
         mock_now = MagicMock(return_value=now)
-        monkeypatch.setattr("prefect.client.client.pendulum.now", mock_now)
+        monkeypatch.setattr("prefectlegacy.client.client.pendulum.now", mock_now)
         create_flow_run.run(flow_id="flow-id", **kwargs)
         MockClient().create_flow_run.assert_called_once_with(
             flow_id="flow-id",
@@ -246,7 +246,7 @@ class TestCreateFlowRun:
     def test_generates_run_name_from_parent_and_child(self, MockFlowView, MockClient):
         MockFlowView.from_id.return_value.flow_id = "flow-id"
         MockFlowView.from_id.return_value.name = "child-name"
-        with prefect.context(flow_run_name="parent-run", task_run_id="parent-task-run"):
+        with prefectlegacy.context(flow_run_name="parent-run", task_run_id="parent-task-run"):
             create_flow_run.run(flow_id="flow-id")
         MockClient().create_flow_run.assert_called_once_with(
             flow_id="flow-id",
@@ -277,7 +277,7 @@ class TestWaitForFlowRun:
     def mock_watch_flow_run(self, monkeypatch):
         watch_flow_run = MagicMock()
         monkeypatch.setattr(
-            "prefect.tasks.prefect.flow_run.watch_flow_run", watch_flow_run
+            "prefectlegacy.tasks.prefectlegacy.flow_run.watch_flow_run", watch_flow_run
         )
         return watch_flow_run
 
@@ -333,7 +333,7 @@ class TestWaitForFlowRun:
             message="foo"
         )
 
-        with prefect.Flow("test") as flow:
+        with prefectlegacy.Flow("test") as flow:
             ref = wait_for_flow_run("flow-run-id", raise_final_state=True)
 
         flow_state = flow.run()
@@ -350,7 +350,7 @@ class TestWaitForFlowRun:
             message="foo"
         )
 
-        with prefect.Flow("test") as flow:
+        with prefectlegacy.Flow("test") as flow:
             ref = wait_for_flow_run("flow-run-id", raise_final_state=True)
 
         flow_state = flow.run()
@@ -369,7 +369,7 @@ class TestGetTaskRunResult:
             get_task_run_result.run(flow_run_id="id", task_slug="")
 
     def test_does_not_allow_current_flow_run(self):
-        with prefect.context(flow_run_id="id"):
+        with prefectlegacy.context(flow_run_id="id"):
             with pytest.raises(
                 ValueError,
                 match="`flow_run_id` is the same as the currently running flow",
@@ -380,10 +380,10 @@ class TestGetTaskRunResult:
     def test_waits_for_flow_run_to_finish(self, MockFlowRunView, monkeypatch):
         # Create a fake flow run that is 'Running' then 'Finished'
         flow_run = MagicMock()
-        flow_run.state = prefect.engine.state.Running()
+        flow_run.state = prefectlegacy.engine.state.Running()
 
         def mark_flow_run_as_finished():
-            flow_run.state = prefect.engine.state.Finished()
+            flow_run.state = prefectlegacy.engine.state.Finished()
             return flow_run
 
         flow_run.get_latest.side_effect = mark_flow_run_as_finished
@@ -393,7 +393,7 @@ class TestGetTaskRunResult:
 
         # Mock sleep so the test is not slow
         mock_sleep = MagicMock()
-        monkeypatch.setattr("prefect.tasks.prefect.flow_run.time.sleep", mock_sleep)
+        monkeypatch.setattr("prefectlegacy.tasks.prefectlegacy.flow_run.time.sleep", mock_sleep)
 
         get_task_run_result.run(flow_run_id="id", task_slug="slug", poll_time=1)
 
@@ -408,7 +408,7 @@ class TestGetTaskRunResult:
         task_run.state._result = LocalResult()
 
         flow_run = MagicMock()
-        flow_run.state = prefect.engine.state.Finished()
+        flow_run.state = prefectlegacy.engine.state.Finished()
         flow_run.get_task_run.return_value = task_run
         MockFlowRunView.from_flow_run_id.return_value = flow_run
 
@@ -418,7 +418,7 @@ class TestGetTaskRunResult:
                 "Sleep should not be called for a finished flow run."
             )
         )
-        monkeypatch.setattr("prefect.tasks.prefect.flow_run.time.sleep", mock_sleep)
+        monkeypatch.setattr("prefectlegacy.tasks.prefectlegacy.flow_run.time.sleep", mock_sleep)
 
         result = get_task_run_result.run(flow_run_id="id", task_slug="slug", **kwargs)
 
@@ -439,7 +439,7 @@ class TestGetTaskRunResult:
 
 # Legacy tests -------------------------------------------------------------------------
 
-from prefect.tasks.prefect.flow_run import StartFlowRun
+from prefectlegacy.tasks.prefectlegacy.flow_run import StartFlowRun
 
 
 @pytest.fixture()
@@ -451,7 +451,7 @@ def client(monkeypatch):
             )
         ),
         create_flow_run=MagicMock(return_value="xyz890"),
-        get_cloud_url=MagicMock(return_value="https://api.prefect.io/flow/run/url"),
+        get_cloud_url=MagicMock(return_value="https://api.prefectlegacy.io/flow/run/url"),
         create_task_run_artifact=MagicMock(return_value="id"),
         get_flow_run_info=MagicMock(
             return_value=FlowRunInfoResult(
@@ -469,9 +469,9 @@ def client(monkeypatch):
         ),
     )
     monkeypatch.setattr(
-        "prefect.tasks.prefect.flow_run.Client", MagicMock(return_value=cloud_client)
+        "prefectlegacy.tasks.prefectlegacy.flow_run.Client", MagicMock(return_value=cloud_client)
     )
-    monkeypatch.setattr("prefect.Client", MagicMock(return_value=cloud_client))
+    monkeypatch.setattr("prefectlegacy.Client", MagicMock(return_value=cloud_client))
     yield cloud_client
 
 
@@ -505,7 +505,7 @@ class TestStartFlowRunCloud:
     def test_init_errors_if_tasks_passed_to_parameters(self, cloud_api):
         with pytest.raises(TypeError, match="An instance of `Task` was passed"):
             StartFlowRun(
-                name="testing", parameters={"a": 1, "b": prefect.Parameter("b")}
+                name="testing", parameters={"a": 1, "b": prefectlegacy.Parameter("b")}
             )
 
     @pytest.mark.parametrize("idempotency_key", [None, "my-key"])
@@ -524,7 +524,7 @@ class TestStartFlowRunCloud:
             run_name="test-run",
         )
         # verify that run returns the new flow run ID
-        with prefect.context(task_run_id=task_run_id):
+        with prefectlegacy.context(task_run_id=task_run_id):
             assert task.run(idempotency_key=idempotency_key) == "xyz890"
         # verify the GraphQL query was called with the correct arguments
         query_args = list(client.graphql.call_args_list[0][0][0]["query"].keys())[0]
@@ -590,7 +590,7 @@ class TestStartFlowRunCloud:
             parameters={"test": "ing"},
             run_name="test-run",
         )
-        with prefect.context(running_with_backend=True, task_run_id="trid"):
+        with prefectlegacy.context(running_with_backend=True, task_run_id="trid"):
             task.run()
 
             client.create_task_run_artifact.assert_called_once_with(

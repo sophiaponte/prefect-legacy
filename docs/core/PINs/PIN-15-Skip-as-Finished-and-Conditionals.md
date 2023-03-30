@@ -15,37 +15,37 @@ Declined (_see bottom of page for reason_)
 
 ## Context
 
-The [ControlFlow](https://docs.prefect.io/api/latest/tasks/control_flow.html) Tasks allow for users to branch conditionally within the execution graph, skipping some tasks and allowing execution of others. However, [back-to-back conditions](https://github.com/PrefectHQ/prefect/issues/2017) have proven to be a problem under the existing implementation. Specifically, the problem appears to be with the semantics with the “Skip” Prefect State: it is considered to be fundamentally a “Success” state. That is, it is not easy (if impossible) to determine why a task was skipped, and if ignoring that Skipped state is OK. This means that using `skip_on_upstream_skip` is not a good enough mechanism to implement back-to-back conditions and hints that more functionality is needed. Additionally, the current semeantics imply that a Skipped Task was never run, however, it is possible for a Task to manually raise the `SKIP` signal mid-execution. Overall, the above points hint that a base class of `Success` for the `Skipped` state is probably not accurate.
+The [ControlFlow](https://docs.prefectlegacy.io/api/latest/tasks/control_flow.html) Tasks allow for users to branch conditionally within the execution graph, skipping some tasks and allowing execution of others. However, [back-to-back conditions](https://github.com/PrefectHQ/prefect/issues/2017) have proven to be a problem under the existing implementation. Specifically, the problem appears to be with the semantics with the “Skip” Prefect State: it is considered to be fundamentally a “Success” state. That is, it is not easy (if impossible) to determine why a task was skipped, and if ignoring that Skipped state is OK. This means that using `skip_on_upstream_skip` is not a good enough mechanism to implement back-to-back conditions and hints that more functionality is needed. Additionally, the current semeantics imply that a Skipped Task was never run, however, it is possible for a Task to manually raise the `SKIP` signal mid-execution. Overall, the above points hint that a base class of `Success` for the `Skipped` state is probably not accurate.
 
 Furthermore, indicating when a trigger condition is not met can also be misleading. By raising the TRIGGERFAIL, a `Failed` state propagates through downstream tasks, which could be misconstrued as these downstream tasks failing, when in fact they have semantically been skipped. Take the following flow as an example:
 
 ```python
-@prefect.task()
+@prefectlegacy.task()
 def a(): pass
 
-@prefect.task(trigger=prefect.triggers.any_failed)
+@prefectlegacy.task(trigger=prefectlegacy.triggers.any_failed)
 def b(): pass
 
-@prefect.task()
+@prefectlegacy.task()
 def c(): pass
 
-with prefect.Flow("My Flow") as flow:
+with prefectlegacy.Flow("My Flow") as flow:
     flow.chain(a, b, c)
 ```
 
 Running this flow will result in `A` completing successfully, followed by `B` and `C` having never been executed yet be in `TriggerFailed` states. However, consider adding an `any_failed` trigger to `C`:
 
 ```python{7}
-@prefect.task()
+@prefectlegacy.task()
 def a(): pass
 
-@prefect.task(trigger=prefect.triggers.any_failed)
+@prefectlegacy.task(trigger=prefectlegacy.triggers.any_failed)
 def b(): pass
 
-@prefect.task(trigger=prefect.triggers.any_failed)
+@prefectlegacy.task(trigger=prefectlegacy.triggers.any_failed)
 def c(): pass
 
-with prefect.Flow("My Flow") as flow:
+with prefectlegacy.Flow("My Flow") as flow:
     flow.chain(a, b, c)
 ```
 
@@ -78,7 +78,7 @@ Once these changes are made there is an opportunity to add additional functional
    instead of
    `switch(is_b_enabled, {True: b_task})`
 
-7. Add the ability to combine conditions: add `any_condition` and `all_conditions` reducing functions to `prefect.tasks.control_flow.conditional`. This would add an additional task to the flow, with upstreams being the individual conditions, and the new task emitting a “True” result or raising a `FAIL`.
+7. Add the ability to combine conditions: add `any_condition` and `all_conditions` reducing functions to `prefectlegacy.tasks.control_flow.conditional`. This would add an additional task to the flow, with upstreams being the individual conditions, and the new task emitting a “True” result or raising a `FAIL`.
 
    Example usage (within a flow context):
    `conditional(all_conditions(is_a_enabled, another_task), a_task)`

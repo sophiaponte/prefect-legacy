@@ -11,7 +11,7 @@ This flow takes in a [Parameter](/core/concepts/parameters.html) `stop` and then
 ```python
 from random import randrange
 
-from prefect import task, Flow, Parameter
+from prefectlegacy import task, Flow, Parameter
 
 @task
 def random_num(stop):
@@ -38,7 +38,7 @@ with Flow("parallel-execution") as flow:
 ```python
 from random import randrange
 
-from prefect import Flow, Parameter, Task
+from prefectlegacy import Flow, Parameter, Task
 
 class RandomNum(Task):
     def run(self, stop):
@@ -82,14 +82,14 @@ info on which executor makes sense for your flows).
 Using a `LocalDaskExecutor`:
 
 ```python
-from prefect.executors import LocalDaskExecutor
+from prefectlegacy.executors import LocalDaskExecutor
 flow.run(parameters={"stop": 5}, executor=LocalDaskExecutor())
 ```
 
 Using a `DaskExecutor`:
 
 ```python
-from prefect.executors import DaskExecutor
+from prefectlegacy.executors import DaskExecutor
 
 # If run in a script, you'll need to call `flow.run` from within an
 # `if __name__ == "__main__"` block. This isn't needed if using

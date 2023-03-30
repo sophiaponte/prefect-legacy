@@ -5,9 +5,9 @@ import pytest
 pytest.importorskip("boto3")
 pytest.importorskip("botocore")
 
-from prefect import context, Flow
-from prefect.storage import CodeCommit
-from prefect.utilities.aws import _CLIENT_CACHE
+from prefectlegacy import context, Flow
+from prefectlegacy.storage import CodeCommit
+from prefectlegacy.utilities.aws import _CLIENT_CACHE
 
 
 @pytest.fixture(autouse=True)
@@ -112,16 +112,16 @@ def test_add_flow_to_codecommit_already_added():
 
 def test_get_flow_codecommit(monkeypatch):
     client = MagicMock()
-    d = {"fileContent": b'import prefect; flow = prefect.Flow("test")'}
+    d = {"fileContent": b'import prefectlegacy; flow = prefectlegacy.Flow("test")'}
     client.__getitem__.side_effect = d.__getitem__
     boto3 = MagicMock(get_file=MagicMock(return_value=client))
-    monkeypatch.setattr("prefect.storage.CodeCommit._boto3_client", boto3)
+    monkeypatch.setattr("prefectlegacy.storage.CodeCommit._boto3_client", boto3)
 
     f = Flow("test")
 
     extract_flow_from_file = MagicMock(return_value=f)
     monkeypatch.setattr(
-        "prefect.storage.codecommit.extract_flow_from_file",
+        "prefectlegacy.storage.codecommit.extract_flow_from_file",
         extract_flow_from_file,
     )
 

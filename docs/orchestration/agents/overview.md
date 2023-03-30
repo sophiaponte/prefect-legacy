@@ -48,7 +48,7 @@ prefect agent local start
 Alternatively, all Prefect Agents can also be run using the Python API.
 
 ```python
-from prefect.agent.local import LocalAgent
+from prefectlegacy.agent.local import LocalAgent
 
 LocalAgent().start()
 ```
@@ -59,7 +59,7 @@ The following configuration options are shared for all agents.
 
 ### Authentication <Badge text="Cloud"/>
 
-Prefect agents rely on the use of an API key from Prefect Cloud. For information on how to create and configure API keys, see the
+Prefect agents rely on the use of an API key from prefectlegacy Cloud. For information on how to create and configure API keys, see the
 [API key documentation](../concepts/api_keys.md).
 
 In addition to the methods outlined there, you may pass an API key via CLI to an agent
@@ -73,7 +73,7 @@ $ prefect agent <agent-type> start --key "API_KEY"
 Prefect agents query the API for any pending flow runs. By default the address
 used is:
 
-- `https://api.prefect.io` for Prefect Cloud
+- `https://api.prefectlegacy.io` for Prefect Cloud
 - `http://localhost:4200` for Prefect Server
 
 If needed, you can manually configure the address through the CLI:
@@ -106,7 +106,7 @@ prefect agent <AGENT TYPE> start --label dev --label staging
 ::: tab Python API
 
 ```python
-from prefect.agent.docker import DockerAgent
+from prefectlegacy.agent.docker import DockerAgent
 
 DockerAgent(labels=["dev", "staging"]).start()
 ```
@@ -152,7 +152,7 @@ prefect agent <AGENT TYPE> start --env KEY=VALUE --env KEY2=VALUE2
 ::: tab Python API
 
 ```python
-from prefect.agent.docker import DockerAgent
+from prefectlegacy.agent.docker import DockerAgent
 
 DockerAgent(env_vars={"KEY": "VALUE", "KEY2": "VALUE2"})
 ```
@@ -162,7 +162,7 @@ DockerAgent(env_vars={"KEY": "VALUE", "KEY2": "VALUE2"})
 
 ### Agent Automations <Badge text="Cloud"/>
 
-Users on Standard or Enterprise licenses in Cloud can create an agent [automation](orchestration/concepts/automations.html) to notify them if all agents from a configuration group (agent config ids can be added to multiple agents) have not queried for work in a certain time frame.   To do so go to the [automations tab of the dashboard](https://cloud.prefect.io/automations=) in the UI and set up an agent configuration then copy the agent config id that is provided once your automation is created.  You can then provide the agent configuration to your agent using the --agent-config-id flag:
+Users on Standard or Enterprise licenses in Cloud can create an agent [automation](orchestration/concepts/automations.html) to notify them if all agents from a configuration group (agent config ids can be added to multiple agents) have not queried for work in a certain time frame.   To do so go to the [automations tab of the dashboard](https://cloud.prefectlegacy.io/automations=) in the UI and set up an agent configuration then copy the agent config id that is provided once your automation is created.  You can then provide the agent configuration to your agent using the --agent-config-id flag:
 
 ```bash
 prefect agent <AGENT TYPE> start --agent-config-id <AGENT CONFIG ID>
@@ -191,7 +191,7 @@ prefect agent <AGENT TYPE> start --agent-address http://localhost:8080
 ::: tab Python API
 
 ```python
-from prefect.agent.docker import DockerAgent
+from prefectlegacy.agent.docker import DockerAgent
 
 DockerAgent(agent_address="http://localhost:8080").start()
 ```

@@ -3,8 +3,8 @@ from unittest.mock import PropertyMock
 
 import pytest
 
-from prefect.storage import Local, Docker, Storage, get_default_storage_class
-from prefect.utilities.configuration import set_temporary_config
+from prefectlegacy.storage import Local, Docker, Storage, get_default_storage_class
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 @pytest.fixture
@@ -53,7 +53,7 @@ def test_default_storage():
 
 def test_default_storage_responds_to_config():
     with set_temporary_config(
-        {"flows.defaults.storage.default_class": "prefect.storage.Docker"}
+        {"flows.defaults.storage.default_class": "prefectlegacy.storage.Docker"}
     ):
         assert get_default_storage_class() is Docker
 

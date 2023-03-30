@@ -1,8 +1,8 @@
 import pytest
 
-import prefect
-from prefect.core import Edge, Flow, Parameter, Task
-from prefect.serialization.edge import EdgeSchema
+import prefectlegacy
+from prefectlegacy.core import Edge, Flow, Parameter, Task
+from prefectlegacy.serialization.edge import EdgeSchema
 
 
 def test_serialize_empty_dict():
@@ -27,11 +27,11 @@ def test_serialize_edge_only_records_task_slug():
     serialized = EdgeSchema().dump(Edge(t1, t2, key="x", mapped=True))
     assert serialized["upstream_task"] == {
         "slug": t1.slug,
-        "__version__": prefect.__version__,
+        "__version__": prefectlegacy.__version__,
     }
     assert serialized["downstream_task"] == {
         "slug": t2.slug,
-        "__version__": prefect.__version__,
+        "__version__": prefectlegacy.__version__,
     }
 
 

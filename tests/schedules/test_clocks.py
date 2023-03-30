@@ -5,9 +5,9 @@ from dateutil import rrule
 import pendulum
 import pytest
 
-from prefect import __version__
-from prefect.schedules import clocks
-from prefect.serialization.schedule import ClockSchema
+from prefectlegacy import __version__
+from prefectlegacy.schedules import clocks
+from prefectlegacy.serialization.schedule import ClockSchema
 
 
 def islice(generator, n):

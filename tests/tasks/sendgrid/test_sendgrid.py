@@ -1,6 +1,6 @@
 import pytest
 
-from prefect.tasks.sendgrid import SendEmail
+from prefectlegacy.tasks.sendgrid import SendEmail
 
 
 class TestInitialization:

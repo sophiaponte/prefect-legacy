@@ -44,7 +44,7 @@ Read the [docs](https://docs.prefect.io); get the [code](#installation); ask us 
 Prefect's Pythonic API should feel familiar for newcomers. Mark functions as tasks and call them on each other to build up a flow.
 
 ```python
-from prefect import task, Flow, Parameter
+from prefectlegacy import task, Flow, Parameter
 
 
 @task(log_stdout=True)

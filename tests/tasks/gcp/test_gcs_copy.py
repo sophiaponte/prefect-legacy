@@ -1,6 +1,6 @@
 import pytest
 
-from prefect.tasks.gcp import GCSCopy
+from prefectlegacy.tasks.gcp import GCSCopy
 
 
 class TestInitialization:

@@ -2,8 +2,8 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from prefect import context, Flow
-from prefect.storage import GitLab
+from prefectlegacy import context, Flow
+from prefectlegacy.storage import GitLab
 
 
 gitlab = pytest.importorskip("gitlab")
@@ -82,7 +82,7 @@ def test_get_flow_gitlab(monkeypatch):
 
     extract_flow_from_file = MagicMock(return_value=f)
     monkeypatch.setattr(
-        "prefect.storage.gitlab.extract_flow_from_file",
+        "prefectlegacy.storage.gitlab.extract_flow_from_file",
         extract_flow_from_file,
     )
 

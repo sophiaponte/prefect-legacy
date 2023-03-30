@@ -6,12 +6,12 @@ import textwrap
 
 import pytest
 
-import prefect
-from prefect.core import Flow, Task
-from prefect.engine import FlowRunner, TaskRunner, state
-from prefect.tasks.control_flow import switch
-from prefect.utilities.configuration import set_temporary_config
-from prefect.utilities.debug import is_serializable, raise_on_exception
+import prefectlegacy
+from prefectlegacy.core import Flow, Task
+from prefectlegacy.engine import FlowRunner, TaskRunner, state
+from prefectlegacy.tasks.control_flow import switch
+from prefectlegacy.utilities.configuration import set_temporary_config
+from prefectlegacy.utilities.debug import is_serializable, raise_on_exception
 
 
 class SuccessTask(Task):
@@ -26,7 +26,7 @@ class ErrorTask(Task):
 
 class BusinessTask(Task):
     def run(self):
-        raise prefect.engine.signals.FAIL("needs more blockchain!")
+        raise prefectlegacy.engine.signals.FAIL("needs more blockchain!")
 
 
 class MathTask(Task):
@@ -58,16 +58,16 @@ def test_raise_on_exception_raises_basic_error():
 
 
 @pytest.mark.parametrize(
-    "signal", prefect.engine.signals.PrefectStateSignal.__subclasses__()
+    "signal", prefectlegacy.engine.signals.PrefectStateSignal.__subclasses__()
 )
 def test_raise_on_exception_ignores_all_prefect_signals(signal):
     flow = Flow(name="test")
 
-    @prefect.task
+    @prefectlegacy.task
     def raise_signal():
         if (
-            prefect.context.get("task_loop_count", 1) < 2
-            and prefect.context.get("task_run_count", 1) < 2
+            prefectlegacy.context.get("task_loop_count", 1) < 2
+            and prefectlegacy.context.get("task_run_count", 1) < 2
             and signal.__name__ != "PAUSE"
         ):
             raise signal("my message")
@@ -129,21 +129,21 @@ def test_raise_on_exception_plays_well_with_context():
     flow = Flow(name="test")
     flow.add_task(MathTask())
     try:
-        assert "raise_on_exception" not in prefect.context
+        assert "raise_on_exception" not in prefectlegacy.context
         with raise_on_exception():
-            assert "raise_on_exception" in prefect.context
+            assert "raise_on_exception" in prefectlegacy.context
             flow.run()
     except ZeroDivisionError:
-        assert "raise_on_exception" not in prefect.context
+        assert "raise_on_exception" not in prefectlegacy.context
         pass
 
 
 def test_switch_works_with_raise_on_exception():
-    @prefect.task
+    @prefectlegacy.task
     def return_b():
         return "b"
 
-    tasks = {let: prefect.Task(name=let) for let in "abcde"}
+    tasks = {let: prefectlegacy.Task(name=let) for let in "abcde"}
 
     with Flow(name="test") as flow:
         res = switch(return_b, tasks)
@@ -167,7 +167,7 @@ def test_is_serializable_returns_false_for_curried_functions_defined_in_main():
     script = textwrap.dedent(
         """
         from toolz import curry
-        from prefect.utilities.debug import is_serializable
+        from prefectlegacy.utilities.debug import is_serializable
 
         @curry
         def f(x, y):
@@ -188,7 +188,7 @@ def test_is_serializable_with_raise_is_informative():
         """
         import subprocess
         from toolz import curry
-        from prefect.utilities.debug import is_serializable
+        from prefectlegacy.utilities.debug import is_serializable
 
         @curry
         def f(x, y):
@@ -205,6 +205,6 @@ def test_is_serializable_with_raise_is_informative():
 
 
 def test_is_serializable_raises_on_windows(monkeypatch):
-    monkeypatch.setattr("prefect.utilities.debug.sys.platform", "win32")
+    monkeypatch.setattr("prefectlegacy.utilities.debug.sys.platform", "win32")
     with pytest.raises(OSError):
         is_serializable(5)

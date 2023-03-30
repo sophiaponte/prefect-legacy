@@ -4,8 +4,8 @@ Tests for `TenantView`
 import pytest
 from unittest.mock import MagicMock
 
-from prefect.backend import TenantView
-from prefect.utilities.graphql import EnumValue
+from prefectlegacy.backend import TenantView
+from prefectlegacy.utilities.graphql import EnumValue
 
 TENANT_DATA_1 = {
     "id": "id-1",
@@ -42,7 +42,7 @@ def test_tenant_view_query_for_tenants_allows_returns_all_tenant_data(patch_post
 
 def test_tenant_view_query_for_tenants_uses_where_in_query(monkeypatch):
     post = MagicMock(return_value={"data": {"tenant": [TENANT_DATA_1]}})
-    monkeypatch.setattr("prefect.client.client.Client.post", post)
+    monkeypatch.setattr("prefectlegacy.client.client.Client.post", post)
 
     TenantView._query_for_tenants(where={"foo": {"_eq": "bar"}})
 
@@ -53,7 +53,7 @@ def test_tenant_view_query_for_tenants_uses_where_in_query(monkeypatch):
 
 def test_tenant_view_query_for_tenants_uses_order_by_in_query(monkeypatch):
     post = MagicMock(return_value={"data": {"tenant": [TENANT_DATA_1]}})
-    monkeypatch.setattr("prefect.client.client.Client.post", post)
+    monkeypatch.setattr("prefectlegacy.client.client.Client.post", post)
 
     TenantView._query_for_tenants(where={}, order_by={"foo": EnumValue("asc")})
 
@@ -65,7 +65,7 @@ def test_tenant_view_query_for_tenants_uses_order_by_in_query(monkeypatch):
 
 def test_tenant_view_query_for_tenants_includes_all_required_data(monkeypatch):
     graphql = MagicMock(return_value={"data": {"tenant": [TENANT_DATA_1]}})
-    monkeypatch.setattr("prefect.client.client.Client.graphql", graphql)
+    monkeypatch.setattr("prefectlegacy.client.client.Client.graphql", graphql)
 
     TenantView._query_for_tenants(where={})
 
@@ -95,7 +95,7 @@ def test_tenant_view_from_returns_instance(patch_post, from_method, monkeypatch)
         tenant = TenantView.from_tenant_id("fake-id")
     elif from_method == "current_tenant":
         monkeypatch.setattr(
-            "prefect.client.client.Client._get_auth_tenant",
+            "prefectlegacy.client.client.Client._get_auth_tenant",
             MagicMock(return_value="fake-id"),
         )
         tenant = TenantView.from_current_tenant()
@@ -107,7 +107,7 @@ def test_tenant_view_from_returns_instance(patch_post, from_method, monkeypatch)
 
 def test_tenant_view_from_tenant_id_where_clause(monkeypatch):
     post = MagicMock(return_value={"data": {"tenant": [TENANT_DATA_1]}})
-    monkeypatch.setattr("prefect.client.client.Client.post", post)
+    monkeypatch.setattr("prefectlegacy.client.client.Client.post", post)
 
     TenantView.from_tenant_id(tenant_id="id-1")
 

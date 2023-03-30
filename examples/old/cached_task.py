@@ -9,8 +9,8 @@ We run our flow on a 1 minute interval schedule and observe that the output of
 import datetime
 import random
 
-from prefect import Flow, task
-from prefect.schedules import IntervalSchedule
+from prefectlegacy import Flow, task
+from prefectlegacy.schedules import IntervalSchedule
 
 
 @task(cache_for=datetime.timedelta(minutes=1, seconds=30))

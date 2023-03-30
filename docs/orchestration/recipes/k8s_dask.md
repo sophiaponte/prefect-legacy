@@ -96,7 +96,7 @@ dependencies your flow needs to execute, either by using the flow's Docker
 storage as the image for Dask or by building a custom image with all the
 required dependencies. The manifest above uses the `prefecthq/prefect:latest`
 image for both the Dask scheduler & worker pods, since our flow has no external
-dependencies beyond Prefect.
+dependencies beyond prefectlegacy.
 :::
 
 ## Flow Source
@@ -111,10 +111,10 @@ Here we create a flow configured with:
   that the flow source should be built and stored in a new Docker image.
 
 ```python
-from prefect import task, Flow
-from prefect.executors import DaskExecutor
-from prefect.run_configs import KubernetesRun
-from prefect.storage import Docker
+from prefectlegacy import task, Flow
+from prefectlegacy.executors import DaskExecutor
+from prefectlegacy.run_configs import KubernetesRun
+from prefectlegacy.storage import Docker
 
 
 @task

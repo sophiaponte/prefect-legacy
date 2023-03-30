@@ -4,7 +4,7 @@ extension = ".md"
 
 [pages.triggers]
 title = "Triggers"
-module = "prefect.triggers"
+module = "prefectlegacy.triggers"
 functions = [
     "all_finished",
     "manual_only",
@@ -19,7 +19,7 @@ functions = [
 
 [pages.backend.artifacts]
 title = "Artifacts"
-module = "prefect.backend.artifacts"
+module = "prefectlegacy.backend.artifacts"
 functions = [
     "create_link_artifact",
     "update_link_artifact",
@@ -30,98 +30,98 @@ functions = [
 
 [pages.backend.flow]
 title = "Flow"
-module = "prefect.backend.flow"
+module = "prefectlegacy.backend.flow"
 classes = ["FlowView"]
 
 [pages.backend.flow_run]
 title = "Flow Run"
-module = "prefect.backend.flow_run"
+module = "prefectlegacy.backend.flow_run"
 classes = ["FlowRunView"]
 functions = ["watch_flow_run"]
 
 [pages.backend.task_run]
 title = "Task Run"
-module = "prefect.backend.task_run"
+module = "prefectlegacy.backend.task_run"
 classes = ["TaskRunView"]
 
 [pages.backend.tenant]
 title = "Tenant"
-module = "prefect.backend.tenant"
+module = "prefectlegacy.backend.tenant"
 classes = ["TenantView"]
 
 [pages.backend.kv_store]
 title = "KV Store"
-module = "prefect.backend.kv_store"
+module = "prefectlegacy.backend.kv_store"
 functions = ["set_key_value", "get_key_value", "delete_key", "list_keys"]
 
 [pages.client.client]
 title = "Client"
-module = "prefect.client"
+module = "prefectlegacy.client"
 classes = ["Client"]
 
 [pages.client.secrets]
 title = "Secrets"
-module = "prefect.client.secrets"
+module = "prefectlegacy.client.secrets"
 classes = ["Secret"]
 
 [pages.cli.agent]
 title = "agent"
-module = "prefect.cli.agent"
+module = "prefectlegacy.cli.agent"
 commands = ["local", "docker", "kubernetes", "ecs"]
 
 [pages.cli.auth]
 title = "auth"
-module = "prefect.cli.auth"
+module = "prefectlegacy.cli.auth"
 commands = ["login", "logout", "list_tenants", "switch_tenants", "create_key", "list_keys", "revoke_key", "status"]
 
 [pages.cli.create]
 title = "create"
-module = "prefect.cli.create"
+module = "prefectlegacy.cli.create"
 commands = ["project"]
 
 [pages.cli.delete]
 title = "delete"
-module = "prefect.cli.delete"
+module = "prefectlegacy.cli.delete"
 commands = ["project"]
 
 [pages.cli.describe]
 title = "describe"
-module = "prefect.cli.describe"
+module = "prefectlegacy.cli.describe"
 commands = ["flows", "tasks", "flow_runs"]
 
 [pages.cli.get]
 title = "get"
-module = "prefect.cli.get"
+module = "prefectlegacy.cli.get"
 commands = ["flows", "tasks", "projects", "flow_runs", "logs"]
 
 [pages.cli.register]
 title = "register"
-module = "prefect.cli.build_register"
+module = "prefectlegacy.cli.build_register"
 commands = ["register"]
 
 [pages.cli.build]
 title = "build"
-module = "prefect.cli.build_register"
+module = "prefectlegacy.cli.build_register"
 commands = ["build"]
 
 [pages.cli.kv_store]
 title = "kv_store"
-module = "prefect.cli.kv_store"
+module = "prefectlegacy.cli.kv_store"
 commands = ["set_command", "get_command", "delete_command", "list_command"]
 
 [pages.cli.run]
 title = "run"
-module = "prefect.cli.run"
+module = "prefectlegacy.cli.run"
 commands = ["run"]
 
 [pages.cli.server]
 title = "server"
-module = "prefect.cli.server"
+module = "prefectlegacy.cli.server"
 commands = ["start", "create_tenant", "stop", "config_cmd"]
 
 [pages.schedules.schedules]
 title = "Schedules"
-module = "prefect.schedules.schedules"
+module = "prefectlegacy.schedules.schedules"
 classes = [
     "Schedule",
 ]
@@ -133,7 +133,7 @@ functions = [
 
 [pages.schedules.clocks]
 title = "Clocks"
-module = "prefect.schedules.clocks"
+module = "prefectlegacy.schedules.clocks"
 classes = [
     "Clock",
     "IntervalClock",
@@ -144,7 +144,7 @@ classes = [
 
 [pages.schedules.filters]
 title = "Filters"
-module = "prefect.schedules.filters"
+module = "prefectlegacy.schedules.filters"
 functions = [
     "at_time",
     "between_datetimes",
@@ -159,7 +159,7 @@ functions = [
 
 [pages.schedules.adjustments]
 title = "Adjustments"
-module = "prefect.schedules.adjustments"
+module = "prefectlegacy.schedules.adjustments"
 functions = [
     "add",
     "next_weekday",
@@ -167,32 +167,32 @@ functions = [
 
 [pages.core.edge]
 title = "Edge"
-module = "prefect.core.edge"
+module = "prefectlegacy.core.edge"
 classes = ["Edge"]
 
 [pages.core.flow]
 title = "Flow"
-module = "prefect.core.flow"
+module = "prefectlegacy.core.flow"
 classes = ["Flow"]
 
 [pages.core.task]
 title = "Task"
-module = "prefect.core.task"
+module = "prefectlegacy.core.task"
 classes = ["Task"]
 
 [pages.core.parameters]
 title = "Parameter"
-module = "prefect.core.parameter"
+module = "prefectlegacy.core.parameter"
 classes = ["Parameter", "DateTimeParameter"]
 
 [pages.engine.cache_validators]
 title = "Cache Validators"
-module = "prefect.engine.cache_validators"
+module = "prefectlegacy.engine.cache_validators"
 functions = ["never_use", "duration_only", "all_inputs", "all_parameters", "partial_parameters_only", "partial_inputs_only"]
 
 [pages.engine.state]
 title = "State"
-module = "prefect.engine.state"
+module = "prefectlegacy.engine.state"
 classes = [
             "State",
             "Pending",
@@ -219,7 +219,7 @@ classes = [
         ]
 
 [pages.engine.signals]
-module = "prefect.engine.signals"
+module = "prefectlegacy.engine.signals"
 title = "Signals"
 classes = [
             "ENDRUN",
@@ -235,52 +235,52 @@ classes = [
 
 [pages.engine.flow_runner]
 title = "FlowRunner"
-module = "prefect.engine.flow_runner"
+module = "prefectlegacy.engine.flow_runner"
 classes = ["FlowRunner"]
 
 [pages.engine.task_runner]
 title = "TaskRunner"
-module = "prefect.engine.task_runner"
+module = "prefectlegacy.engine.task_runner"
 classes = ["TaskRunner"]
 
 [pages.engine.result]
 title = "Results"
-module = "prefect.engine.result"
+module = "prefectlegacy.engine.result"
 classes = ["Result"]
 
 [pages.engine.results]
 title = "Result Subclasses"
-module = "prefect.engine.results"
+module = "prefectlegacy.engine.results"
 classes = ["PrefectResult", "GCSResult", "LocalResult", "S3Result", "AzureResult", "SecretResult", "ConstantResult"]
 
 [pages.engine.serializers]
 title = "Result Serializers"
-module = "prefect.engine.serializers"
+module = "prefectlegacy.engine.serializers"
 classes = ["Serializer", "PickleSerializer", "JSONSerializer", "DateTimeSerializer", "PandasSerializer", "CompressedSerializer"]
 
 [pages.engine.cloud]
 title = "Cloud"
-module = "prefect.engine.cloud"
+module = "prefectlegacy.engine.cloud"
 classes = ["CloudFlowRunner", "CloudTaskRunner"]
 
 [pages.executors]
 title = "Executors"
-module = "prefect.executors"
+module = "prefectlegacy.executors"
 classes = {Executor=[], LocalExecutor=[], LocalDaskExecutor=[], DaskExecutor=[]}
 
 [pages.run_configs]
 title = "Run Configuration"
-module = "prefect.run_configs"
+module = "prefectlegacy.run_configs"
 classes = ["RunConfig", "UniversalRun", "LocalRun", "DockerRun", "KubernetesRun", "ECSRun", "VertexRun"]
 
 [pages.storage]
 title = "Storage"
-module = "prefect.storage"
+module = "prefectlegacy.storage"
 classes = {"Storage" = ["add_flow", "build"], "Azure" = [], "Bitbucket" = [], "CodeCommit" = [], "Docker" = [], "GCS" = [], "Git" = [], "GitHub" = [], "GitLab" = [], "Local" = [], "Module" = [], "S3" = [], "Webhook" = []}
 
 [pages.exceptions]
 title = "Exceptions"
-module = "prefect.exceptions"
+module = "prefectlegacy.exceptions"
 classes = [
     "PrefectSignal", 
     "VersionLockMismatchSignal", 
@@ -293,23 +293,23 @@ classes = [
 
 [pages.tasks.control_flow]
 title = "Control Flow Tasks"
-module = "prefect.tasks.control_flow"
+module = "prefectlegacy.tasks.control_flow"
 classes = ["FilterTask", "case"]
 functions = ["switch", "ifelse", "merge"]
 
 [pages.tasks.airtable]
 title = "Airtable Tasks"
-module = "prefect.tasks.airtable"
+module = "prefectlegacy.tasks.airtable"
 classes = ["WriteAirtableRow", "ReadAirtableRow"]
 
 [pages.tasks.aws]
 title = "AWS Tasks"
-module = "prefect.tasks.aws"
+module = "prefectlegacy.tasks.aws"
 classes = ["S3Download", "S3Upload", "S3List", "LambdaCreate", "LambdaDelete" , "LambdaInvoke", "LambdaList", "StepActivate", "AWSSecretsManager", "AWSParametersManager", "BatchSubmit", "AWSClientWait"]
 
 [pages.tasks.azure]
 title = "Azure Tasks"
-module = "prefect.tasks.azure"
+module = "prefectlegacy.tasks.azure"
 classes = ["BlobStorageDownload",
            "BlobStorageUpload",
            "CosmosDBCreateItem",
@@ -321,7 +321,7 @@ classes = ["BlobStorageDownload",
 
 [pages.tasks.azureml]
 title = "Azure ML Service Tasks"
-module = "prefect.tasks.azureml"
+module = "prefectlegacy.tasks.azureml"
 classes = ["DatasetCreateFromDelimitedFiles",
            "DatasetCreateFromParquetFiles",
            "DatasetCreateFromFiles",
@@ -332,13 +332,13 @@ classes = ["DatasetCreateFromDelimitedFiles",
 
 [pages.tasks.fivetran]
 title = "Fivetran Tasks"
-module = "prefect.tasks.fivetran"
+module = "prefectlegacy.tasks.fivetran"
 classes = ["FivetranSyncTask"]
 verified_task = true
 
 [pages.tasks.prefect]
 title = "Prefect Tasks"
-module = "prefect.tasks.prefect"
+module = "prefectlegacy.tasks.prefect"
 classes = [
     "StartFlowRun",
     "RenameFlowRun",
@@ -350,12 +350,12 @@ classes = [
 
 [pages.tasks.github]
 title = "GitHub Tasks"
-module = "prefect.tasks.github"
+module = "prefectlegacy.tasks.github"
 classes = ["CreateGitHubPR", "OpenGitHubIssue", "CreateIssueComment", "GetRepoInfo", "CreateBranch"]
 
 [pages.tasks.kubernetes]
 title = "Kubernetes Tasks"
-module = "prefect.tasks.kubernetes"
+module = "prefectlegacy.tasks.kubernetes"
 classes = [
         "CreateNamespacedDeployment",
         "DeleteNamespacedDeployment",
@@ -389,7 +389,7 @@ classes = [
 
 [pages.tasks.dbt]
 title = "DBT Tasks"
-module = "prefect.tasks.dbt"
+module = "prefectlegacy.tasks.dbt"
 classes = [
         "DbtShellTask",
         "DbtCloudRunJob"
@@ -398,12 +398,12 @@ verified_task = true
 
 [pages.tasks.asana]
 title = "Asana Tasks"
-module = "prefect.tasks.asana"
+module = "prefectlegacy.tasks.asana"
 classes = ["OpenAsanaToDo"]
 
 [pages.tasks.docker]
 title = "Docker Tasks"
-module = "prefect.tasks.docker"
+module = "prefectlegacy.tasks.docker"
 classes = [
         "BuildImage",
         "ListImages",
@@ -422,12 +422,12 @@ classes = [
 
 [pages.tasks.dropbox]
 title = "Dropbox Tasks"
-module = "prefect.tasks.dropbox"
+module = "prefectlegacy.tasks.dropbox"
 classes = ["DropboxDownload"]
 
 [pages.tasks.exasol]
 title = "Exasol Tasks"
-module = "prefect.tasks.exasol"
+module = "prefectlegacy.tasks.exasol"
 classes = [
         "ExasolFetch",
         "ExasolExecute",
@@ -437,7 +437,7 @@ classes = [
 
 [pages.tasks.files]
 title = "File and Filesystem Tasks"
-module = "prefect.tasks.files"
+module = "prefectlegacy.tasks.files"
 classes = [
         "Copy",
         "Glob",
@@ -449,12 +449,12 @@ classes = [
 
 [pages.tasks.firebolt]
 title = "Firebolt Tasks"
-module = "prefect.tasks.firebolt"
+module = "prefectlegacy.tasks.firebolt"
 classes = ["FireboltQuery"]
 
 [pages.tasks.gcp]
 title = "Google Cloud Tasks"
-module = "prefect.tasks.gcp"
+module = "prefectlegacy.tasks.gcp"
 classes = [
         "GCPSecret",
         "GCSDownload",
@@ -471,13 +471,13 @@ verified_task = true
 
 [pages.tasks.great_expectations]
 title = "Great Expectations Task"
-module = "prefect.tasks.great_expectations"
+module = "prefectlegacy.tasks.great_expectations"
 classes = ["RunGreatExpectationsValidation"]
 verified_task = true
 
 [pages.tasks.gsheets]
 title = "Google Sheets Tasks"
-module = "prefect.tasks.gsheets"
+module = "prefectlegacy.tasks.gsheets"
 classes = [
         "WriteGsheetRow",
         "ReadGsheetRow",
@@ -485,17 +485,17 @@ classes = [
 
 [pages.tasks.jira]
 title = "Jira Tasks"
-module = "prefect.tasks.jira"
+module = "prefectlegacy.tasks.jira"
 classes = ["JiraTask", "JiraServiceDeskTask"]
 
 [pages.tasks.jupyter]
 title = "Jupyter Tasks"
-module = "prefect.tasks.jupyter"
+module = "prefectlegacy.tasks.jupyter"
 classes = ["ExecuteNotebook"]
 
 [pages.tasks.kafka]
 title = "Kafka Tasks"
-module = "prefect.tasks.kafka"
+module = "prefectlegacy.tasks.kafka"
 classes = [
         "KafkaBatchConsume",
         "KafkaBatchProduce"
@@ -503,105 +503,105 @@ classes = [
 
 [pages.tasks.monday]
 title = "Monday Tasks"
-module = "prefect.tasks.monday"
+module = "prefectlegacy.tasks.monday"
 classes = ["CreateItem"]
 
 [pages.tasks.trello]
 title = "Trello Tasks"
-module = "prefect.tasks.trello"
+module = "prefectlegacy.tasks.trello"
 classes = ["CreateCard"]
 
 [pages.tasks.mysql]
 title = "MySQL Tasks"
-module = "prefect.tasks.mysql"
+module = "prefectlegacy.tasks.mysql"
 classes = ["MySQLExecute", "MySQLFetch"]
 
 [pages.tasks.notifications]
 title = "Notification Tasks"
-module = "prefect.tasks.notifications"
+module = "prefectlegacy.tasks.notifications"
 classes = ["EmailTask", "SlackTask", "PushbulletTask"]
 
 [pages.tasks.postgres]
 title = "Postgres Tasks"
-module = "prefect.tasks.postgres"
+module = "prefectlegacy.tasks.postgres"
 classes = ["PostgresExecute", "PostgresExecuteMany", "PostgresFetch"]
 
 [pages.tasks.prometheus]
 title = "prometheus Tasks"
-module = "prefect.tasks.prometheus"
+module = "prefectlegacy.tasks.prometheus"
 classes = ["PushGaugeToGateway", "PushAddGaugeToGateway"]
 
 [pages.tasks.sql_server]
 title = "SQL Server Tasks"
-module = "prefect.tasks.sql_server"
+module = "prefectlegacy.tasks.sql_server"
 classes = ["SqlServerExecute", "SqlServerExecuteMany", "SqlServerFetch"]
 
 [pages.tasks.redis]
 title = "Redis Tasks"
-module = "prefect.tasks.redis"
+module = "prefectlegacy.tasks.redis"
 classes = ["RedisSet", "RedisGet", "RedisExecute"]
 
 [pages.tasks.rss]
 title = "RSS Tasks"
-module = "prefect.tasks.rss"
+module = "prefectlegacy.tasks.rss"
 classes = ["ParseRSSFeed"]
 
 [pages.tasks.secrets]
 title = "Secret Tasks"
-module = "prefect.tasks.secrets"
+module = "prefectlegacy.tasks.secrets"
 classes = ["SecretBase", "PrefectSecret", "EnvVarSecret"]
 
 [pages.tasks.snowflake]
 title = "Snowflake Tasks"
-module = "prefect.tasks.snowflake"
+module = "prefectlegacy.tasks.snowflake"
 classes = ["SnowflakeQuery", "SnowflakeQueriesFromFile"]
 verified_task = true
 
 [pages.tasks.sodasql]
 title = "SodaSQL Tasks"
-module = "prefect.tasks.sodasql"
+module = "prefectlegacy.tasks.sodasql"
 classes = ["SodaSQLScan"]
 
 [pages.tasks.sodaspark]
 title = "SodaSpark Tasks"
-module = "prefect.tasks.sodaspark"
+module = "prefectlegacy.tasks.sodaspark"
 classes = ["SodaSparkScan"]
 
 [pages.tasks.mixpanel]
 title = "Mixpanel Tasks"
-module = "prefect.tasks.mixpanel"
+module = "prefectlegacy.tasks.mixpanel"
 classes = ["MixpanelExportTask"]
 
 [pages.tasks.databricks]
 title = "Databricks Tasks"
-module = "prefect.tasks.databricks"
+module = "prefectlegacy.tasks.databricks"
 classes = ["DatabricksSubmitRun", "DatabricksRunNow", "DatabricksSubmitMultitaskRun", "DatabricksGetJobID"]
 verified_task = true
 
 [pages.tasks.spacy]
 title = "spaCy Tasks"
-module = "prefect.tasks.spacy"
+module = "prefectlegacy.tasks.spacy"
 classes = ["SpacyNLP", "SpacyTagger", "SpacyParser", "SpacyNER", "SpacyComponent"]
 
 [pages.tasks.sqlite]
 title = "SQLite Tasks"
-module = "prefect.tasks.database"
+module = "prefectlegacy.tasks.database"
 classes = ["SQLiteQuery", "SQLiteScript"]
 verified_task = true
 
 [pages.tasks.function]
 title = "Function Tasks"
-module = "prefect.tasks.core.function"
+module = "prefectlegacy.tasks.core.function"
 classes = ["FunctionTask"]
 
 [pages.tasks.collections]
 title = "Collection Tasks"
-module = "prefect.tasks.core.collections"
+module = "prefectlegacy.tasks.core.collections"
 classes = ["List", "Tuple", "Set", "Dict"]
 
 [pages.tasks.operators]
 title = "Operator Tasks"
-module = "prefect.tasks.core.operators"
+module = "prefectlegacy.tasks.core.operators"
 classes = [
     "GetItem",
     "GetAttr",
@@ -624,192 +624,192 @@ classes = [
     ]
 [pages.tasks.constants]
 title = "Constant Tasks"
-module = "prefect.tasks.core.constants"
+module = "prefectlegacy.tasks.core.constants"
 classes = ["Constant"]
 
 [pages.tasks.resources]
 title = "ResourceManager Tasks"
-module = "prefect.tasks.core.resource_manager"
+module = "prefectlegacy.tasks.core.resource_manager"
 classes = ["ResourceManager"]
 functions = ["resource_manager"]
 
 [pages.tasks.shell]
 title = "Shell Tasks"
-module = "prefect.tasks.shell"
+module = "prefectlegacy.tasks.shell"
 classes = ["ShellTask"]
 
 [pages.tasks.strings]
 title = "String Templating Tasks"
-module = "prefect.tasks.templates"
+module = "prefectlegacy.tasks.templates"
 classes = ["StringFormatter", "JinjaTemplate"]
 
 [pages.tasks.twitter]
 title = "Twitter Tasks"
-module = "prefect.tasks.twitter"
+module = "prefectlegacy.tasks.twitter"
 classes = ["LoadTweetReplies"]
 
 [pages.agent.agent]
 title = "Agent"
-module = "prefect.agent"
+module = "prefectlegacy.agent"
 classes = {Agent = ["start"]}
 
 [pages.agent.local]
 title = "Local Agent"
-module = "prefect.agent.local"
+module = "prefectlegacy.agent.local"
 classes = {LocalAgent = ["start"]}
 
 [pages.agent.docker]
 title = "Docker Agent"
-module = "prefect.agent.docker"
+module = "prefectlegacy.agent.docker"
 classes = {DockerAgent = ["start"]}
 
 [pages.agent.kubernetes]
 title = "Kubernetes Agent"
-module = "prefect.agent.kubernetes"
+module = "prefectlegacy.agent.kubernetes"
 classes = {KubernetesAgent = ["start"]}
 
 [pages.agent.ecs]
 title = "ECS Agent"
-module = "prefect.agent.ecs"
+module = "prefectlegacy.agent.ecs"
 classes = {ECSAgent = ["start"]}
 
 [pages.agent.vertex]
 title = "Vertex Agent"
-module = "prefect.agent.vertex"
+module = "prefectlegacy.agent.vertex"
 classes = {VertexAgent = ["start"]}
 
 [pages.utilities.collections]
 title = "Collections"
-module = "prefect.utilities.collections"
+module = "prefectlegacy.utilities.collections"
 classes = ["DotDict"]
 functions = ["merge_dicts", "as_nested_dict", "dict_to_flatdict", "flatdict_to_dict"]
 
 [pages.utilities.configuration]
 title = "Configuration"
-module = "prefect.utilities.configuration"
+module = "prefectlegacy.utilities.configuration"
 functions = ["set_temporary_config"]
 
 [pages.utilities.context]
 title = "Context"
-module = "prefect.utilities.context"
+module = "prefectlegacy.utilities.context"
 classes = ["Context"]
 
 [pages.utilities.debug]
 title = "Debugging Tools"
-module = "prefect.utilities.debug"
+module = "prefectlegacy.utilities.debug"
 functions = ["is_serializable", "raise_on_exception"]
 
 [pages.utilities.diagnostics]
 title = "Diagnostics"
-module = "prefect.utilities.diagnostics"
+module = "prefectlegacy.utilities.diagnostics"
 functions = ["diagnostic_info", "flow_information", "system_information", "config_overrides", "environment_variables"]
 
 [pages.utilities.executors]
 title = "Executors"
-module = "prefect.utilities.executors"
+module = "prefectlegacy.utilities.executors"
 functions = ["run_task_with_timeout"]
 
 [pages.utilities.gcp]
 title = "Google Utilities"
-module = "prefect.utilities.gcp"
+module = "prefectlegacy.utilities.gcp"
 functions = ["get_storage_client", "get_bigquery_client"]
 
 [pages.utilities.graphql]
 title = "GraphQL"
-module = "prefect.utilities.graphql"
+module = "prefectlegacy.utilities.graphql"
 classes = ["EnumValue"]
 functions = ["parse_graphql", "parse_graphql_arguments", "with_args", "compress", "decompress"]
 
 [pages.utilities.logging]
 title = "Logging"
-module = "prefect.utilities.logging"
+module = "prefectlegacy.utilities.logging"
 functions = ["configure_logging", "get_logger"]
 
 [pages.utilities.notifications]
 title = "Notifications and Callback Tools"
-module = "prefect.utilities.notifications"
+module = "prefectlegacy.utilities.notifications"
 functions = ["callback_factory", "slack_notifier", "gmail_notifier", "jira_notification.jira_notifier"]
 
 [pages.utilities.serialization]
 title = "Serialization"
-module = "prefect.utilities.serialization"
+module = "prefectlegacy.utilities.serialization"
 classes = ["JSONCompatible", "Nested", "Bytes", "UUID", "FunctionReference"]
 functions = ["to_qualified_name", "from_qualified_name"]
 
 [pages.utilities.tasks]
 title = "Task Utilities"
-module = "prefect.utilities.tasks"
+module = "prefectlegacy.utilities.tasks"
 classes = []
 functions = ["tags", "as_task", "pause_task", "task", "defaults_from_attrs", "apply_map"]
 
 [pages.utilities.edges]
 title = "Edge Utilities"
-module = "prefect.utilities.edges"
+module = "prefectlegacy.utilities.edges"
 classes = ["unmapped", "mapped", "flatten"]
 functions = []
 
 [pages.tasks.dremio]
 title = "Dremio Tasks"
-module = "prefect.tasks.dremio"
+module = "prefectlegacy.tasks.dremio"
 classes = ["DremioFetch"]
 
 [pages.tasks.sendgrid]
 title = "SendGrid Tasks"
-module = "prefect.tasks.sendgrid"
+module = "prefectlegacy.tasks.sendgrid"
 classes = ["SendEmail"]
 
 [pages.tasks.census]
 title = "Census Tasks"
-module = "prefect.tasks.census"
+module = "prefectlegacy.tasks.census"
 classes = ["CensusSyncTask"]
 verified_task = true
 
 [pages.tasks.airbyte]
 title = "Airbyte Tasks"
-module = "prefect.tasks.airbyte"
+module = "prefectlegacy.tasks.airbyte"
 classes = ["AirbyteConnectionTask","AirbyteConfigurationExport"]
 verified_task = true
 
 [pages.tasks.cubejs]
 title = "Cube.js Tasks"
-module = "prefect.tasks.cubejs"
+module = "prefectlegacy.tasks.cubejs"
 classes = ["CubeJSQueryTask"]
 
 [pages.tasks.monte_carlo]
 title = "Monte Carlo Tasks"
-module = "prefect.tasks.monte_carlo"
+module = "prefectlegacy.tasks.monte_carlo"
 classes = ["MonteCarloCreateOrUpdateLineage", "MonteCarloCreateOrUpdateNodeWithTags", "MonteCarloGetResources"]
 verified_task = true
 
 [pages.tasks.zendesk]
 title = "Zendesk Tasks"
-module = "prefect.tasks.zendesk"
+module = "prefectlegacy.tasks.zendesk"
 classes = ["ZendeskTicketsIncrementalExportTask"]
 
 [pages.tasks.Neo4j]
 title = "Neo4j Tasks"
-module = "prefect.tasks.neo4j"
+module = "prefectlegacy.tasks.neo4j"
 classes = ["Neo4jRunCypherQueryTask"]
 
 [pages.tasks.Transform]
 title = "Transform Tasks"
-module = "prefect.tasks.transform"
+module = "prefectlegacy.tasks.transform"
 classes = ["TransformCreateMaterialization"]
 verified_task = true
 
 [pages.tasks.Hightouch]
 title = "Hightouch Tasks"
-module = "prefect.tasks.hightouch"
+module = "prefectlegacy.tasks.hightouch"
 classes = ["HightouchRunSync"]
 
 [pages.tasks.sftp]
 title = "SFTP Tasks"
-module = "prefect.tasks.sftp.sftp"
+module = "prefectlegacy.tasks.sftp.sftp"
 classes = ["SftpDownload", "SftpUpload"]
 
 [pages.tasks.toloka]
 title = "Toloka Tasks"
-module = "prefect.tasks.toloka"
+module = "prefectlegacy.tasks.toloka"
 functions = ["create_project",
              "create_exam_pool",
              "create_pool",

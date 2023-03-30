@@ -1,8 +1,8 @@
 from unittest.mock import MagicMock
-import prefect
-from prefect import context
-from prefect.tasks.jira import JiraServiceDeskTask
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy import context
+from prefectlegacy.tasks.jira import JiraServiceDeskTask
+from prefectlegacy.utilities.configuration import set_temporary_config
 import pytest
 
 pytest.importorskip("jira")
@@ -28,7 +28,7 @@ class TestInitialization:
         jira = MagicMock(client=client)
         monkeypatch.setattr("jira.JIRA", jira)
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(
+            with prefectlegacy.context(
                 secrets=dict(
                     JIRASECRETS={
                         "JIRAUSER": "Bob",
@@ -55,7 +55,7 @@ class TestInitialization:
         jira = MagicMock(client=client)
         monkeypatch.setattr("jira.JIRA", jira)
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(
+            with prefectlegacy.context(
                 secrets=dict(
                     JIRASECRETS={
                         "JIRAUSER": "Bob",
@@ -73,7 +73,7 @@ class TestInitialization:
         jira = MagicMock(client=client)
         monkeypatch.setattr("jira.JIRA", jira)
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(
+            with prefectlegacy.context(
                 secrets=dict(
                     JIRASECRETS={
                         "JIRAUSER": "Bob",

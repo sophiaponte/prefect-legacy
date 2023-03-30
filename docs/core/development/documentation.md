@@ -25,14 +25,14 @@ information:
   documented).
 - `functions` (list, optional): a list of function names in `module` to document
 
-For example, to document a module `prefect.utilities.example` with a class
+For example, to document a module `prefectlegacy.utilities.example` with a class
 `MyClass` and a function `my_function`, you might add the following to
 `outline.toml`:
 
 ```
 [pages.utilities.example]
 title = "Example Module"
-module = "prefect.utilities.example"
+module = "prefectlegacy.utilities.example"
 classes = ["MyClass"]
 functions = ["my_function"]
 ```
@@ -41,12 +41,12 @@ Most reference docs sections update their sidebars automatically by detecting
 the files generated from `outline.toml`. However, in some instances you may
 have to include your file explicitly. To do so, update
 `docs/.vuepress/config.js` and add it to the appropriate "children" section.
-The actual `prefect.utilities` section _does_ auto-update its sidebar, but for
+The actual `prefectlegacy.utilities` section _does_ auto-update its sidebar, but for
 the sake of example, you would add the new file to the children array like so:
 
 ```javascript
 {
-    title: 'prefect.utilities',
+    title: 'prefectlegacy.utilities',
     collapsable: true,
     children: [
         'utilities/collections',
@@ -102,7 +102,7 @@ You will also need to install the rest of Prefect's dependencies for generating
 docs. You only need to do this once:
 
 ```bash
-git clone https://github.com/PrefectHQ/prefect.git
+git clone https://github.com/PrefectHQ/prefectlegacy.git
 cd prefect
 npm install
 pip install ".[all_extras]"

@@ -1,15 +1,15 @@
 import pytest
 
-import prefect
-from prefect import Flow, Task, task, Parameter
-from prefect.engine.state import Skipped, Success
-from prefect.tasks.control_flow import FilterTask, ifelse, merge, switch, case
-from prefect.tasks.control_flow.conditional import CompareValue
+import prefectlegacy
+from prefectlegacy import Flow, Task, task, Parameter
+from prefectlegacy.engine.state import Skipped, Success
+from prefectlegacy.tasks.control_flow import FilterTask, ifelse, merge, switch, case
+from prefectlegacy.tasks.control_flow.conditional import CompareValue
 
 
 class Condition(Task):
     def run(self):
-        return prefect.context.CONDITION
+        return prefectlegacy.context.CONDITION
 
 
 class SuccessTask(Task):
@@ -27,7 +27,7 @@ def test_ifelse(condition_value):
         cnd = ifelse(condition, true_branch, false_branch)
         assert len(flow.tasks) == 6
 
-    with prefect.context(CONDITION=condition_value):
+    with prefectlegacy.context(CONDITION=condition_value):
         state = flow.run()
 
     assert isinstance(
@@ -47,7 +47,7 @@ def test_ifelse_doesnt_add_None_task(condition_value):
         cnd = ifelse(condition, true_branch, None)
         assert len(flow.tasks) == 4
 
-    with prefect.context(CONDITION=condition_value):
+    with prefectlegacy.context(CONDITION=condition_value):
         state = flow.run()
 
     assert isinstance(
@@ -64,7 +64,7 @@ def test_ifelse_with_truthy_conditions(condition_value):
     with Flow(name="test") as flow:
         cnd = ifelse(condition, true_branch, false_branch)
 
-    with prefect.context(CONDITION=condition_value):
+    with prefectlegacy.context(CONDITION=condition_value):
         state = flow.run()
 
     assert state.result[true_branch].is_successful()
@@ -80,7 +80,7 @@ def test_ifelse_with_falsey_conditions(condition_value):
     with Flow(name="test") as flow:
         cnd = ifelse(condition, true_branch, false_branch)
 
-    with prefect.context(CONDITION=condition_value):
+    with prefectlegacy.context(CONDITION=condition_value):
         state = flow.run()
 
     assert state.result[true_branch].is_skipped()
@@ -99,7 +99,7 @@ def test_switch(condition_value):
         switch(condition, dict(a=a_branch, b=b_branch, c=c_branch, d=d_branch))
         assert len(flow.tasks) == 9
 
-    with prefect.context(CONDITION=condition_value):
+    with prefectlegacy.context(CONDITION=condition_value):
         state = flow.run()
         assert isinstance(
             state.result[a_branch], Success if condition_value == "a" else Skipped
@@ -133,7 +133,7 @@ def test_merging_diamond_flow():
 
         merge_task = merge(true_branch[-1], false_branch[-1])
 
-    with prefect.context(CONDITION=True):
+    with prefectlegacy.context(CONDITION=True):
         state = flow.run()
 
         for t in true_branch:
@@ -240,7 +240,7 @@ def test_merging_with_objects_that_cant_be_equality_compared():
         ifelse(Condition(), success, return_array)
         merge_task = merge(success, return_array)
 
-    with prefect.context(CONDITION=False):
+    with prefectlegacy.context(CONDITION=False):
         flow_state = flow.run()
     assert flow_state.is_successful()
     assert isinstance(flow_state.result[merge_task].result, SpecialObject)
@@ -249,7 +249,7 @@ def test_merging_with_objects_that_cant_be_equality_compared():
 def test_merging_skips_if_all_upstreams_skip():
     @task
     def skip_task():
-        raise prefect.engine.signals.SKIP("not today")
+        raise prefectlegacy.engine.signals.SKIP("not today")
 
     with Flow("skipper") as flow:
         merge_task = merge(skip_task(), skip_task())
@@ -271,21 +271,21 @@ def test_list_of_tasks():
         false_branch = SuccessTask()
         ifelse(condition, true_branch, false_branch)
 
-    with prefect.context(CONDITION=True):
+    with prefectlegacy.context(CONDITION=True):
         state = flow.run()
 
         for t in true_branch:
             assert isinstance(state.result[t], Success)
         assert isinstance(state.result[false_branch], Skipped)
 
-    with prefect.context(CONDITION=False):
+    with prefectlegacy.context(CONDITION=False):
         state = flow.run()
 
         for t in true_branch:
             # the tasks in the list ran becuase they have no upstream dependencies.
             assert isinstance(state.result[t], Success)
         list_task = next(
-            t for t in flow.tasks if isinstance(t, prefect.tasks.core.collections.List)
+            t for t in flow.tasks if isinstance(t, prefectlegacy.tasks.core.collections.List)
         )
         # but the list itself skipped
         assert isinstance(state.result[list_task], Skipped)
@@ -294,7 +294,7 @@ def test_list_of_tasks():
 
 def test_merge_with_upstream_skip_arg_raises_error():
     with pytest.raises(ValueError, match="skip_on_upstream_skip=False"):
-        prefect.tasks.control_flow.conditional.Merge(skip_on_upstream_skip=True)
+        prefectlegacy.tasks.control_flow.conditional.Merge(skip_on_upstream_skip=True)
 
 
 def test_merge_diamond_flow_with_results():
@@ -312,11 +312,11 @@ def test_merge_diamond_flow_with_results():
         ifelse(condition, true_branch, false_branch)
         merge_task = merge(true_branch, false_branch)
 
-    with prefect.context(CONDITION=True):
+    with prefectlegacy.context(CONDITION=True):
         state = flow.run()
         assert state.result[merge_task].result == 1
 
-    with prefect.context(CONDITION=False):
+    with prefectlegacy.context(CONDITION=False):
         state = flow.run()
         assert state.result[merge_task].result == 0
 
@@ -336,7 +336,7 @@ def test_merge_can_distinguish_between_a_none_result_and_an_unrun_task():
         ifelse(condition, true_branch, false_branch)
         merge_task = merge(true_branch, false_branch)
 
-    with prefect.context(CONDITION=True):
+    with prefectlegacy.context(CONDITION=True):
         state = flow.run()
         assert state.result[merge_task].result is None
 
@@ -355,7 +355,7 @@ def test_merge_with_list():
         ifelse(condition, true_branch, false_branch)
         merge_task = merge(true_branch, false_branch)
 
-    with prefect.context(CONDITION=True):
+    with prefectlegacy.context(CONDITION=True):
         state = flow.run()
         assert state.result[merge_task].result == [1, 2]
 
@@ -381,15 +381,15 @@ class TestFilterTask:
         task = FilterTask()
         assert task.name == "FilterTask"
         assert task.skip_on_upstream_skip is False
-        assert task.trigger == prefect.triggers.all_finished
+        assert task.trigger == prefectlegacy.triggers.all_finished
 
     def test_skip_on_upstream_skip_can_be_overwritten(self):
         task = FilterTask(skip_on_upstream_skip=True)
         assert task.skip_on_upstream_skip is True
 
     def test_trigger_can_be_overwritten(self):
-        task = FilterTask(trigger=prefect.triggers.manual_only)
-        assert task.trigger == prefect.triggers.manual_only
+        task = FilterTask(trigger=prefectlegacy.triggers.manual_only)
+        assert task.trigger == prefectlegacy.triggers.manual_only
 
     def test_default_filter_func_filters_noresults_and_exceptions(self):
         task = FilterTask()
@@ -443,13 +443,13 @@ class TestCase:
         with Flow("test"):
             c1 = case(identity(True), True)
             c2 = case(identity(False), True)
-            assert "case" not in prefect.context
+            assert "case" not in prefectlegacy.context
             with c1:
-                assert prefect.context["case"] is c1
+                assert prefectlegacy.context["case"] is c1
                 with c2:
-                    assert prefect.context["case"] is c2
-                assert prefect.context["case"] is c1
-            assert "case" not in prefect.context
+                    assert prefectlegacy.context["case"] is c2
+                assert prefectlegacy.context["case"] is c1
+            assert "case" not in prefectlegacy.context
 
     def test_case_upstream_tasks(self):
         with Flow("test") as flow:

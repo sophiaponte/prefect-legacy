@@ -35,12 +35,12 @@ name of the project you wish to register it under.
 Here's the example flow we're using (updated to now say "Hello, Cloud!"):
 
 ```python
-import prefect
-from prefect import task, Flow
+import prefectlegacy
+from prefectlegacy import task, Flow
 
 @task
 def say_hello():
-    logger = prefect.context.get("logger")
+    logger = prefectlegacy.context.get("logger")
     logger.info("Hello, Cloud!")
 
 with Flow("hello-flow") as flow:
@@ -73,7 +73,7 @@ Assuming you saved the code shown above to a file called `hello_flow.py` (or edi
 ```bash
 $ python hello_flow.py
 Result check: OK
-Flow URL: https://cloud.prefect.io/dev-prefectio/flow/fc5e630d-9154-489d-98d4-ea6ffabb9ca0
+Flow URL: https://cloud.prefectlegacy.io/dev-prefectio/flow/fc5e630d-9154-489d-98d4-ea6ffabb9ca0
  └── ID: 90f9f57b-bff6-4d34-85be-8696d9982306
  └── Project: tutorial
  └── Labels: ['LABEL']
@@ -123,7 +123,7 @@ tutorial.
 
 You're now ready to execute your first flow run!
 
-Flow runs can be created in a few different ways. Running a flow from Prefect Cloud is an easy way to control flow runs. Even non-engineering users can run and monitor flows from the Prefect Cloud UI.
+Flow runs can be created in a few different ways. Running a flow from prefectlegacy Cloud is an easy way to control flow runs. Even non-engineering users can run and monitor flows from the Prefect Cloud UI.
 
 On the [Flow page](/orchestration/ui/flow.md) click **Quick Run** in the
 upper-right corner.

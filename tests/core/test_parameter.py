@@ -1,11 +1,11 @@
 import pendulum
 import pytest
 
-import prefect
-from prefect.core.flow import Flow
-from prefect.core.parameter import DateTimeParameter, Parameter
-from prefect.core.task import Task
-from prefect.tasks.core.function import FunctionTask
+import prefectlegacy
+from prefectlegacy.core.flow import Flow
+from prefectlegacy.core.parameter import DateTimeParameter, Parameter
+from prefectlegacy.core.task import Task
+from prefectlegacy.tasks.core.function import FunctionTask
 
 
 def test_create_parameter():
@@ -102,7 +102,7 @@ def test_copy_requires_name():
 
 
 class TestDateTimeParameter:
-    @prefect.task
+    @prefectlegacy.task
     def return_value(x):
         return x
 

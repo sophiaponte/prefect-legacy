@@ -5,8 +5,8 @@ import pytest
 import responses
 from requests import PreparedRequest
 
-import prefect
-from prefect.tasks.databricks import (
+import prefectlegacy
+from prefectlegacy.tasks.databricks import (
     DatabricksGetJobID,
     DatabricksRunNow,
     DatabricksSubmitRun,
@@ -155,17 +155,17 @@ def get_jobid_task_template(databricks_list_api_response_success):
 @pytest.fixture
 def flow_run_id():
     flow_run_id = "a1b2c3d4"
-    prefect.context.flow_run_id = flow_run_id
+    prefectlegacy.context.flow_run_id = flow_run_id
     yield flow_run_id
-    del prefect.context.flow_run_id
+    del prefectlegacy.context.flow_run_id
 
 
 @pytest.fixture
 def flow_run_name():
     flow_run_name = "angry_cat"
-    prefect.context.flow_run_name = flow_run_name
+    prefectlegacy.context.flow_run_name = flow_run_name
     yield flow_run_name
-    del prefect.context.flow_run_name
+    del prefectlegacy.context.flow_run_name
 
 
 @pytest.fixture
@@ -264,7 +264,7 @@ def body_entry_matcher(key: str, value: Any):
 
 def test_raises_if_invalid_host_submitrun(job_config):
 
-    # from prefect.tasks.secrets import PrefectSecret
+    # from prefectlegacy.tasks.secrets import prefectlegacySecret
     # conn = PrefectSecret('DATABRICKS_CONNECTION_STRING')
     # task = DatabricksSubmitRun(databricks_conn_secret=conn, json=job_config)
 
@@ -277,7 +277,7 @@ def test_raises_if_invalid_host_submitrun(job_config):
 
 def test_raises_if_invalid_host_runnow(notebook_job_config):
 
-    # from prefect.tasks.secrets import PrefectSecret
+    # from prefectlegacy.tasks.secrets import prefectlegacySecret
     # conn = PrefectSecret('DATABRICKS_CONNECTION_STRING')
     # task = DatabricksSubmitRun(databricks_conn_secret=conn, json=job_config)
 

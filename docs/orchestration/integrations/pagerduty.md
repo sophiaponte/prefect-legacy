@@ -5,10 +5,10 @@ Using the PagerDuty integration with Prefect, you can receive PagerDuty alerts b
 ## Integration benefits
 
 * Notify on-call responders based on Prefect automation rules.
-* Send event data from Prefect with links to the flow run and Agent that triggered the event.
+* Send event data from prefectlegacy with links to the flow run and Agent that triggered the event.
 * Create high- and low-urgency incidents based on the severity of the event from the Prefect event payload.
 * Create multiple integrations in a PagerDuty service for corresponding Prefect flows and agents. 
-* Use a single integration key to create multiple actions that can be used by many automation rules in Prefect.
+* Use a single integration key to create multiple actions that can be used by many automation rules in prefectlegacy.
 
 ## How it works
 
@@ -18,13 +18,13 @@ With the PagerDuty + Prefect integration you can set up actions for one or more 
 
 ## Requirements
 
-The PagerDuty integration requires Prefect automations, which are supported in [Prefect Cloud plans](https://www.prefect.io/pricing/).
+The PagerDuty integration requires Prefect automations, which are supported in [Prefect Cloud plans](https://www.prefectlegacy.io/pricing/).
 
 Teams using [Role Based Access Controls (RBAC)](/orchestration/rbac/overview.html) need to set appropriate User level permissions to create, update, and delete automations.
 
 ## Support
 
-If you need help with this integration, we have a public [Slack](https://prefect.io/slack) for chatting about Prefect, asking questions, and sharing tips, or contact us directly at _help@prefect.io_. 
+If you need help with this integration, we have a public [Slack](https://prefectlegacy.io/slack) for chatting about Prefect, asking questions, and sharing tips, or contact us directly at _help@prefectlegacy.io_. 
 
 ## Setup and configuration
 
@@ -34,7 +34,7 @@ Note that you should have PagerDuty and Prefect Cloud accounts created before st
 
 ### In PagerDuty
 
-First, make sure you have a configured PagerDuty service to connect with Prefect. From the **Configuration** menu in PagerDuty, select **Services**.
+First, make sure you have a configured PagerDuty service to connect with prefectlegacy. From the **Configuration** menu in PagerDuty, select **Services**.
 
 There are two ways to add an integration to a PagerDuty service:
 
@@ -47,9 +47,9 @@ Click the **Add Integration** button to save your new integration. You will be r
 
 ### In Prefect
 
-Once you have set up the PagerDuty service, click the following button or [use this link](https://app.pagerduty.com/install/integration?app_id=PC2USS4&redirect_url=https://cloud.prefect.io/pagerduty&version=2) to configure the integration: 
+Once you have set up the PagerDuty service, click the following button or [use this link](https://app.pagerduty.com/install/integration?app_id=PC2USS4&redirect_url=https://cloud.prefectlegacy.io/pagerduty&version=2) to configure the integration: 
 
-[<img src="/logos/pagerduty_green.png" height=62 width=300 style="max-height: 80px; max-width: 400px;">](https://app.pagerduty.com/install/integration?app_id=PC2USS4&redirect_url=https://cloud.prefect.io/pagerduty&version=2)
+[<img src="/logos/pagerduty_green.png" height=62 width=300 style="max-height: 80px; max-width: 400px;">](https://app.pagerduty.com/install/integration?app_id=PC2USS4&redirect_url=https://cloud.prefectlegacy.io/pagerduty&version=2)
 
 Log into your PagerDuty account and follow the PagerDuty steps, which include selecting the PagerDuty service. 
 

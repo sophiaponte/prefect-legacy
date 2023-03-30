@@ -5,9 +5,9 @@ editLink: false
 # Docker Agent
 ---
  ## DockerAgent
- <div class='class-sig' id='prefect-agent-docker-agent-dockeragent'><p class="prefect-sig">class </p><p class="prefect-class">prefect.agent.docker.agent.DockerAgent</p>(agent_config_id=None, name=None, labels=None, env_vars=None, max_polls=None, agent_address=None, no_cloud_logs=None, base_url=None, no_pull=None, volumes=None, show_flow_logs=False, networks=None, reg_allow_list=None, docker_client_timeout=None, docker_interface=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/agent/docker/agent.py#L38">[source]</a></span></div>
+ <div class='class-sig' id='prefect-agent-docker-agent-dockeragent'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.agent.docker.agent.DockerAgent</p>(agent_config_id=None, name=None, labels=None, env_vars=None, max_polls=None, agent_address=None, no_cloud_logs=None, base_url=None, no_pull=None, volumes=None, show_flow_logs=False, networks=None, reg_allow_list=None, docker_client_timeout=None, docker_interface=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/agent/docker/agent.py#L38">[source]</a></span></div>
 
-Agent which deploys flow runs locally as Docker containers. Information on using the Docker Agent can be found at https://docs.prefect.io/orchestration/agents/docker.html
+Agent which deploys flow runs locally as Docker containers. Information on using the Docker Agent can be found at https://docs.prefectlegacy.io/orchestration/agents/docker.html
 
 This agent requires Docker v20.10.0+
 
@@ -35,7 +35,7 @@ prefect agent docker start --network prefect-server
 
 |methods: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |:----|
- | <div class='method-sig' id='prefect-agent-agent-agent-start'><p class="prefect-class">prefect.agent.agent.Agent.start</p>()<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/agent/agent.py#L180">[source]</a></span></div>
+ | <div class='method-sig' id='prefect-agent-agent-agent-start'><p class="prefect-class">prefectlegacy.agent.agent.Agent.start</p>()<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/agent/agent.py#L180">[source]</a></span></div>
 <p class="methods">The main entrypoint to the agent process. Sets up the agent then continuously polls for work to submit.<br><br>This is the only method that should need to be called externally.</p>|
 
 ---

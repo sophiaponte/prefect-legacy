@@ -3,15 +3,15 @@ from unittest.mock import MagicMock
 
 pytest.importorskip("boto3")
 
-from prefect.engine.signals import FAIL
-from prefect.tasks.aws import BatchSubmit
+from prefectlegacy.engine.signals import FAIL
+from prefectlegacy.tasks.aws import BatchSubmit
 
 
 @pytest.fixture
 def batch_client(monkeypatch):
     batch_client = MagicMock()
     boto3 = MagicMock(client=MagicMock(return_value=batch_client))
-    monkeypatch.setattr("prefect.utilities.aws.boto3", boto3)
+    monkeypatch.setattr("prefectlegacy.utilities.aws.boto3", boto3)
     yield batch_client
 
 

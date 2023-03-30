@@ -7,9 +7,9 @@ import uuid
 from requests.exceptions import HTTPError
 from typing import Any, Dict, Optional
 
-from prefect import context
-from prefect import task, Flow
-from prefect.storage.webhook import Webhook, _render_dict
+from prefectlegacy import context
+from prefectlegacy import task, Flow
+from prefectlegacy.storage.webhook import Webhook, _render_dict
 
 
 @pytest.fixture
@@ -323,7 +323,7 @@ def templating_works_with_embedded_json_strings():
 def test_webhook_works_with_file_storage(sample_flow, tmpdir):
 
     script_file = os.path.join(tmpdir, "{}.py".format(str(uuid.uuid4())))
-    script_contents = """from prefect import Flow\nf=Flow('test-flow')"""
+    script_contents = """from prefectlegacy import Flow\nf=Flow('test-flow')"""
     with open(script_file, "w") as f:
         f.write(script_contents)
 
@@ -343,7 +343,7 @@ def test_webhook_works_with_file_storage(sample_flow, tmpdir):
     )
 
     def _mock_successful_get(*args, **kwargs):
-        file_contents = """from prefect import Flow\nf=Flow('test-flow')"""
+        file_contents = """from prefectlegacy import Flow\nf=Flow('test-flow')"""
         return _MockResponse(
             status_code=200, json={}, content=file_contents.encode("utf-8")
         )

@@ -6,7 +6,7 @@ editLink: false
 ---
 This module implements the Prefect context that is available when tasks run.
 
-Tasks can import `prefect` and access `prefect.context` values that will be set
+Tasks can import `prefect` and access `prefectlegacy.context` values that will be set
 when the task is run.
 
 Context values can be accessed as attributes or as dictionary items.
@@ -16,12 +16,12 @@ consistently across execution environments.
 Example:
 
 ```python
-import prefect
+import prefectlegacy
 
-with prefect.context(dict(a=1, b=2)):
-    print(prefect.context.a) # 1
+with prefectlegacy.context(dict(a=1, b=2)):
+    print(prefectlegacy.context.a) # 1
 
-print(prefect.context.get("a")) # undefined
+print(prefectlegacy.context.get("a")) # undefined
 ```
 
 Prefect provides various key / value pairs in context that are always available during task runs:
@@ -36,7 +36,7 @@ Prefect provides various key / value pairs in context that are always available 
 | `tomorrow` | tomorrow's date formatted as `YYYY-MM-DD`|
 | `tomorrow_nodash` | tomorrow's date formatted as `YYYYMMDD`|
 | `logger` | the logger for the current task |
-| `config` | the complete [Prefect configuration](https://docs.prefect.io/core/concepts/configuration.html) object that is being used during this run |
+| `config` | the complete [Prefect configuration](https://docs.prefectlegacy.io/core/concepts/configuration.html) object that is being used during this run |
 | `flow_name` | the name of the current flow |
 | `scheduled_start_time` | a datetime object representing the scheduled start time for the flow run; falls back to `now` for unscheduled runs |
 | `parameters` | a dictionary of parameter values for the current flow run |
@@ -65,9 +65,9 @@ Prefect Cloud and Server supply some additional context variables:
 
 Users can also provide values to context at runtime. For more information, see
 the [Context concept
-doc](https://docs.prefect.io/core/concepts/execution.html#context).
+doc](https://docs.prefectlegacy.io/core/concepts/execution.html#context).
  ## Context
- <div class='class-sig' id='prefect-utilities-context-context'><p class="prefect-sig">class </p><p class="prefect-class">prefect.utilities.context.Context</p>(*args, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/utilities/context.py#L78">[source]</a></span></div>
+ <div class='class-sig' id='prefect-utilities-context-context'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.utilities.context.Context</p>(*args, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/utilities/context.py#L78">[source]</a></span></div>
 
 A thread safe context store for Prefect data.
 

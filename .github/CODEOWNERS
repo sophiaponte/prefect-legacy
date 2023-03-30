@@ -2,7 +2,7 @@
 *                           @madkinsz
 
 # task library owners
-/src/prefect/tasks          @desertaxle
+/src/prefectlegacy/tasks          @desertaxle
 /tests/tasks                @desertaxle
 /docs/core/task_library     @desertaxle
 

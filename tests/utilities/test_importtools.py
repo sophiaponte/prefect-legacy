@@ -1,6 +1,6 @@
 import pytest
 
-from prefect.utilities.importtools import import_object
+from prefectlegacy.utilities.importtools import import_object
 
 
 def test_import_object():
@@ -14,10 +14,10 @@ def test_import_object():
 
 def test_import_object_submodule_not_an_attribute():
     # `hello_world` is not in the `prefect` top-level
-    hello_world = import_object("prefect.hello_world")
-    import prefect.hello_world
+    hello_world = import_object("prefectlegacy.hello_world")
+    import prefectlegacy.hello_world
 
-    assert hello_world is prefect.hello_world
+    assert hello_world is prefectlegacy.hello_world
 
 
 def test_import_object_module_does_not_exist():

@@ -5,13 +5,13 @@ editLink: false
 # Edge Utilities
 ---
  ## unmapped
- <div class='class-sig' id='prefect-utilities-edges-unmapped'><p class="prefect-sig">class </p><p class="prefect-class">prefect.utilities.edges.unmapped</p>(value)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/utilities/edges.py#L57">[source]</a></span></div>
+ <div class='class-sig' id='prefect-utilities-edges-unmapped'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.utilities.edges.unmapped</p>(value)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/utilities/edges.py#L57">[source]</a></span></div>
 
 A container for specifying that a task should _not_ be mapped over when called with `task.map`.
 
 **Args**:     <ul class="args"><li class="args">`value (Any)`: the task or value to mark as "unmapped"; if not a Task         subclass, Prefect will attempt to convert it to one when the edge is         created.</li></ul> **Example**:     
 ```python
-    from prefect import Flow, Task, unmapped
+    from prefectlegacy import Flow, Task, unmapped
 
     class AddTask(Task):
         def run(self, x, y):
@@ -33,13 +33,13 @@ A container for specifying that a task should _not_ be mapped over when called w
 <br>
 
  ## mapped
- <div class='class-sig' id='prefect-utilities-edges-mapped'><p class="prefect-sig">class </p><p class="prefect-class">prefect.utilities.edges.mapped</p>(value)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/utilities/edges.py#L25">[source]</a></span></div>
+ <div class='class-sig' id='prefect-utilities-edges-mapped'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.utilities.edges.mapped</p>(value)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/utilities/edges.py#L25">[source]</a></span></div>
 
 A container for specifying that a task should be mapped over when supplied as the input to another task.
 
 **Args**:     <ul class="args"><li class="args">`value (Any)`: the task or value to mark as "mapped"; if not a Task         subclass, Prefect will attempt to convert it to one when the edge is         created.</li></ul> **Example**:     
 ```python
-    from prefect import Flow, Task, mapped
+    from prefectlegacy import Flow, Task, mapped
 
     class AddTask(Task):
         def run(self, x, y):
@@ -61,13 +61,13 @@ A container for specifying that a task should be mapped over when supplied as th
 <br>
 
  ## flatten
- <div class='class-sig' id='prefect-utilities-edges-flatten'><p class="prefect-sig">class </p><p class="prefect-class">prefect.utilities.edges.flatten</p>(value)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/utilities/edges.py#L89">[source]</a></span></div>
+ <div class='class-sig' id='prefect-utilities-edges-flatten'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.utilities.edges.flatten</p>(value)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/utilities/edges.py#L89">[source]</a></span></div>
 
 A container for specifying that a task's output should be flattened before being passed to another task.
 
 **Args**:     <ul class="args"><li class="args">`value (Any)`: the task or value to mark as "flattened"; if not a Task         subclass, Prefect will attempt to convert it to one when the edge is         created.</li></ul> **Example**:     
 ```python
-    from prefect import Flow, Task, flatten
+    from prefectlegacy import Flow, Task, flatten
 
     class Add(Task):
         def run(self, x):

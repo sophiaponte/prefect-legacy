@@ -1,7 +1,7 @@
 from click.testing import CliRunner
 
-import prefect
-from prefect.cli import cli, config, version
+import prefectlegacy
+from prefectlegacy.cli import cli, config, version
 
 
 def test_init():
@@ -28,7 +28,7 @@ def test_version():
     runner = CliRunner()
     result = runner.invoke(cli, ["version"])
     assert result.exit_code == 0
-    assert result.output.rstrip() == prefect.__version__
+    assert result.output.rstrip() == prefectlegacy.__version__
 
 
 def test_config():

@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from prefect.utilities.filesystems import parse_path, read_bytes_from_path
+from prefectlegacy.utilities.filesystems import parse_path, read_bytes_from_path
 
 
 class Test_parse_path:
@@ -71,10 +71,10 @@ class Test_read_bytes_from_path:
 
     @pytest.mark.parametrize("scheme", ["gcs", "gs"])
     def test_read_gcs(self, monkeypatch, scheme):
-        pytest.importorskip("prefect.utilities.gcp")
+        pytest.importorskip("prefectlegacy.utilities.gcp")
         client = MagicMock()
         monkeypatch.setattr(
-            "prefect.utilities.gcp.get_storage_client", MagicMock(return_value=client)
+            "prefectlegacy.utilities.gcp.get_storage_client", MagicMock(return_value=client)
         )
         res = read_bytes_from_path(f"{scheme}://mybucket/path/to/thing.yaml")
         assert client.bucket.call_args[0] == ("mybucket",)
@@ -85,10 +85,10 @@ class Test_read_bytes_from_path:
         assert blob.download_as_bytes.return_value is res
 
     def test_read_s3(self, monkeypatch):
-        pytest.importorskip("prefect.utilities.aws")
+        pytest.importorskip("prefectlegacy.utilities.aws")
         client = MagicMock()
         monkeypatch.setattr(
-            "prefect.utilities.aws.get_boto_client", MagicMock(return_value=client)
+            "prefectlegacy.utilities.aws.get_boto_client", MagicMock(return_value=client)
         )
         res = read_bytes_from_path("s3://mybucket/path/to/thing.yaml")
         assert client.download_fileobj.call_args[1]["Bucket"] == "mybucket"

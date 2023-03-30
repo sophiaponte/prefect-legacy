@@ -2,7 +2,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from prefect.tasks.azureml import (
+from prefectlegacy.tasks.azureml import (
     DatasetCreateFromDelimitedFiles,
     DatasetCreateFromParquetFiles,
     DatasetCreateFromFiles,
@@ -41,7 +41,7 @@ class TestDatasetCreateFromDelimitedFiles:
         tabular = MagicMock()
         dataset = MagicMock(Tabular=tabular)
         monkeypatch.setattr(
-            "prefect.tasks.azureml.dataset.azureml.core.dataset.Dataset", dataset
+            "prefectlegacy.tasks.azureml.dataset.azureml.core.dataset.Dataset", dataset
         )
         task = DatasetCreateFromDelimitedFiles(
             dataset_name=name, datastore=mock_datastore, path=path
@@ -61,7 +61,7 @@ class TestDatasetCreateFromDelimitedFiles:
         tabular = MagicMock()
         dataset = MagicMock(Tabular=tabular)
         monkeypatch.setattr(
-            "prefect.tasks.azureml.dataset.azureml.core.dataset.Dataset", dataset
+            "prefectlegacy.tasks.azureml.dataset.azureml.core.dataset.Dataset", dataset
         )
         task = DatasetCreateFromDelimitedFiles(
             dataset_name=name, datastore=mock_datastore, path=path
@@ -100,7 +100,7 @@ class TestDatasetCreateFromParquetFiles:
         tabular = MagicMock()
         dataset = MagicMock(Tabular=tabular)
         monkeypatch.setattr(
-            "prefect.tasks.azureml.dataset.azureml.core.dataset.Dataset", dataset
+            "prefectlegacy.tasks.azureml.dataset.azureml.core.dataset.Dataset", dataset
         )
         task = DatasetCreateFromParquetFiles(
             dataset_name=name, datastore=mock_datastore, path=path
@@ -120,7 +120,7 @@ class TestDatasetCreateFromParquetFiles:
         tabular = MagicMock()
         dataset = MagicMock(Tabular=tabular)
         monkeypatch.setattr(
-            "prefect.tasks.azureml.dataset.azureml.core.dataset.Dataset", dataset
+            "prefectlegacy.tasks.azureml.dataset.azureml.core.dataset.Dataset", dataset
         )
         task = DatasetCreateFromParquetFiles(
             dataset_name=name, datastore=mock_datastore, path=path
@@ -157,7 +157,7 @@ class TestDatasetCreateFromFiles:
         file_class = MagicMock()
         dataset = MagicMock(File=file_class)
         monkeypatch.setattr(
-            "prefect.tasks.azureml.dataset.azureml.core.dataset.Dataset", dataset
+            "prefectlegacy.tasks.azureml.dataset.azureml.core.dataset.Dataset", dataset
         )
         task = DatasetCreateFromFiles(
             dataset_name=name, datastore=mock_datastore, path=path
@@ -175,7 +175,7 @@ class TestDatasetCreateFromFiles:
         file_class = MagicMock()
         dataset = MagicMock(File=file_class)
         monkeypatch.setattr(
-            "prefect.tasks.azureml.dataset.azureml.core.dataset.Dataset", dataset
+            "prefectlegacy.tasks.azureml.dataset.azureml.core.dataset.Dataset", dataset
         )
         task = DatasetCreateFromFiles(
             dataset_name=name, datastore=mock_datastore, path=path

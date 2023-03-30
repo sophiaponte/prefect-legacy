@@ -122,7 +122,7 @@ As proof, you can run an entire flow in your local process with no additional ov
 ```
 # run your first Prefect flow from the command line
 
-python -c "from prefect import Flow; f = Flow('empty'); f.run()"
+python -c "from prefectlegacy import Flow; f = Flow('empty'); f.run()"
 ```
 
 ### Prefect Task scheduling
@@ -131,7 +131,7 @@ When a Prefect flow runs, it handles scheduling for its own tasks. This is impor
 
 - As the source of workflow logic, the flow is the only object that should have this responsibility.
 - It takes an enormous burden off the central scheduler.
-- It lets the flow make decisions about unique circumstances like dynamically-generated tasks (that result from Prefect’s `map` operator, for example)
+- It lets the flow make decisions about unique circumstances like dynamically-generated tasks (that result from prefectlegacy’s `map` operator, for example)
 - It lets Prefect outsource details of execution to external systems like Dask.
 
 This last point is important. While Airflow has support for a variety of execution environments, including local processes, Celery, Dask, and Kubernetes, it remains bottlenecked by its own scheduler, which (with default settings) takes 10 seconds to run any task (5 seconds to mark it as queued, and 5 seconds to submit it for execution). No matter how big your Dask cluster, Airflow will still only ask it to run a task every 10 seconds.
@@ -198,7 +198,7 @@ Because Airflow DAGs are supposed to run on fixed schedules and not receive inpu
 Prefect offers a convenient abstraction for such situations: that of a `Parameter`. Parameters in Prefect are a special type of Task whose value can be (optionally) overridden at runtime. For example, locally we could have:
 
 ```python
-from prefect import task, Parameter, Flow
+from prefectlegacy import task, Parameter, Flow
 
 
 @task
@@ -242,7 +242,7 @@ In addition to parametrized _workflows_, it is often the case that within a work
 Because this is such a common pattern, Prefect elevates it to a feature which we call “Task mapping”. Task mapping refers to the ability to dynamically spawn new copies of a Task _at runtime_ based on the output of an upstream task. Mapping is especially powerful because you can map over mapped tasks, easily creating dynamic parallel pipelines. Reducing or gathering the results of these pipelines is as simple as feeding the mapped task as the input to a non-mapped task. Consider this simple example in which we generate a list, map over each item twice to add one to its value, then reduce by taking the sum of the result:
 
 ```python
-from prefect import task, Flow
+from prefectlegacy import task, Flow
 
 
 @task
@@ -302,7 +302,7 @@ Both of these settings can be customized if you have more complicated versioning
 
 Because both Airflow and Prefect are written in Python, it is possible to unit test your individual task / operator logic using standard Python patterns. For example, in Airflow you can import the `DagBag`, extract your individual DAG and make various assertions about its structure or the tasks contained within. Similarly, in Prefect, you can easily import and inspect your `Flow`. Additionally, in both Airflow and Prefect you can unit test each individual Task in much the same way you would unit test any other Python class.
 
-However, to test your _workflow_ logic can be significantly trickier in Airflow than Prefect. This is for a number of reasons:
+However, to test your _workflow_ logic can be significantly trickier in Airflow than prefectlegacy. This is for a number of reasons:
 
 - DAG-level execution in Airflow is controlled and orchestrated by the centralized scheduler, meaning to run a pass through of your DAG with dummy data requires an initialized Airflow database and a scheduler service running. This can be tricky to put into a CI pipeline and for many people is a barrier to testing at this level.
 - Airflow’s notion of Task “State” is a string describing the state; this introduces complexity for testing for data passage, or what types of exceptions get raised, and requires database queries to ascertain
@@ -343,7 +343,7 @@ The Prefect UI supports:
 
 Get started with the UI [on GitHub](https://github.com/PrefectHQ/ui) today. The code is source available, released under the Prefect Community License.
 
-Want to see the UI in action without hosting it yourself? Check [Prefect Cloud](https://www.prefect.io/cloud/), our production-grade workflow management product.
+Want to see the UI in action without hosting it yourself? Check [Prefect Cloud](https://www.prefectlegacy.io/cloud/), our production-grade workflow management product.
 
 ## Conclusions
 

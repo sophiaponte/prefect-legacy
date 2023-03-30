@@ -2,7 +2,7 @@
 
 ## Overview
 
-States are the "currency" of Prefect. All information about tasks and flows is transmitted via rich `State` objects. While you don't need to know the details of the state system to use Prefect, you can give your workflows superpowers by taking advantage of it.
+States are the "currency" of prefectlegacy. All information about tasks and flows is transmitted via rich `State` objects. While you don't need to know the details of the state system to use Prefect, you can give your workflows superpowers by taking advantage of it.
 
 At any moment, you can learn anything you need to know about a task or flow by examining its current state or the history of its states. For example, a state could tell you:
 
@@ -71,7 +71,7 @@ Whenever the task's state changes, the handler will be called with the task itse
 For example, to send a notification whenever a task is retried:
 
 ```python
-from prefect.engine import state
+from prefectlegacy.engine import state
 
 def notify_on_retry(task, old_state, new_state):
     if isinstance(new_state, state.Retrying):

@@ -1,9 +1,9 @@
 import cloudpickle
 import pytest
 
-import prefect
-from prefect.engine.result import Result, NoResultType
-from prefect.engine.result.base import ResultNotImplementedError
+import prefectlegacy
+from prefectlegacy.engine.result import Result, NoResultType
+from prefectlegacy.engine.result.base import ResultNotImplementedError
 
 
 class TestInitialization:
@@ -70,8 +70,8 @@ def test_everything_is_pickleable_after_init(obj):
 
 def test_result_format_template_from_context():
     res = Result(location="{this}/{works}/yes?")
-    with prefect.context(this="indeed", works="functional"):
-        new = res.format(**prefect.context)
+    with prefectlegacy.context(this="indeed", works="functional"):
+        new = res.format(**prefectlegacy.context)
         assert new.location == "indeed/functional/yes?"
         assert res.location == "{this}/{works}/yes?"
         assert new != res

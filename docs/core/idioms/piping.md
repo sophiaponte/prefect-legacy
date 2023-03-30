@@ -109,7 +109,7 @@ passed in **as the first positional argument** to the right hand side. Consider
 the following example:
 
 ```python
-from prefect import task, Flow
+from prefectlegacy import task, Flow
 
 
 @task()
@@ -159,4 +159,4 @@ task_a().pipe(task_b, 1, 2, 3)
 This isn't actually a limitation however, because most arguments can be
 expressed as keyword arguments.
 Only [positional-only arguments](https://www.python.org/dev/peps/pep-0570/)
-and `*args` cannot. These are not supported by Prefect.
+and `*args` cannot. These are not supported by prefectlegacy.

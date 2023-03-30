@@ -1,5 +1,5 @@
 from click.testing import CliRunner
-from prefect.cli.delete import delete
+from prefectlegacy.cli.delete import delete
 
 
 def test_delete_init():

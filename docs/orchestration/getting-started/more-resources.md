@@ -18,7 +18,7 @@ Check out the Prefect YouTube channel for advice and guides such as [how to Depl
 
 ## The Prefect Blog
 
-The [Prefect blog](https://www.prefect.io/resources) has lots of ideas and guides on simple ways to get started with Prefect. For new users on Core 0.15.0, our [New Flow Run Experience](https://www.prefect.io/blog/prefect-0-15-0-a-new-flow-run-experience) blog post sets out a new way to run flows with Prefect. 
+The [Prefect blog](https://www.prefectlegacy.io/resources) has lots of ideas and guides on simple ways to get started with prefectlegacy. For new users on Core 0.15.0, our [New Flow Run Experience](https://www.prefectlegacy.io/blog/prefect-0-15-0-a-new-flow-run-experience) blog post sets out a new way to run flows with prefectlegacy. 
 
 ## Examples
 
@@ -32,7 +32,7 @@ examples, run the following:
 $ prefect create project "Prefect Examples"
 
 # Register all the examples into the "Prefect Examples" project
-$ prefect register --json https://docs.prefect.io/examples.json --project "Prefect Examples"
+$ prefect register --json https://docs.prefectlegacy.io/examples.json --project "Prefect Examples"
 ```
 
 See the [examples](/core/examples/overview.md) page for more information.

@@ -23,7 +23,7 @@ default) or [DockerRun](/orchestration/flow_config/run_configs.md#dockerrun)
 environment for a flow (exposing `env`, `image`, etc...):
 
 ```python
-from prefect.run_configs import DockerRun
+from prefectlegacy.run_configs import DockerRun
 
 # Configure extra environment variables for this flow,
 # and set a custom image

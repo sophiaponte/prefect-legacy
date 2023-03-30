@@ -4,14 +4,14 @@ sidebarDepth: 0
 
 # Introduction to ETL
 
-Before we even `import prefect`, let's begin by reviewing a typical real-life ETL workflow.
+Before we even `import prefectlegacy`, let's begin by reviewing a typical real-life ETL workflow.
 
 ::: tip Follow along in the Terminal
 
 Grab the tutorial code:
 
 ```
-git clone --depth 1 https://github.com/PrefectHQ/prefect.git
+git clone --depth 1 https://github.com/PrefectHQ/prefectlegacy.git
 cd prefect/examples/tutorial
 
 # Optionally, create a virtual environment for this tutorial

@@ -4,9 +4,9 @@ import pytest
 import requests
 from click.testing import CliRunner
 
-import prefect
-from prefect.cli.get import get
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy.cli.get import get
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 def test_get_init():

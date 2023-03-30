@@ -3,10 +3,10 @@ from unittest.mock import MagicMock, patch
 import box
 import pytest
 
-import prefect
-from prefect.client import Secret
-from prefect.utilities.configuration import set_temporary_config
-from prefect.exceptions import AuthorizationError, ClientError
+import prefectlegacy
+from prefectlegacy.client import Secret
+from prefectlegacy.utilities.configuration import set_temporary_config
+from prefectlegacy.exceptions import AuthorizationError, ClientError
 
 #################################
 ##### Secret Tests
@@ -36,7 +36,7 @@ def test_secret_raises_informative_error_for_server():
 def test_secret_value_pulled_from_context():
     secret = Secret(name="test")
     with set_temporary_config({"cloud.use_local_secrets": True}):
-        with prefect.context(secrets=dict(test=42)):
+        with prefectlegacy.context(secrets=dict(test=42)):
             assert secret.get() == 42
         with pytest.raises(ValueError):
             secret.get()
@@ -53,7 +53,7 @@ def test_secret_value_depends_on_use_local_secrets(monkeypatch):
     with set_temporary_config(
         {"cloud.use_local_secrets": False, "cloud.api_key": None}
     ):
-        with prefect.context(secrets=dict()):
+        with prefectlegacy.context(secrets=dict()):
             with pytest.raises(ClientError):
                 secret.get()
 
@@ -81,7 +81,7 @@ def test_cloud_secrets_use_context_first(monkeypatch):
     with set_temporary_config(
         {"cloud.api_key": "api-key", "cloud.use_local_secrets": False}
     ):
-        with prefect.context(secrets={"the-key": "foo"}):
+        with prefectlegacy.context(secrets={"the-key": "foo"}):
             my_secret = Secret(name="the-key")
             val = my_secret.get()
     assert val == "foo"
@@ -96,7 +96,7 @@ def test_cloud_secrets_use_context_first_but_fallback_to_client(monkeypatch, clo
     with set_temporary_config(
         {"cloud.api_key": "api-key", "cloud.use_local_secrets": False}
     ):
-        with prefect.context(secrets={}):
+        with prefectlegacy.context(secrets={}):
             my_secret = Secret(name="the-key")
             val = my_secret.get()
     assert val == "1234"
@@ -139,7 +139,7 @@ def test_cloud_secrets_auto_load_json_strings(monkeypatch, cloud_api):
 def test_local_secrets_auto_load_json_strings():
     secret = Secret(name="test")
     with set_temporary_config({"cloud.use_local_secrets": True}):
-        with prefect.context(secrets=dict(test='{"x": 42}')):
+        with prefectlegacy.context(secrets=dict(test='{"x": 42}')):
             assert secret.get() == {"x": 42}
         with pytest.raises(ValueError):
             secret.get()
@@ -148,8 +148,8 @@ def test_local_secrets_auto_load_json_strings():
 def test_local_secrets_remain_plain_dictionaries():
     secret = Secret(name="test")
     with set_temporary_config({"cloud.use_local_secrets": True}):
-        with prefect.context(secrets=dict(test={"x": 42})):
-            assert isinstance(prefect.context.secrets["test"], dict)
+        with prefectlegacy.context(secrets=dict(test={"x": 42})):
+            assert isinstance(prefectlegacy.context.secrets["test"], dict)
             val = secret.get()
             assert val == {"x": 42}
             assert isinstance(val, dict) and not isinstance(val, box.Box)
@@ -158,8 +158,8 @@ def test_local_secrets_remain_plain_dictionaries():
 def test_secrets_raise_if_in_flow_context():
     secret = Secret(name="test")
     with set_temporary_config({"cloud.use_local_secrets": True}):
-        with prefect.context(secrets=dict(test=42)):
-            with prefect.Flow("test"):
+        with prefectlegacy.context(secrets=dict(test=42)):
+            with prefectlegacy.Flow("test"):
                 with pytest.raises(ValueError):
                     secret.get()
 
@@ -167,7 +167,7 @@ def test_secrets_raise_if_in_flow_context():
 def test_secrets_dont_raise_just_because_flow_key_is_populated():
     secret = Secret(name="test")
     with set_temporary_config({"cloud.use_local_secrets": True}):
-        with prefect.context(secrets=dict(test=42), flow="not None"):
+        with prefectlegacy.context(secrets=dict(test=42), flow="not None"):
             assert secret.get() == 42
 
 

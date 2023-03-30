@@ -101,8 +101,8 @@ Following creation of the Dask cluster, the Flow will be run using the [Dask Exe
 The following example will execute your Flow on an auto-scaling Dask cluster in Kubernetes. The cluster will start with a single worker and dynamically scale up to five workers as needed.
 
 ```python
-from prefect import task, Flow
-from prefect.environments import DaskKubernetesEnvironment
+from prefectlegacy import task, Flow
+from prefectlegacy.environments import DaskKubernetesEnvironment
 
 
 @task
@@ -162,9 +162,9 @@ spec:
 ```
 
 ```python
-from prefect import task, Flow
-from prefect.environments import DaskKubernetesEnvironment
-from prefect.storage import Docker
+from prefectlegacy import task, Flow
+from prefectlegacy.environments import DaskKubernetesEnvironment
+from prefectlegacy.storage import Docker
 
 
 @task

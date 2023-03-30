@@ -1,6 +1,6 @@
 import pytest
 
-from prefect.tasks.postgres import PostgresExecute, PostgresExecuteMany, PostgresFetch
+from prefectlegacy.tasks.postgres import PostgresExecute, PostgresExecuteMany, PostgresFetch
 
 
 class TestPostgresExecute:

@@ -101,7 +101,7 @@ Because the UI is code that runs in your browser, you can reuse Prefect Cloud's 
 
 To achieve this:
 
-- [sign up for a free account](https://cloud.prefect.io/)
+- [sign up for a free account](https://cloud.prefectlegacy.io/)
 - login; if you click the status indicator to the right of the nav-bar, the UI will switch the endpoint that it talks to
 - you can further configure the location of this endpoint on the Home page
   :::
@@ -155,4 +155,4 @@ that your metadata is not lost between restarts.
 Due to the current implementation of the single node deployment for server this will result in a small
 window of downtime. If high availability is important for your instance it is encouraged that you inquire
 about a community maintained deployment method or sign up for a free developer account at
-[Prefect Cloud](https://cloud.prefect.io).
+[Prefect Cloud](https://cloud.prefectlegacy.io).

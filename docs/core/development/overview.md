@@ -7,7 +7,7 @@ title: Overview
 
 Thanks for contributing to Prefect! This section of the docs is designed to help you become familiar with how we work, the standards we apply, and how to ensure your contribution is successful.
 
-If you're stuck, don't be shy about asking for help [on GitHub](https://github.com/PrefectHQ/prefect/issues/new/choose) or in the `#prefect-contributors` channel of our [Slack community](https://www.prefect.io/slack). You can also ask us any question in our [Discourse](https://discourse.prefect.io) forum.
+If you're stuck, don't be shy about asking for help [on GitHub](https://github.com/PrefectHQ/prefect/issues/new/choose) or in the `#prefect-contributors` channel of our [Slack community](https://www.prefectlegacy.io/slack). You can also ask us any question in our [Discourse](https://discourse.prefectlegacy.io) forum.
 
 
 ::: tip Working on Server & UI
@@ -21,7 +21,7 @@ The source code for [Prefect Server](https://github.com/PrefectHQ/server) and [P
 To clone Prefect for development, we recommend creating an "editable" install of Prefect's master branch, including all development dependencies:
 
 ```bash
-git clone https://github.com/PrefectHQ/prefect.git
+git clone https://github.com/PrefectHQ/prefectlegacy.git
 cd prefect
 pip install -e ".[dev]"
 ```
@@ -42,7 +42,7 @@ In order to submit code to Prefect, please:
 - [Fork the Prefect repository](https://help.github.com/en/articles/fork-a-repo)
 - [Create a new branch](https://help.github.com/en/desktop/contributing-to-projects/creating-a-branch-for-your-work) on your fork
 - [Open a Pull Request](https://help.github.com/en/articles/creating-a-pull-request-from-a-fork) once your work is ready for review
-- A Core maintainer will review your PR and provide feedback on any changes it requires to be approved. Once approved, your PR will be merged into Prefect.
+- A Core maintainer will review your PR and provide feedback on any changes it requires to be approved. Once approved, your PR will be merged into prefectlegacy.
 
 ### Congratulations!
 

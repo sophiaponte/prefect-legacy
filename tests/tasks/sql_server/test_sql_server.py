@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 
 import pyodbc
 
-from prefect.tasks.sql_server import (
+from prefectlegacy.tasks.sql_server import (
     SqlServerExecute,
     SqlServerExecuteMany,
     SqlServerFetch,
@@ -33,7 +33,7 @@ class TestSqlServerExecute:
         )
 
         monkeypatch.setattr(
-            "prefect.tasks.sql_server.sql_server.pyodbc", sql_server_connector_module
+            "prefectlegacy.tasks.sql_server.sql_server.pyodbc", sql_server_connector_module
         )
 
         task = SqlServerExecute(db_name="test", user="test", host="test")

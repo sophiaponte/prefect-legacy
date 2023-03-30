@@ -33,7 +33,7 @@ Most of the underlying communication patterns within Prefect require that object
 Moreover, when creating and submitting new flows for deployment, you should check to ensure your flow can be properly serialized and deserialized. To help you with this, Prefect has a builtin `is_serializable` utility function for giving you some confidence that your Flow can be handled:
 
 ```python
-from prefect.utilities.debug import is_serializable
+from prefectlegacy.utilities.debug import is_serializable
 
 
 is_serializable(my_flow) # returns True / False

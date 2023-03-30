@@ -4,8 +4,8 @@ from typing import Optional
 from transform.models import MqlQueryStatusResp, MqlQueryStatus, MqlMaterializeResp
 from transform.exceptions import QueryRuntimeException
 
-from prefect.engine.signals import FAIL
-from prefect.tasks.transform import TransformCreateMaterialization
+from prefectlegacy.engine.signals import FAIL
+from prefectlegacy.tasks.transform import TransformCreateMaterialization
 
 
 class TestTransformCreateMaterialization:
@@ -97,7 +97,7 @@ class TestTransformCreateMaterialization:
                 api_key="key", mql_server_url="url", materialization_name="mt_name"
             )
 
-    @mock.patch("prefect.tasks.transform.transform_tasks.MQLClient")
+    @mock.patch("prefectlegacy.tasks.transform.transform_tasks.MQLClient")
     def test_run_raises_on_create_materialization_async(self, mock_mql_client):
         error_msg = "Error while creating async materialization!"
 
@@ -136,7 +136,7 @@ class TestTransformCreateMaterialization:
                 wait_for_creation=False,
             )
 
-    @mock.patch("prefect.tasks.transform.transform_tasks.MQLClient")
+    @mock.patch("prefectlegacy.tasks.transform.transform_tasks.MQLClient")
     def test_run_raises_on_create_materialization_sync(self, mock_mql_client):
         error_msg = "Error while creating sync materialization!"
 
@@ -163,7 +163,7 @@ class TestTransformCreateMaterialization:
                 api_key="key", mql_server_url="url", materialization_name="mt_name"
             )
 
-    @mock.patch("prefect.tasks.transform.transform_tasks.MQLClient")
+    @mock.patch("prefectlegacy.tasks.transform.transform_tasks.MQLClient")
     def test_run_on_create_materialization_async_successful_status(
         self, mock_mql_client
     ):
@@ -202,7 +202,7 @@ class TestTransformCreateMaterialization:
         assert response.is_successful is True
         assert response.is_failed is False
 
-    @mock.patch("prefect.tasks.transform.transform_tasks.MQLClient")
+    @mock.patch("prefectlegacy.tasks.transform.transform_tasks.MQLClient")
     def test_run_on_create_materialization_async_pending_status(self, mock_mql_client):
         class MockMQLClient:
             def create_materialization(
@@ -239,7 +239,7 @@ class TestTransformCreateMaterialization:
         assert response.is_successful is False
         assert response.is_failed is False
 
-    @mock.patch("prefect.tasks.transform.transform_tasks.MQLClient")
+    @mock.patch("prefectlegacy.tasks.transform.transform_tasks.MQLClient")
     def test_run_on_create_materialization_async_running_status(self, mock_mql_client):
         class MockMQLClient:
             def create_materialization(
@@ -276,7 +276,7 @@ class TestTransformCreateMaterialization:
         assert response.is_successful is False
         assert response.is_failed is False
 
-    @mock.patch("prefect.tasks.transform.transform_tasks.MQLClient")
+    @mock.patch("prefectlegacy.tasks.transform.transform_tasks.MQLClient")
     def test_run_on_create_materialization_sync(self, mock_mql_client):
         class MockMQLClient:
             def materialize(

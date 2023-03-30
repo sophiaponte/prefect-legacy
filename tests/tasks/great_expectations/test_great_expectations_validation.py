@@ -16,8 +16,8 @@ from great_expectations.validation_operators.types.validation_operator_result im
     ValidationOperatorResult,
 )
 
-from prefect.engine import signals
-from prefect.tasks.great_expectations import RunGreatExpectationsValidation
+from prefectlegacy.engine import signals
+from prefectlegacy.tasks.great_expectations import RunGreatExpectationsValidation
 
 PARENT_PATH = Path(__file__).parent.resolve()
 DATA_PATH = PARENT_PATH / "data"

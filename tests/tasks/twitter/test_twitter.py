@@ -1,8 +1,8 @@
 import pytest
 
-import prefect
-from prefect.tasks.twitter import LoadTweetReplies
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy.tasks.twitter import LoadTweetReplies
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 class TestLoadTweetReplies:

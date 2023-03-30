@@ -18,7 +18,7 @@ pip install "prefect[viz]"
 The `Flow` class comes with a builtin `visualize` method for inspecting the underlying Directed Acyclic Graph (DAG). Let's setup a basic example:
 
 ```python
-from prefect import Flow, Parameter
+from prefectlegacy import Flow, Parameter
 
 with Flow("math") as f:
     x, y = Parameter("x"), Parameter("y")
@@ -38,8 +38,8 @@ Here we see a nice static representation of the underlying flow graph: the nodes
 Let's now create a more complicated dependency chain.
 
 ```python
-from prefect import task
-from prefect.tasks.control_flow import switch
+from prefectlegacy import task
+from prefectlegacy.tasks.control_flow import switch
 
 @task
 def handle_zero():

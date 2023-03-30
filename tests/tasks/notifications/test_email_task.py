@@ -2,9 +2,9 @@ from unittest.mock import MagicMock, call
 
 import pytest
 
-from prefect import context
-from prefect.tasks.notifications import EmailTask
-from prefect.utilities.configuration import set_temporary_config
+from prefectlegacy import context
+from prefectlegacy.tasks.notifications import EmailTask
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 class TestInitialization:
@@ -20,7 +20,7 @@ class TestInitialization:
 
     def test_username_password_pulled_from_secrets(self, monkeypatch):
         smtp = MagicMock()
-        monkeypatch.setattr("prefect.tasks.notifications.email_task.smtplib", smtp)
+        monkeypatch.setattr("prefectlegacy.tasks.notifications.email_task.smtplib", smtp)
         t = EmailTask(msg="")
         with set_temporary_config({"cloud.use_local_secrets": True}):
             with context({"secrets": dict(EMAIL_USERNAME="foo", EMAIL_PASSWORD="bar")}):
@@ -29,7 +29,7 @@ class TestInitialization:
 
     def test_login_not_called_if_smtp_type_insecure(self, monkeypatch):
         smtp = MagicMock()
-        monkeypatch.setattr("prefect.tasks.notifications.email_task.smtplib", smtp)
+        monkeypatch.setattr("prefectlegacy.tasks.notifications.email_task.smtplib", smtp)
         t = EmailTask(msg="", smtp_type="INSECURE")
         with set_temporary_config({"cloud.use_local_secrets": True}):
             with context({"secrets": dict(EMAIL_USERNAME="foo", EMAIL_PASSWORD="bar")}):
@@ -38,7 +38,7 @@ class TestInitialization:
 
     def test_login_called_if_smtp_type_not_insecure(self, monkeypatch):
         smtp = MagicMock()
-        monkeypatch.setattr("prefect.tasks.notifications.email_task.smtplib", smtp)
+        monkeypatch.setattr("prefectlegacy.tasks.notifications.email_task.smtplib", smtp)
         t = EmailTask(msg="")
         with set_temporary_config({"cloud.use_local_secrets": True}):
             with context({"secrets": dict(EMAIL_USERNAME="foo", EMAIL_PASSWORD="bar")}):
@@ -55,7 +55,7 @@ class TestInitialization:
 
     def test_kwarg_for_email_from_get_passed_to_task_init(self, monkeypatch):
         smtp = MagicMock()
-        monkeypatch.setattr("prefect.tasks.notifications.email_task.smtplib", smtp)
+        monkeypatch.setattr("prefectlegacy.tasks.notifications.email_task.smtplib", smtp)
         t = EmailTask(msg="", email_from="test@lvh.me")
         with set_temporary_config({"cloud.use_local_secrets": True}):
             with context({"secrets": dict(EMAIL_USERNAME="foo", EMAIL_PASSWORD="bar")}):

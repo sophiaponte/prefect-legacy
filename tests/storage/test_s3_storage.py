@@ -8,10 +8,10 @@ import pytest
 pytest.importorskip("boto3")
 pytest.importorskip("botocore")
 
-from prefect import context, Flow
-from prefect.storage import S3
-from prefect.utilities.storage import flow_from_bytes_pickle, flow_to_bytes_pickle
-from prefect.utilities.aws import _CLIENT_CACHE
+from prefectlegacy import context, Flow
+from prefectlegacy.storage import S3
+from prefectlegacy.utilities.storage import flow_from_bytes_pickle, flow_to_bytes_pickle
+from prefectlegacy.utilities.aws import _CLIENT_CACHE
 
 from botocore.exceptions import ClientError
 
@@ -25,7 +25,7 @@ def clear_boto3_cache():
 def s3_client(monkeypatch):
     client = MagicMock()
     get_boto_client = MagicMock(return_value=client)
-    monkeypatch.setattr("prefect.utilities.aws.get_boto_client", get_boto_client)
+    monkeypatch.setattr("prefectlegacy.utilities.aws.get_boto_client", get_boto_client)
     return client
 
 
@@ -271,7 +271,7 @@ def test_get_flow_s3_script(s3_client, key):
 
     data = textwrap.dedent(
         """
-        from prefect import Flow
+        from prefectlegacy import Flow
         flow = Flow("test")
         """
     ).encode("utf-8")

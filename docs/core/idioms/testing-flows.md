@@ -7,7 +7,7 @@ Use the following flow as an example:
 :::: tabs
 ::: tab Functional API
 ```python
-from prefect import task, Flow
+from prefectlegacy import task, Flow
 
 @task
 def extract():
@@ -30,7 +30,7 @@ with Flow("testing-example") as flow:
 
 ::: tab Imperative API
 ```python
-from prefect import Task, Flow
+from prefectlegacy import Task, Flow
 
 class Extract(Task):
     def run(self):
@@ -59,7 +59,7 @@ flow.add_edge(upstream_task=t, downstream_task=l, key="x")
 #### Testing flow composition
 
 ```python
-from prefect.core.edge import Edge
+from prefectlegacy.core.edge import Edge
 
 assert e in flow.tasks
 assert t in flow.tasks

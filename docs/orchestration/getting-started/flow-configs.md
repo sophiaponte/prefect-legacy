@@ -44,16 +44,16 @@ Our new flow code might look like this:
 ```python
 import os
 
-import prefect
-from prefect import task, Flow, Parameter
-from prefect.run_configs import LocalRun
+import prefectlegacy
+from prefectlegacy import task, Flow, Parameter
+from prefectlegacy.run_configs import LocalRun
 
 
 @task
 def say_hello(name):
     # Load the greeting to use from an environment variable
     greeting = os.environ.get("GREETING")
-    logger = prefect.context.get("logger")
+    logger = prefectlegacy.context.get("logger")
     logger.info(f"{greeting}, {name}!")
 
 
@@ -96,10 +96,10 @@ execution, we'll add a `time.sleep` to provide a better demo.
 import os
 import time
 
-import prefect
-from prefect import task, Flow, Parameter
-from prefect.run_configs import LocalRun
-from prefect.executors import LocalDaskExecutor
+import prefectlegacy
+from prefectlegacy import task, Flow, Parameter
+from prefectlegacy.run_configs import LocalRun
+from prefectlegacy.executors import LocalDaskExecutor
 
 
 @task
@@ -108,7 +108,7 @@ def say_hello(name):
     time.sleep(10)
     # Load the greeting to use from an environment variable
     greeting = os.environ.get("GREETING")
-    logger = prefect.context.get("logger")
+    logger = prefectlegacy.context.get("logger")
     logger.info(f"{greeting}, {name}!")
 
 

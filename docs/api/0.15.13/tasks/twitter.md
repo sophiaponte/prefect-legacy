@@ -6,7 +6,7 @@ editLink: false
 ---
 Tasks for interacting with Twitter.
  ## LoadTweetReplies
- <div class='class-sig' id='prefect-tasks-twitter-twitter-loadtweetreplies'><p class="prefect-sig">class </p><p class="prefect-class">prefect.tasks.twitter.twitter.LoadTweetReplies</p>(user=None, tweet_id=None, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/tasks/twitter/twitter.py#L9">[source]</a></span></div>
+ <div class='class-sig' id='prefect-tasks-twitter-twitter-loadtweetreplies'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.tasks.twitter.twitter.LoadTweetReplies</p>(user=None, tweet_id=None, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/tasks/twitter/twitter.py#L9">[source]</a></span></div>
 
 A task for loading replies to a specific user's tweet. This task works by querying the 100 most recent replies to that user, then filtering for those that match the specified tweet id.
 
@@ -18,7 +18,7 @@ Note that _all_ initialization settings can be provided / overwritten at runtime
 
 |methods: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |:----|
- | <div class='method-sig' id='prefect-tasks-twitter-twitter-loadtweetreplies-run'><p class="prefect-class">prefect.tasks.twitter.twitter.LoadTweetReplies.run</p>(user=None, tweet_id=None, credentials=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/tasks/twitter/twitter.py#L31">[source]</a></span></div>
+ | <div class='method-sig' id='prefect-tasks-twitter-twitter-loadtweetreplies-run'><p class="prefect-class">prefectlegacy.tasks.twitter.twitter.LoadTweetReplies.run</p>(user=None, tweet_id=None, credentials=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/tasks/twitter/twitter.py#L31">[source]</a></span></div>
 <p class="methods">**Args**:     <ul class="args"><li class="args">`user (str)`: a Twitter user     </li><li class="args">`tweet_id (str)`: a tweet ID; replies to this tweet will be retrieved     </li><li class="args">`credentials(dict)`: a JSON document with four keys:         "api_key", "api_secret", "access_token", and "access_token_secret".</li></ul></p>|
 
 ---

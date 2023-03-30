@@ -6,7 +6,7 @@ editLink: false
 ---
 Tasks for interacting with Prometheus. The main task are using pushgateway 
  ## PushGaugeToGateway
- <div class='class-sig' id='prefect-tasks-prometheus-pushgateway-pushgaugetogateway'><p class="prefect-sig">class </p><p class="prefect-class">prefect.tasks.prometheus.pushgateway.PushGaugeToGateway</p>(pushgateway_url=None, counter_name=None, counter_description=None, grouping_key=None, job_name=None, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/tasks/prometheus/pushgateway.py#L182">[source]</a></span></div>
+ <div class='class-sig' id='prefect-tasks-prometheus-pushgateway-pushgaugetogateway'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.tasks.prometheus.pushgateway.PushGaugeToGateway</p>(pushgateway_url=None, counter_name=None, counter_description=None, grouping_key=None, job_name=None, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/tasks/prometheus/pushgateway.py#L182">[source]</a></span></div>
 
 Task that allow you to push a Gauge to prometheus [PushGateway] (https://prometheus.io/docs/practices/pushing/).This method is using the [prometheus_client](https://github.com/prometheus/client_python#exporting-to-a-pushgateway).
 
@@ -21,7 +21,7 @@ Some of the main usage of that task is to allow to push inside of your workflow 
 <br>
 
  ## PushAddGaugeToGateway
- <div class='class-sig' id='prefect-tasks-prometheus-pushgateway-pushaddgaugetogateway'><p class="prefect-sig">class </p><p class="prefect-class">prefect.tasks.prometheus.pushgateway.PushAddGaugeToGateway</p>(pushgateway_url=None, counter_name=None, counter_description=None, grouping_key=None, job_name=None, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/tasks/prometheus/pushgateway.py#L226">[source]</a></span></div>
+ <div class='class-sig' id='prefect-tasks-prometheus-pushgateway-pushaddgaugetogateway'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.tasks.prometheus.pushgateway.PushAddGaugeToGateway</p>(pushgateway_url=None, counter_name=None, counter_description=None, grouping_key=None, job_name=None, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/tasks/prometheus/pushgateway.py#L226">[source]</a></span></div>
 
 Task that allow you to push add a Gauge to prometheus [PushGateway] (https://prometheus.io/docs/practices/pushing/). This method is using the [prometheus_client](https://github.com/prometheus/client_python#exporting-to-a-pushgateway).
 

@@ -3,11 +3,11 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from prefect import Task
-from prefect.engine import signals, state
-from prefect.engine.runner import ENDRUN, Runner
-from prefect.utilities.configuration import set_temporary_config
-from prefect.utilities.executors import run_with_heartbeat
+from prefectlegacy import Task
+from prefectlegacy.engine import signals, state
+from prefectlegacy.engine.runner import ENDRUN, Runner
+from prefectlegacy.utilities.configuration import set_temporary_config
+from prefectlegacy.utilities.executors import run_with_heartbeat
 
 
 def test_state_handlers_must_be_iterable():
@@ -66,7 +66,7 @@ def test_call_runner_target_handlers_allows_for_none_return_values():
 
 def test_runner_has_logger():
     r = Runner()
-    assert r.logger.name == "prefect.Runner"
+    assert r.logger.name == "prefectlegacy.Runner"
 
 
 class TestInitializeRun:

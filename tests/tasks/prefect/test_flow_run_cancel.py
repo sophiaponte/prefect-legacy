@@ -1,15 +1,15 @@
 import pytest
 from unittest.mock import MagicMock
 
-from prefect import Flow
-from prefect.tasks.prefect.flow_run_cancel import CancelFlowRun
+from prefectlegacy import Flow
+from prefectlegacy.tasks.prefectlegacy.flow_run_cancel import CancelFlowRun
 
 
 def test_flow_run_cancel(monkeypatch):
     client = MagicMock()
     client.cancel_flow_run = MagicMock(return_value=True)
     monkeypatch.setattr(
-        "prefect.tasks.prefect.flow_run_cancel.Client", MagicMock(return_value=client)
+        "prefectlegacy.tasks.prefectlegacy.flow_run_cancel.Client", MagicMock(return_value=client)
     )
     flow_cancel_task = CancelFlowRun(flow_run_id="id123")
 

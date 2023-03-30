@@ -10,13 +10,13 @@ if sys.platform != "win32":
     import multiprocessing.popen_spawn_posix  # noqa
 from distributed import Client
 
-import prefect
-from prefect.executors import DaskExecutor, LocalDaskExecutor, LocalExecutor
-from prefect.utilities import configuration
+import prefectlegacy
+from prefectlegacy.executors import DaskExecutor, LocalDaskExecutor, LocalExecutor
+from prefectlegacy.utilities import configuration
 
 
 # Set the prefect module to display debug level logs during tests
-prefect.utilities.logging.get_logger().setLevel("DEBUG")
+prefectlegacy.utilities.logging.get_logger().setLevel("DEBUG")
 
 
 @pytest.fixture(autouse=True)
@@ -24,7 +24,7 @@ def no_cloud_logs(monkeypatch):
     """Prevent cloud logging from doing anything actually sending requests to
     Prefect, regardless of status of `cloud.send_flow_run_logs`. Test checking
     cloud logging works explicitly may need to override this mock."""
-    monkeypatch.setattr("prefect.utilities.logging.LOG_MANAGER.enqueue", MagicMock())
+    monkeypatch.setattr("prefectlegacy.utilities.logging.LOG_MANAGER.enqueue", MagicMock())
 
 
 @pytest.fixture(autouse=True)
@@ -131,7 +131,7 @@ def executor(request, _switch):
 @pytest.fixture()
 def patch_post(monkeypatch):
     """
-    Patches `prefect.client.Client.post()` (and `graphql()`) to return the specified response.
+    Patches `prefectlegacy.client.Client.post()` (and `graphql()`) to return the specified response.
 
     The return value of the fixture is a function that is called on the response to patch it.
 
@@ -151,7 +151,7 @@ def patch_post(monkeypatch):
 @pytest.fixture()
 def patch_posts(monkeypatch):
     """
-    Patches `prefect.client.Client.post()` (and `graphql()`) to return the specified sequence of responses.
+    Patches `prefectlegacy.client.Client.post()` (and `graphql()`) to return the specified sequence of responses.
 
     The return value of the fixture is a function that is called on the response to patch it.
 
@@ -177,26 +177,26 @@ def patch_posts(monkeypatch):
 
 @pytest.fixture()
 def cloud_api():
-    with prefect.utilities.configuration.set_temporary_config(
-        {"cloud.api": "https://api.prefect.io", "backend": "cloud"}
+    with prefectlegacy.utilities.configuration.set_temporary_config(
+        {"cloud.api": "https://api.prefectlegacy.io", "backend": "cloud"}
     ):
         yield
 
 
 @pytest.fixture()
 def server_api():
-    with prefect.utilities.configuration.set_temporary_config(
+    with prefectlegacy.utilities.configuration.set_temporary_config(
         {"cloud.api": "https://localhost:4200", "backend": "server"}
     ):
         yield
 
 
 @pytest.fixture(
-    params=[("cloud", "https://api.prefect.io"), ("server", "https://localhost:4200")]
+    params=[("cloud", "https://api.prefectlegacy.io"), ("server", "https://localhost:4200")]
 )
 def backend(request):
     backend, api = request.param
-    with prefect.utilities.configuration.set_temporary_config(
+    with prefectlegacy.utilities.configuration.set_temporary_config(
         {"cloud.api": api, "backend": backend}
     ):
         yield backend
@@ -204,13 +204,13 @@ def backend(request):
 
 @pytest.fixture()
 def running_with_backend():
-    with prefect.context({"running_with_backend": True}):
+    with prefectlegacy.context({"running_with_backend": True}):
         yield
 
 
 @pytest.fixture
 def config_with_api_key(cloud_api):
-    with prefect.utilities.configuration.set_temporary_config(
+    with prefectlegacy.utilities.configuration.set_temporary_config(
         {
             "cloud.api_key": "TEST_KEY",
             "cloud.tenant_id": "fa68f96e-0c80-4e0d-9c2a-e11452f1d786",

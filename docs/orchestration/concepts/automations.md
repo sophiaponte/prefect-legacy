@@ -2,7 +2,7 @@
 
 Automations allow you to configure actions &mdash; such as cancelling a flow run or sending a notification to certain endpoints &mdash; when an event occurs in the Prefect ecosystem.
 
-Automations are a feature of [Prefect Cloud](https://cloud.prefect.io) and are included with all Prefect Cloud plans. Some automation features are available only in Standard plan and above.
+Automations are a feature of [Prefect Cloud](https://cloud.prefectlegacy.io) and are included with all Prefect Cloud plans. Some automation features are available only in Standard plan and above.
 
 - [Overview](#overview)
 - [Events](#events)
@@ -30,7 +30,7 @@ When creating an automation, you can:
 
 The following documentation will cover the various types of events and actions you can configure.
 
-We recommend creating and managing your automations in [Prefect Cloud Automations](https://cloud.prefect.io/?automations) (Prefect Cloud login required). See the [Automations UI](/orchestration/ui/automations.html) documentation for an overview of creating and managing automations in Prefect Cloud.
+We recommend creating and managing your automations in [Prefect Cloud Automations](https://cloud.prefectlegacy.io/?automations) (Prefect Cloud login required). See the [Automations UI](/orchestration/ui/automations.html) documentation for an overview of creating and managing automations in Prefect Cloud.
 
 You can also manage automations via the [GraphQL API](/orchestration/concepts/api.html#graphql), but it requires a deeper understanding of the system than this document provides.
 

@@ -4,8 +4,8 @@ from datetime import time, timedelta
 import pendulum
 import pytest
 
-from prefect import __version__
-from prefect.schedules import adjustments, clocks, filters, schedules
+from prefectlegacy import __version__
+from prefectlegacy.schedules import adjustments, clocks, filters, schedules
 
 
 def test_create_schedule_requires_clock():

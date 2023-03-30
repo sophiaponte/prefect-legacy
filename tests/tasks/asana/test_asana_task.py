@@ -1,8 +1,8 @@
 from unittest.mock import MagicMock
-import prefect
-from prefect import context
-from prefect.tasks.asana import OpenAsanaToDo
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy import context
+from prefectlegacy.tasks.asana import OpenAsanaToDo
+from prefectlegacy.utilities.configuration import set_temporary_config
 import pytest
 
 pytest.importorskip("asana")
@@ -27,6 +27,6 @@ class TestInitialization:
         task = OpenAsanaToDo(name="test", notes="foo", token="1234a")
         client = MagicMock()
         asana = MagicMock(client=client)
-        monkeypatch.setattr("prefect.tasks.asana.asana_task.asana", asana)
+        monkeypatch.setattr("prefectlegacy.tasks.asana.asana_task.asana", asana)
         with pytest.raises(ValueError, match="project"):
             task.run()

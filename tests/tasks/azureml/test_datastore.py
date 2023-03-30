@@ -5,14 +5,14 @@ import pytest
 
 from azureml.core.workspace import Workspace
 
-import prefect
-from prefect.tasks.azureml import (
+import prefectlegacy
+from prefectlegacy.tasks.azureml import (
     DatastoreRegisterBlobContainer,
     DatastoreList,
     DatastoreGet,
     DatastoreUpload,
 )
-from prefect.utilities.configuration import set_temporary_config
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 @pytest.fixture
@@ -43,12 +43,12 @@ class TestDatastoreRegisterBlobContainer:
 
         datastore_class = MagicMock()
         monkeypatch.setattr(
-            "prefect.tasks.azureml.datastore.azureml.core.datastore.Datastore",
+            "prefectlegacy.tasks.azureml.datastore.azureml.core.datastore.Datastore",
             datastore_class,
         )
 
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(
+            with prefectlegacy.context(
                 secrets=dict(AZ_CREDENTIALS={"ACCOUNT_NAME": "42", "ACCOUNT_KEY": "99"})
             ):
                 task.run(container_name=container_name, datastore_name=datastore_name)
@@ -64,12 +64,12 @@ class TestDatastoreRegisterBlobContainer:
 
         datastore_class = MagicMock()
         monkeypatch.setattr(
-            "prefect.tasks.azureml.datastore.azureml.core.datastore.Datastore",
+            "prefectlegacy.tasks.azureml.datastore.azureml.core.datastore.Datastore",
             datastore_class,
         )
 
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(
+            with prefectlegacy.context(
                 secrets=dict(AZ_CREDENTIALS={"ACCOUNT_NAME": "42", "ACCOUNT_KEY": "99"})
             ):
                 task.run(container_name=container_name)
@@ -85,12 +85,12 @@ class TestDatastoreRegisterBlobContainer:
 
         datastore_class = MagicMock()
         monkeypatch.setattr(
-            "prefect.tasks.azureml.datastore.azureml.core.datastore.Datastore",
+            "prefectlegacy.tasks.azureml.datastore.azureml.core.datastore.Datastore",
             datastore_class,
         )
 
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(
+            with prefectlegacy.context(
                 secrets=dict(AZ_CREDENTIALS={"ACCOUNT_NAME": "42", "ACCOUNT_KEY": "99"})
             ):
                 task.run(container_name=container_name)
@@ -106,12 +106,12 @@ class TestDatastoreRegisterBlobContainer:
 
         datastore_class = MagicMock()
         monkeypatch.setattr(
-            "prefect.tasks.azureml.datastore.azureml.core.datastore.Datastore",
+            "prefectlegacy.tasks.azureml.datastore.azureml.core.datastore.Datastore",
             datastore_class,
         )
 
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(
+            with prefectlegacy.context(
                 secrets=dict(AZ_CREDENTIALS={"ACCOUNT_NAME": "42", "SAS_TOKEN": "24"})
             ):
                 task.run(container_name=container_name)
@@ -148,7 +148,7 @@ class TestDatastoreGet:
     def test_get_called_with_defined_datastore_name(self, mock_workspace, monkeypatch):
         datastore_class = MagicMock()
         monkeypatch.setattr(
-            "prefect.tasks.azureml.datastore.azureml.core.datastore.Datastore",
+            "prefectlegacy.tasks.azureml.datastore.azureml.core.datastore.Datastore",
             datastore_class,
         )
 
@@ -163,7 +163,7 @@ class TestDatastoreGet:
     ):
         datastore_class = MagicMock()
         monkeypatch.setattr(
-            "prefect.tasks.azureml.datastore.azureml.core.datastore.Datastore",
+            "prefectlegacy.tasks.azureml.datastore.azureml.core.datastore.Datastore",
             datastore_class,
         )
 

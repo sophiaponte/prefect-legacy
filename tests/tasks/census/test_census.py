@@ -1,6 +1,6 @@
 import pytest
 
-from prefect.tasks.census import CensusSyncTask
+from prefectlegacy.tasks.census import CensusSyncTask
 
 
 class TestCensusSyncTask:

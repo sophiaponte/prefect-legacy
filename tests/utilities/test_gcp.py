@@ -3,8 +3,8 @@ from unittest.mock import MagicMock
 
 pytest.importorskip("google.cloud")
 
-import prefect
-from prefect.utilities.gcp import (
+import prefectlegacy
+from prefectlegacy.utilities.gcp import (
     get_google_client,
     get_storage_client,
     get_bigquery_client,
@@ -14,7 +14,7 @@ from prefect.utilities.gcp import (
 def test_credentials_are_not_required(monkeypatch):
     submodule = MagicMock()
     creds_loader = MagicMock(return_value=MagicMock(project_id="mocked-proj"))
-    monkeypatch.setattr("prefect.utilities.gcp.Credentials", creds_loader)
+    monkeypatch.setattr("prefectlegacy.utilities.gcp.Credentials", creds_loader)
 
     client = get_google_client(submodule)
 
@@ -28,7 +28,7 @@ def test_credentials_are_used(monkeypatch):
     creds_loader = MagicMock()
     creds = MagicMock(project_id="mocked-proj")
     creds_loader.from_service_account_info.return_value = creds
-    monkeypatch.setattr("prefect.utilities.gcp.Credentials", creds_loader)
+    monkeypatch.setattr("prefectlegacy.utilities.gcp.Credentials", creds_loader)
     client = get_google_client(submodule, credentials=dict(x=1))
 
     assert creds_loader.from_service_account_info.called
@@ -43,8 +43,8 @@ def test_credentials_are_pulled_from_context(monkeypatch):
     creds_loader = MagicMock()
     creds = MagicMock(project_id="mocked-proj")
     creds_loader.from_service_account_info.return_value = creds
-    monkeypatch.setattr("prefect.utilities.gcp.Credentials", creds_loader)
-    with prefect.context(secrets=dict(GCP_CREDENTIALS="foobar")):
+    monkeypatch.setattr("prefectlegacy.utilities.gcp.Credentials", creds_loader)
+    with prefectlegacy.context(secrets=dict(GCP_CREDENTIALS="foobar")):
         client = get_google_client(submodule)
 
     assert creds_loader.from_service_account_info.called
@@ -60,7 +60,7 @@ def test_provided_project_is_prioritized(monkeypatch):
     creds_loader = MagicMock()
     creds = MagicMock(project_id="mocked-proj")
     creds_loader.from_service_account_info.return_value = creds
-    monkeypatch.setattr("prefect.utilities.gcp.Credentials", creds_loader)
+    monkeypatch.setattr("prefectlegacy.utilities.gcp.Credentials", creds_loader)
     client = get_google_client(submodule, credentials=dict(x=1), project="my-proj")
 
     assert creds_loader.from_service_account_info.called

@@ -21,19 +21,19 @@ import toml
 
 from typing import Dict, Optional, Set
 
-import prefect
-from prefect import task
-from prefect.core.edge import Edge
-from prefect.core.flow import Flow
-from prefect.core.task import Task
-from prefect.tasks.core import constants
-from prefect.core.parameter import Parameter
-from prefect.engine.cache_validators import all_inputs, partial_inputs_only
-from prefect.executors import LocalExecutor, DaskExecutor
-from prefect.engine.result import Result
-from prefect.engine.results import LocalResult, PrefectResult
-from prefect.engine.signals import FAIL, LOOP
-from prefect.engine.state import (
+import prefectlegacy
+from prefectlegacy import task
+from prefectlegacy.core.edge import Edge
+from prefectlegacy.core.flow import Flow
+from prefectlegacy.core.task import Task
+from prefectlegacy.tasks.core import constants
+from prefectlegacy.core.parameter import Parameter
+from prefectlegacy.engine.cache_validators import all_inputs, partial_inputs_only
+from prefectlegacy.executors import LocalExecutor, DaskExecutor
+from prefectlegacy.engine.result import Result
+from prefectlegacy.engine.results import LocalResult, PrefectResult
+from prefectlegacy.engine.signals import FAIL, LOOP
+from prefectlegacy.engine.state import (
     Cancelled,
     Failed,
     Finished,
@@ -47,14 +47,14 @@ from prefect.engine.state import (
     TriggerFailed,
     TimedOut,
 )
-from prefect.run_configs import LocalRun, UniversalRun
-from prefect.schedules.clocks import ClockEvent
-from prefect.tasks.core.function import FunctionTask
-from prefect.utilities.configuration import set_temporary_config
-from prefect.exceptions import TaskTimeoutSignal
-from prefect.utilities.serialization import from_qualified_name
-from prefect.utilities.tasks import task
-from prefect.utilities.edges import unmapped
+from prefectlegacy.run_configs import LocalRun, UniversalRun
+from prefectlegacy.schedules.clocks import ClockEvent
+from prefectlegacy.tasks.core.function import FunctionTask
+from prefectlegacy.utilities.configuration import set_temporary_config
+from prefectlegacy.exceptions import TaskTimeoutSignal
+from prefectlegacy.utilities.serialization import from_qualified_name
+from prefectlegacy.utilities.tasks import task
+from prefectlegacy.utilities.edges import unmapped
 
 
 class AddTask(Task):
@@ -74,7 +74,7 @@ def add_flow():
 
 @pytest.fixture
 def clear_context_cache():
-    prefect.context["caches"] = {}
+    prefectlegacy.context["caches"] = {}
 
 
 class TestCreateFlow:
@@ -117,7 +117,7 @@ class TestCreateFlow:
         f1 = Flow(name="test")
         assert f1.schedule is None
 
-        cron = prefect.schedules.CronSchedule("* * * * *")
+        cron = prefectlegacy.schedules.CronSchedule("* * * * *")
         f2 = Flow(name="test", schedule=cron)
         assert f2.schedule == cron
 
@@ -139,12 +139,12 @@ class TestCreateFlow:
     def test_flow_has_logger(self):
         f = Flow(name="test")
         assert isinstance(f.logger, logging.Logger)
-        assert f.logger.name == "prefect.test"
+        assert f.logger.name == "prefectlegacy.test"
 
     def test_flow_has_logger_with_informative_name(self):
         f = Flow(name="foo")
         assert isinstance(f.logger, logging.Logger)
-        assert f.logger.name == "prefect.foo"
+        assert f.logger.name == "prefectlegacy.foo"
 
     def test_create_flow_with_result(self):
         f = Flow(name="test", result=LocalResult())
@@ -152,14 +152,14 @@ class TestCreateFlow:
         assert isinstance(f.result, LocalResult)
 
     def test_create_flow_with_storage(self):
-        f2 = Flow(name="test", storage=prefect.storage.Local())
-        assert isinstance(f2.storage, prefect.storage.Local)
+        f2 = Flow(name="test", storage=prefectlegacy.storage.Local())
+        assert isinstance(f2.storage, prefectlegacy.storage.Local)
         assert f2.result is None
 
     def test_create_flow_with_storage_and_result(self):
         result = LocalResult(dir="/")
-        f2 = Flow(name="test", storage=prefect.storage.Local(), result=result)
-        assert isinstance(f2.storage, prefect.storage.Local)
+        f2 = Flow(name="test", storage=prefectlegacy.storage.Local(), result=result)
+        assert isinstance(f2.storage, prefectlegacy.storage.Local)
         assert isinstance(f2.result, LocalResult)
         assert f2.result != f2.storage.result
         assert f2.result == result
@@ -172,7 +172,7 @@ class TestCreateFlow:
         assert all(
             [
                 t.auto_generated is True
-                for t in f.get_tasks(task_type=prefect.tasks.core.constants.Constant)
+                for t in f.get_tasks(task_type=prefectlegacy.tasks.core.constants.Constant)
             ]
         )
 
@@ -394,13 +394,13 @@ def test_context_manager_is_properly_applied_to_tasks():
 
 
 def test_that_flow_adds_and_removes_itself_from_prefect_context():
-    assert "flow" not in prefect.context
+    assert "flow" not in prefectlegacy.context
     with Flow(name="test") as f1:
-        assert prefect.context.flow is f1
+        assert prefectlegacy.context.flow is f1
         with Flow(name="test") as f2:
-            assert prefect.context.flow is f2
-        assert prefect.context.flow is f1
-    assert "flow" not in prefect.context
+            assert prefectlegacy.context.flow is f2
+        assert prefectlegacy.context.flow is f1
+    assert "flow" not in prefectlegacy.context
 
 
 def test_add_edge():
@@ -515,7 +515,7 @@ def test_detect_cycle():
 
 def test_eager_cycle_detection_defaults_false():
 
-    assert not prefect.config.flows.eager_edge_validation
+    assert not prefectlegacy.config.flows.eager_edge_validation
 
     f = Flow(name="test")
     t1 = Task()
@@ -549,10 +549,10 @@ def test_direct_cycles_are_always_detected_2():
 
 def test_eager_validation_is_off_by_default(monkeypatch):
     # https://github.com/PrefectHQ/prefect/issues/919
-    assert not prefect.config.flows.eager_edge_validation
+    assert not prefectlegacy.config.flows.eager_edge_validation
 
     validate = MagicMock()
-    monkeypatch.setattr("prefect.core.flow.Flow.validate", validate)
+    monkeypatch.setattr("prefectlegacy.core.flow.Flow.validate", validate)
 
     @task
     def length(x):
@@ -580,7 +580,7 @@ def test_eager_cycle_detection_works():
         with pytest.raises(ValueError):
             f.add_edge(t2, t1)
 
-    assert not prefect.config.flows.eager_edge_validation
+    assert not prefectlegacy.config.flows.eager_edge_validation
 
 
 def test_copy_handles_constants():
@@ -733,21 +733,21 @@ def test_key_states_raises_error_if_not_iterable():
 def test_warning_raised_if_tasks_are_created_but_not_added_to_flow():
     with pytest.warns(UserWarning, match="Tasks were created but not added"):
         with Flow(name="test"):
-            tracker = prefect.context._unused_task_tracker
+            tracker = prefectlegacy.context._unused_task_tracker
             assert len(tracker) == 0
             x = Parameter("x")
             assert len(tracker) == 1
             assert x in tracker
-        assert "_unused_task_tracker" not in prefect.context
+        assert "_unused_task_tracker" not in prefectlegacy.context
 
 
 def test_warning_raised_if_tasks_are_created_but_not_added_to_nested_flow():
     # only one warning for nested flows
     with pytest.warns(None) as record:
         with Flow(name="test"):
-            tracker_1 = prefect.context._unused_task_tracker
+            tracker_1 = prefectlegacy.context._unused_task_tracker
             with Flow(name="test2"):
-                tracker_2 = prefect.context._unused_task_tracker
+                tracker_2 = prefectlegacy.context._unused_task_tracker
                 x = Parameter("x")
                 assert x in tracker_2
                 assert x not in tracker_1
@@ -881,12 +881,12 @@ def test_warning_raised_for_lambda_tasks_defined_in_flow_context_and_unused():
 
 def test_context_is_scoped_to_flow_context():
     with Flow(name="f"):
-        prefect.context.name = "f"
+        prefectlegacy.context.name = "f"
         with Flow(name="g"):
-            prefect.context.name = "g"
-            assert prefect.context.name == "g"
-        assert prefect.context.name == "f"
-    assert "name" not in prefect.context
+            prefectlegacy.context.name = "g"
+            assert prefectlegacy.context.name == "g"
+        assert prefectlegacy.context.name == "f"
+    assert "name" not in prefectlegacy.context
 
 
 class TestEquality:
@@ -1165,7 +1165,7 @@ def test_sorted_tasks_with_invalid_start_task():
 def test_flow_raises_for_irrelevant_user_provided_parameters():
     class ParameterTask(Task):
         def run(self):
-            return prefect.context.get("parameters")
+            return prefectlegacy.context.get("parameters")
 
     with Flow(name="test") as f:
         x = Parameter("x")
@@ -1865,21 +1865,21 @@ class TestSerialize:
         f = Flow(
             name="hi",
             tasks=[p1, t2, t3],
-            schedule=prefect.schedules.CronSchedule("0 0 * * *"),
+            schedule=prefectlegacy.schedules.CronSchedule("0 0 * * *"),
         )
         f.add_edge(p1, t2)
         f.add_edge(p1, t3)
 
         serialized = f.serialize()
-        f2 = prefect.serialization.flow.FlowSchema().load(serialized)
+        f2 = prefectlegacy.serialization.flow.FlowSchema().load(serialized)
 
         assert len(f2.tasks) == 3
         assert len(f2.edges) == 2
         assert len(f2.reference_tasks()) == 2
         assert {t.name for t in f2.reference_tasks()} == {"2", "3"}
         assert f2.name == f.name
-        assert isinstance(f2.schedule, prefect.schedules.Schedule)
-        assert isinstance(f2.schedule.clocks[0], prefect.schedules.clocks.CronClock)
+        assert isinstance(f2.schedule, prefectlegacy.schedules.Schedule)
+        assert isinstance(f2.schedule.clocks[0], prefectlegacy.schedules.clocks.CronClock)
 
     def test_serialize_validates_invalid_flows(self):
         t1, t2 = Task(), Task()
@@ -1892,7 +1892,7 @@ class TestSerialize:
             f.serialize()
 
     def test_serialize_includes_storage(self):
-        f = Flow(name="test", storage=prefect.storage.Local())
+        f = Flow(name="test", storage=prefectlegacy.storage.Local())
         s_no_build = f.serialize()
         s_build = f.serialize(build=True)
 
@@ -1900,7 +1900,7 @@ class TestSerialize:
         assert s_build["storage"]["type"] == "Local"
 
     def test_serialize_adds_flow_to_storage_if_build(self, tmpdir):
-        f = Flow(name="test", storage=prefect.storage.Local(tmpdir))
+        f = Flow(name="test", storage=prefectlegacy.storage.Local(tmpdir))
         s_no_build = f.serialize()
         assert f.name not in f.storage
 
@@ -1908,7 +1908,7 @@ class TestSerialize:
         assert f.name in f.storage
 
     def test_serialize_can_be_called_twice(self, tmpdir):
-        f = Flow(name="test", storage=prefect.storage.Local(tmpdir))
+        f = Flow(name="test", storage=prefectlegacy.storage.Local(tmpdir))
         s_no_build = f.serialize()
         assert f.name not in f.storage
 
@@ -1935,14 +1935,14 @@ class TestSerializedHash:
         assert f.serialized_hash() == f.copy().serialized_hash()
 
     def test_is_consistent_after_storage_build(self):
-        f = Flow("foo", storage=prefect.storage.Local())
+        f = Flow("foo", storage=prefectlegacy.storage.Local())
         key = f.serialized_hash(build=True)
         assert key == f.serialized_hash()
         assert key == f.serialized_hash(build=True)
         assert key == f.copy().serialized_hash()
 
     def test_is_different_before_and_after_storage_build(self):
-        f = Flow("foo", storage=prefect.storage.Local())
+        f = Flow("foo", storage=prefectlegacy.storage.Local())
         assert f.copy().serialized_hash() != f.serialized_hash(build=True)
 
     def test_is_different_with_different_flow_name(self):
@@ -1951,7 +1951,7 @@ class TestSerializedHash:
     def test_is_same_in_new_python_instance(self, tmpdir):
         contents = textwrap.dedent(
             """
-        from prefect import task, Flow
+        from prefectlegacy import task, Flow
 
         @task
         def dummy_task():
@@ -1984,7 +1984,7 @@ class TestSerializedHash:
     def test_task_positional_only_arguments(self, tmpdir):
         contents = textwrap.dedent(
             """
-        from prefect import task
+        from prefectlegacy import task
 
         @task
         def dummy_task(a, b, /):
@@ -2044,9 +2044,9 @@ class TestSerializedHash:
         assert f1.serialized_hash() != f2.serialized_hash()
 
     def test_is_different_with_modified_flow_storage(self):
-        f1 = Flow("foo", storage=prefect.storage.Local())
+        f1 = Flow("foo", storage=prefectlegacy.storage.Local())
         f2 = f1.copy()
-        f2.storage = prefect.storage.Docker()
+        f2.storage = prefectlegacy.storage.Docker()
         assert f1.serialized_hash() != f2.serialized_hash()
 
     def test_is_different_with_different_flow_tasks(self):
@@ -2068,7 +2068,7 @@ class TestSerializedHash:
 class TestFlowRunMethod:
     @pytest.fixture
     def repeat_schedule(self):
-        class RepeatSchedule(prefect.schedules.Schedule):
+        class RepeatSchedule(prefectlegacy.schedules.Schedule):
             def __init__(self, n, **kwargs):
                 self.call_count = 0
                 self.n = n
@@ -2108,7 +2108,7 @@ class TestFlowRunMethod:
         def task_1():
             return 1
 
-        @task(trigger=prefect.triggers.manual_only)
+        @task(trigger=prefectlegacy.triggers.manual_only)
         def add_one(x):
             return x + 1
 
@@ -2131,21 +2131,21 @@ class TestFlowRunMethod:
             assert flow.run()
 
     def test_flow_dot_run_passes_scheduled_parameters(self):
-        a = prefect.schedules.clocks.DatesClock(
+        a = prefectlegacy.schedules.clocks.DatesClock(
             [pendulum.now("UTC").add(seconds=0.1)], parameter_defaults=dict(x=1)
         )
-        b = prefect.schedules.clocks.DatesClock(
+        b = prefectlegacy.schedules.clocks.DatesClock(
             [pendulum.now("UTC").add(seconds=0.5)], parameter_defaults=dict(x=2)
         )
 
-        x = prefect.Parameter("x", default=None, required=False)
+        x = prefectlegacy.Parameter("x", default=None, required=False)
         outputs = []
 
-        @prefect.task
+        @prefectlegacy.task
         def whats_the_param(x):
             outputs.append(x)
 
-        with Flow("test", schedule=prefect.schedules.Schedule(clocks=[a, b])) as f:
+        with Flow("test", schedule=prefectlegacy.schedules.Schedule(clocks=[a, b])) as f:
             whats_the_param(x)
 
         f.run()
@@ -2153,19 +2153,19 @@ class TestFlowRunMethod:
         assert outputs == [1, 2]
 
     def test_flow_dot_run_doesnt_persist_stale_scheduled_params(self):
-        a = prefect.schedules.clocks.DatesClock(
+        a = prefectlegacy.schedules.clocks.DatesClock(
             [pendulum.now("UTC").add(seconds=0.1)], parameter_defaults=dict(x=1)
         )
-        b = prefect.schedules.clocks.DatesClock([pendulum.now("UTC").add(seconds=0.65)])
+        b = prefectlegacy.schedules.clocks.DatesClock([pendulum.now("UTC").add(seconds=0.65)])
 
-        x = prefect.Parameter("x", default=3, required=False)
+        x = prefectlegacy.Parameter("x", default=3, required=False)
         outputs = []
 
-        @prefect.task
+        @prefectlegacy.task
         def whats_the_param(x):
             outputs.append(x)
 
-        with Flow("test", schedule=prefect.schedules.Schedule(clocks=[a, b])) as f:
+        with Flow("test", schedule=prefectlegacy.schedules.Schedule(clocks=[a, b])) as f:
             whats_the_param(x)
 
         f.run()
@@ -2187,7 +2187,7 @@ class TestFlowRunMethod:
         assert t.call_count == 1
 
     def test_flow_dot_run_returns_tasks_when_running_off_schedule(self):
-        @prefect.task
+        @prefectlegacy.task
         def test_task():
             return 2
 
@@ -2349,8 +2349,8 @@ class TestFlowRunMethod:
 
     def test_flow_dot_run_without_schedule_can_run_cached_tasks(self):
         # simulate fresh environment
-        if "caches" in prefect.context:
-            del prefect.context["caches"]
+        if "caches" in prefectlegacy.context:
+            del prefectlegacy.context["caches"]
 
         @task(cache_for=datetime.timedelta(minutes=1))
         def noop():
@@ -2424,7 +2424,7 @@ class TestFlowRunMethod:
 
         storage = {"output": []}
 
-        @task(trigger=prefect.triggers.always_run)
+        @task(trigger=prefectlegacy.triggers.always_run)
         def store_output(y):
             storage["output"].append(y)
 
@@ -2471,7 +2471,7 @@ class TestFlowRunMethod:
 
         storage = {"output": []}
 
-        @task(trigger=prefect.triggers.always_run)
+        @task(trigger=prefectlegacy.triggers.always_run)
         def store_output(y):
             storage["output"].append(y)
 
@@ -2520,7 +2520,7 @@ class TestFlowRunMethod:
 
         storage = {"output": []}
 
-        @task(trigger=prefect.triggers.always_run)
+        @task(trigger=prefectlegacy.triggers.always_run)
         def store_output(y):
             storage["output"].append(y)
 
@@ -2568,7 +2568,7 @@ class TestFlowRunMethod:
 
         storage = {"y": []}
 
-        @task(trigger=prefect.triggers.always_run)
+        @task(trigger=prefectlegacy.triggers.always_run)
         def store_y(y):
             storage["y"].append(y)
 
@@ -2636,13 +2636,13 @@ class TestFlowRunMethod:
 
         @task
         def report_start_time():
-            return prefect.context.scheduled_start_time
+            return prefectlegacy.context.scheduled_start_time
 
         f = Flow(
             name="test",
             tasks=[report_start_time],
-            schedule=prefect.schedules.Schedule(
-                clocks=[prefect.schedules.clocks.DatesClock(dates=[start_time])]
+            schedule=prefectlegacy.schedules.Schedule(
+                clocks=[prefectlegacy.schedules.clocks.DatesClock(dates=[start_time])]
             ),
         )
         state = f.run()
@@ -2651,12 +2651,12 @@ class TestFlowRunMethod:
     def test_flow_dot_run_does_not_set_scheduled_start_time_globally(self):
         @task
         def report_start_time():
-            return prefect.context.scheduled_start_time
+            return prefectlegacy.context.scheduled_start_time
 
         f = Flow(name="test", tasks=[report_start_time])
         state = f.run()
         assert isinstance(state.result[report_start_time].result, datetime.datetime)
-        assert "scheduled_start_time" not in prefect.context
+        assert "scheduled_start_time" not in prefectlegacy.context
 
     def test_flow_dot_run_persists_scheduled_start_time_across_retries(self):
         # start very soon
@@ -2664,15 +2664,15 @@ class TestFlowRunMethod:
 
         @task(max_retries=1, retry_delay=datetime.timedelta(0))
         def report_start_time():
-            if prefect.context.task_run_count == 1:
+            if prefectlegacy.context.task_run_count == 1:
                 raise ValueError("I'm not ready to tell you the start time yet")
-            return prefect.context.scheduled_start_time
+            return prefectlegacy.context.scheduled_start_time
 
         f = Flow(
             name="test",
             tasks=[report_start_time],
-            schedule=prefect.schedules.Schedule(
-                clocks=[prefect.schedules.clocks.DatesClock(dates=[start_time])]
+            schedule=prefectlegacy.schedules.Schedule(
+                clocks=[prefectlegacy.schedules.clocks.DatesClock(dates=[start_time])]
             ),
         )
         state = f.run()
@@ -2686,13 +2686,13 @@ class TestFlowRunMethod:
 
         @task
         def record_start_time():
-            REPORTED_START_TIMES.append(prefect.context.scheduled_start_time)
+            REPORTED_START_TIMES.append(prefectlegacy.context.scheduled_start_time)
 
         f = Flow(
             name="test",
             tasks=[record_start_time],
-            schedule=prefect.schedules.Schedule(
-                clocks=[prefect.schedules.clocks.DatesClock(dates=start_times)]
+            schedule=prefectlegacy.schedules.Schedule(
+                clocks=[prefectlegacy.schedules.clocks.DatesClock(dates=start_times)]
             ),
         )
         f.run()
@@ -2713,24 +2713,24 @@ class TestFlowDiagnostics:
             file.close()
 
             monkeypatch.setattr(
-                "prefect.configuration.USER_CONFIG", "{}/config.toml".format(tempdir)
+                "prefectlegacy.configuration.USER_CONFIG", "{}/config.toml".format(tempdir)
             )
 
-            @prefect.task
+            @prefectlegacy.task
             def t1():
                 pass
 
-            @prefect.task
+            @prefectlegacy.task
             def t2():
                 pass
 
-            flow = prefect.Flow(
+            flow = prefectlegacy.Flow(
                 "test",
                 tasks=[t1, t2],
-                storage=prefect.storage.Local(),
-                run_config=prefect.run_configs.LocalRun(),
-                schedule=prefect.schedules.Schedule(clocks=[]),
-                result=prefect.engine.results.PrefectResult(),
+                storage=prefectlegacy.storage.Local(),
+                run_config=prefectlegacy.run_configs.LocalRun(),
+                schedule=prefectlegacy.schedules.Schedule(clocks=[]),
+                result=prefectlegacy.engine.results.PrefectResult(),
             )
 
             monkeypatch.setenv("PREFECT__TEST", "VALUE" "NOT__PREFECT", "VALUE2")
@@ -2762,7 +2762,7 @@ class TestFlowDiagnostics:
             assert flow_information["run_config"]["labels"] == False
             assert flow_information["run_config"]["working_dir"] == False
 
-            assert system_info["prefect_version"] == prefect.__version__
+            assert system_info["prefect_version"] == prefectlegacy.__version__
             assert system_info["platform"] == platform.platform()
             assert system_info["python_version"] == platform.python_version()
 
@@ -2770,10 +2770,10 @@ class TestFlowDiagnostics:
 class TestFlowRegister:
     @pytest.mark.parametrize(
         "storage",
-        ["prefect.storage.Docker", "prefect.storage.Local"],
+        ["prefectlegacy.storage.Docker", "prefectlegacy.storage.Local"],
     )
     def test_flow_register_uses_default_storage(self, monkeypatch, storage):
-        monkeypatch.setattr("prefect.Client", MagicMock())
+        monkeypatch.setattr("prefectlegacy.Client", MagicMock())
         f = Flow(name="test")
 
         assert f.storage is None
@@ -2793,12 +2793,12 @@ class TestFlowRegister:
         assert f.result == from_qualified_name(storage)().result
 
     def test_flow_register_passes_kwargs_to_storage(self, monkeypatch):
-        monkeypatch.setattr("prefect.Client", MagicMock())
+        monkeypatch.setattr("prefectlegacy.Client", MagicMock())
         f = Flow(name="test")
 
         assert f.storage is None
         with set_temporary_config(
-            {"flows.defaults.storage.default_class": "prefect.storage.Docker"}
+            {"flows.defaults.storage.default_class": "prefectlegacy.storage.Docker"}
         ):
             f.register(
                 "My-project",
@@ -2808,14 +2808,14 @@ class TestFlowRegister:
                 no_url=True,
             )
 
-        assert isinstance(f.storage, prefect.storage.Docker)
+        assert isinstance(f.storage, prefectlegacy.storage.Docker)
         assert f.storage.registry_url == "FOO"
         assert f.storage.image_name == "BAR"
         assert f.storage.image_tag == "BIG"
         assert f.run_config.labels == set()
 
     def test_flow_register_sets_universal_run_if_empty(self, monkeypatch):
-        monkeypatch.setattr("prefect.Client", MagicMock())
+        monkeypatch.setattr("prefectlegacy.Client", MagicMock())
 
         f = Flow(name="test")
         f.register("My-project", build=False)
@@ -2824,10 +2824,10 @@ class TestFlowRegister:
     @pytest.mark.parametrize(
         "storage",
         [
-            prefect.storage.Local(),
-            prefect.storage.S3(bucket="blah"),
-            prefect.storage.GCS(bucket="test"),
-            prefect.storage.Azure(container="windows"),
+            prefectlegacy.storage.Local(),
+            prefectlegacy.storage.S3(bucket="blah"),
+            prefectlegacy.storage.GCS(bucket="test"),
+            prefectlegacy.storage.Azure(container="windows"),
         ],
     )
     def test_flow_register_auto_labels_if_labeled_storage_used(
@@ -2835,7 +2835,7 @@ class TestFlowRegister:
         monkeypatch,
         storage,
     ):
-        monkeypatch.setattr("prefect.Client", MagicMock())
+        monkeypatch.setattr("prefectlegacy.Client", MagicMock())
         f = Flow(name="Test me!! I should get labeled", storage=storage)
         run_config = f.run_config = LocalRun(labels=["test-label"])
 
@@ -2846,16 +2846,16 @@ class TestFlowRegister:
     @pytest.mark.parametrize(
         "storage",
         [
-            prefect.storage.Local(),
-            prefect.storage.S3(bucket="blah"),
-            prefect.storage.GCS(bucket="test"),
-            prefect.storage.Azure(container="windows"),
+            prefectlegacy.storage.Local(),
+            prefectlegacy.storage.S3(bucket="blah"),
+            prefectlegacy.storage.GCS(bucket="test"),
+            prefectlegacy.storage.Azure(container="windows"),
         ],
     )
     def test_flow_register_auto_sets_result_if_storage_has_default(
         self, monkeypatch, storage
     ):
-        monkeypatch.setattr("prefect.Client", MagicMock())
+        monkeypatch.setattr("prefectlegacy.Client", MagicMock())
         f = Flow(name="Test me!! I should get labeled", storage=storage)
         assert f.result is None
 
@@ -2864,10 +2864,10 @@ class TestFlowRegister:
         assert f.result == storage.result
 
     def test_flow_register_doesnt_override_custom_set_result(self, monkeypatch):
-        monkeypatch.setattr("prefect.Client", MagicMock())
+        monkeypatch.setattr("prefectlegacy.Client", MagicMock())
         f = Flow(
             name="Test me!! I should get labeled",
-            storage=prefect.storage.S3(bucket="t"),
+            storage=prefectlegacy.storage.S3(bucket="t"),
             result=LocalResult(),
         )
         assert isinstance(f.result, LocalResult)
@@ -2878,19 +2878,19 @@ class TestFlowRegister:
     def test_flow_register_doesnt_overwrite_labels_if_local_storage_is_used(
         self, monkeypatch
     ):
-        monkeypatch.setattr("prefect.Client", MagicMock())
+        monkeypatch.setattr("prefectlegacy.Client", MagicMock())
         f = Flow(
             name="test",
-            run_config=prefect.run_configs.LocalRun(labels=["foo"]),
+            run_config=prefectlegacy.run_configs.LocalRun(labels=["foo"]),
         )
 
         assert f.storage is None
         with set_temporary_config(
-            {"flows.defaults.storage.default_class": "prefect.storage.Local"}
+            {"flows.defaults.storage.default_class": "prefectlegacy.storage.Local"}
         ):
             f.register("My-project")
 
-        assert isinstance(f.storage, prefect.storage.Local)
+        assert isinstance(f.storage, prefectlegacy.storage.Local)
         assert "foo" in f.run_config.labels
         assert len(f.run_config.labels) == 2
 
@@ -2904,7 +2904,7 @@ class TestFlowRegister:
 
 
 def test_bad_flow_runner_code_still_returns_state_obj():
-    class BadFlowRunner(prefect.engine.flow_runner.FlowRunner):
+    class BadFlowRunner(prefectlegacy.engine.flow_runner.FlowRunner):
         def initialize_run(self, *args, **kwargs):
             import blig  # will raise ImportError
 
@@ -2922,9 +2922,9 @@ def test_flow_run_raises_informative_error_for_certain_kwargs():
 
 
 def test_flow_run_raises_if_no_more_scheduled_runs():
-    schedule = prefect.schedules.Schedule(
+    schedule = prefectlegacy.schedules.Schedule(
         clocks=[
-            prefect.schedules.clocks.DatesClock(
+            prefectlegacy.schedules.clocks.DatesClock(
                 dates=[pendulum.now("utc").add(days=-1)]
             )
         ]
@@ -2961,9 +2961,9 @@ def test_flow_run_handles_error_states_when_initial_state_is_provided():
 def test_looping_works_in_a_flow():
     @task
     def looper(x):
-        if prefect.context.get("task_loop_count", 1) < 20:
-            raise LOOP(result=prefect.context.get("task_loop_result", 0) + x)
-        return prefect.context.get("task_loop_result") + x
+        if prefectlegacy.context.get("task_loop_count", 1) < 20:
+            raise LOOP(result=prefectlegacy.context.get("task_loop_result", 0) + x)
+        return prefectlegacy.context.get("task_loop_result") + x
 
     @task
     def downstream(l):
@@ -2993,7 +2993,7 @@ def test_pause_resume_works_with_retries():
         max_retries=2,
         retry_delay=datetime.timedelta(seconds=0),
         state_handlers=[state_handler],
-        trigger=prefect.triggers.manual_only,
+        trigger=prefectlegacy.triggers.manual_only,
     )
     def fail():
         runs.append(1)
@@ -3009,14 +3009,14 @@ def test_looping_with_retries_works_in_a_flow():
     @task(max_retries=1, retry_delay=datetime.timedelta(seconds=0))
     def looper(x):
         if (
-            prefect.context.get("task_loop_count") == 2
-            and prefect.context.get("task_run_count", 1) == 1
+            prefectlegacy.context.get("task_loop_count") == 2
+            and prefectlegacy.context.get("task_run_count", 1) == 1
         ):
             raise ValueError("err")
 
-        if prefect.context.get("task_loop_count", 1) < 20:
-            raise LOOP(result=prefect.context.get("task_loop_result", 0) + x)
-        return prefect.context.get("task_loop_result") + x
+        if prefectlegacy.context.get("task_loop_count", 1) < 20:
+            raise LOOP(result=prefectlegacy.context.get("task_loop_result", 0) + x)
+        return prefectlegacy.context.get("task_loop_result") + x
 
     @task
     def downstream(l):
@@ -3038,17 +3038,17 @@ def test_looping_with_retries_resets_run_count():
 
     @task(max_retries=1, retry_delay=datetime.timedelta(seconds=0))
     def looper(x):
-        run_counts.append(prefect.context.get("task_run_count"))
+        run_counts.append(prefectlegacy.context.get("task_run_count"))
 
         if (
-            prefect.context.get("task_loop_count") == 2
-            and prefect.context.get("task_run_count", 1) == 1
+            prefectlegacy.context.get("task_loop_count") == 2
+            and prefectlegacy.context.get("task_run_count", 1) == 1
         ):
             raise ValueError("err")
 
-        if prefect.context.get("task_loop_count", 1) < 20:
-            raise LOOP(result=prefect.context.get("task_loop_result", 0) + x)
-        return prefect.context.get("task_loop_result") + x
+        if prefectlegacy.context.get("task_loop_count", 1) < 20:
+            raise LOOP(result=prefectlegacy.context.get("task_loop_result", 0) + x)
+        return prefectlegacy.context.get("task_loop_result") + x
 
     with Flow(name="looping") as f:
         inter = looper(1)
@@ -3063,9 +3063,9 @@ def test_looping_with_retries_resets_run_count():
 def test_starting_at_arbitrary_loop_index():
     @task
     def looper(x):
-        if prefect.context.get("task_loop_count", 1) < 20:
-            raise LOOP(result=prefect.context.get("task_loop_result", 0) + x)
-        return prefect.context.get("task_loop_result", 0) + x
+        if prefectlegacy.context.get("task_loop_count", 1) < 20:
+            raise LOOP(result=prefectlegacy.context.get("task_loop_result", 0) + x)
+        return prefectlegacy.context.get("task_loop_result", 0) + x
 
     @task
     def downstream(l):
@@ -3085,7 +3085,7 @@ def test_starting_at_arbitrary_loop_index():
 def test_flow_run_name_as_run_param():
     @task
     def get_flow_run_from_context():
-        return prefect.context["flow_run_name"]
+        return prefectlegacy.context["flow_run_name"]
 
     with Flow(name="flow-run-name-from-context") as f:
         flow_run_name = get_flow_run_from_context()
@@ -3194,7 +3194,7 @@ def test_timeout_actually_stops_execution(executor, tmpdir):
     # Note: a real file must be used in the case of "mthread"
     FILE = str(tmpdir.join("test.txt"))
 
-    @prefect.task(timeout=TIMEOUT_TIME)
+    @prefectlegacy.task(timeout=TIMEOUT_TIME)
     def slow_fn():
         with open(FILE, "w") as f:
             f.write("called!")
@@ -3282,7 +3282,7 @@ def test_results_write_to_custom_formatters(tmpdir):
 
 def test_run_agent_passes_flow_labels(monkeypatch):
     agent = MagicMock()
-    monkeypatch.setattr("prefect.agent.local.LocalAgent", agent)
+    monkeypatch.setattr("prefectlegacy.agent.local.LocalAgent", agent)
     labels = ["test", "test", "test2"]
 
     f = Flow("test")

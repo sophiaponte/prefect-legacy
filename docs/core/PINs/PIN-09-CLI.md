@@ -82,8 +82,8 @@ Usage: prefect get [OPTIONS] COMMAND [ARGS]...
 
       $ prefect get tasks --flow-name Test-Flow
       NAME          FLOW NAME   FLOW VERSION   AGE          MAPPED   TYPE
-      first_task    Test-Flow   1              5 days ago   False    prefect.tasks.core.function.FunctionTask
-      second_task   Test-Flow   1              5 days ago   True     prefect.tasks.core.function.FunctionTask
+      first_task    Test-Flow   1              5 days ago   False    prefectlegacy.tasks.core.function.FunctionTask
+      second_task   Test-Flow   1              5 days ago   True     prefectlegacy.tasks.core.function.FunctionTask
 
 Options:
   -h, --help  Show this message and exit.

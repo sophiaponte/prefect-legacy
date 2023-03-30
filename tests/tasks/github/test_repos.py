@@ -3,9 +3,9 @@ from unittest.mock import MagicMock
 import pytest
 import requests
 
-import prefect
-from prefect.tasks.github import CreateBranch, GetRepoInfo
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy.tasks.github import CreateBranch, GetRepoInfo
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 class TestGetRepoInfoInitialization:

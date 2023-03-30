@@ -15,7 +15,7 @@ Logging is a crucial aspect of any production environment. Prefect exposes a ser
 The most common place you might want to add additional logs is within a custom Task. There are two places you can access your Task's logger, depending on how you created the Task:
 
 - if your Task is implemented as a subclass of the `Task` class, the `self.logger` attribute contains your Task's logger
-- if your Task is implemented via the `task` decorator, you can access your logger from context: `logger = prefect.context.get("logger")`
+- if your Task is implemented via the `task` decorator, you can access your logger from context: `logger = prefectlegacy.context.get("logger")`
 
 ### Configuration
 
@@ -41,7 +41,7 @@ export PREFECT__LOGGING__FORMAT="[%(asctime)s] %(levelname)s - %(name)s | %(mess
 
 In addition to changing how your logs are formatted, you can take it one step further by interacting with the logger objects directly prior to execution. For example, you can add new handlers to your logger (recall that logging handlers allow you to ship your logs to multiple configurable destinations).
 
-This is easily accomplished via the [`get_logger` utility](../../api/latest/utilities/logging.html#prefect-utilities-logging-get-logger) located in `prefect.utilities.logging`. The root logger can be accessed by calling `get_logger()` with no arguments. Note that the `Task` and `Flow` loggers are associated with loggers of the same names as the Task or Flow.
+This is easily accomplished via the [`get_logger` utility](../../api/latest/utilities/logging.html#prefect-utilities-logging-get-logger) located in `prefectlegacy.utilities.logging`. The root logger can be accessed by calling `get_logger()` with no arguments. Note that the `Task` and `Flow` loggers are associated with loggers of the same names as the Task or Flow.
 
 ## An Example
 
@@ -58,9 +58,9 @@ Next, let's create a logger handler and add this handler to our Task's loggers.
 import logging
 import requests
 
-import prefect
-from prefect import task, Flow
-from prefect.utilities.logging import get_logger
+import prefectlegacy
+from prefectlegacy import task, Flow
+from prefectlegacy.utilities.logging import get_logger
 
 
 class MyHandler(logging.StreamHandler):
@@ -75,7 +75,7 @@ def task_a():
 
 @task(name="Task B")
 def task_b(x):
-    logger = prefect.context.get("logger")
+    logger = prefectlegacy.context.get("logger")
     logger.debug("Beginning to run Task B with input {}".format(x))
     y = 3 * x + 1
     logger.debug("Returning the value {}".format(y))

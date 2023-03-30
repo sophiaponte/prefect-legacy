@@ -5,8 +5,8 @@ from contextlib import closing
 
 import pytest
 
-from prefect import Flow, Parameter
-from prefect.tasks.database import SQLiteQuery, SQLiteScript
+from prefectlegacy import Flow, Parameter
+from prefectlegacy.tasks.database import SQLiteQuery, SQLiteScript
 
 
 sql_script = """

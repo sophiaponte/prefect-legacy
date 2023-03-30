@@ -9,18 +9,18 @@ import yaml
 pytest.importorskip("boto3")
 pytest.importorskip("botocore")
 
-import prefect
-from prefect.agent.ecs.agent import (
+import prefectlegacy
+from prefectlegacy.agent.ecs.agent import (
     merge_run_task_kwargs,
     ECSAgent,
     DEFAULT_TASK_DEFINITION_PATH,
 )
-from prefect.storage import Local, Docker
-from prefect.run_configs import ECSRun, LocalRun, UniversalRun
-from prefect.utilities.configuration import set_temporary_config
-from prefect.utilities.filesystems import read_bytes_from_path
-from prefect.utilities.graphql import GraphQLResult
-from prefect.utilities.aws import _CLIENT_CACHE
+from prefectlegacy.storage import Local, Docker
+from prefectlegacy.run_configs import ECSRun, LocalRun, UniversalRun
+from prefectlegacy.utilities.configuration import set_temporary_config
+from prefectlegacy.utilities.filesystems import read_bytes_from_path
+from prefectlegacy.utilities.graphql import GraphQLResult
+from prefectlegacy.utilities.aws import _CLIENT_CACHE
 
 
 @pytest.fixture(autouse=True)
@@ -209,7 +209,7 @@ class TestAgentTaskDefinitionPath:
         data = yaml.safe_dump(task_definition)
 
         mock = MagicMock(wraps=read_bytes_from_path, return_value=data)
-        monkeypatch.setattr("prefect.agent.ecs.agent.read_bytes_from_path", mock)
+        monkeypatch.setattr("prefectlegacy.agent.ecs.agent.read_bytes_from_path", mock)
 
         agent = ECSAgent(task_definition_path="s3://bucket/test.yaml")
         assert agent.task_definition == task_definition
@@ -242,7 +242,7 @@ class TestAgentRunTaskKwargsPath:
         def mock(path):
             return data if path == s3_path else read_bytes_from_path(path)
 
-        monkeypatch.setattr("prefect.agent.ecs.agent.read_bytes_from_path", mock)
+        monkeypatch.setattr("prefectlegacy.agent.ecs.agent.read_bytes_from_path", mock)
         agent = ECSAgent(launch_type="EC2", run_task_kwargs_path=s3_path)
         assert agent.run_task_kwargs == run_task_kwargs
 
@@ -321,7 +321,7 @@ class TestGenerateTaskDefinition:
             data = yaml.safe_dump(task_definition)
             run_config = ECSRun(task_definition_path="s3://test/path.yaml")
             monkeypatch.setattr(
-                "prefect.agent.ecs.agent.read_bytes_from_path",
+                "prefectlegacy.agent.ecs.agent.read_bytes_from_path",
                 MagicMock(wraps=read_bytes_from_path, return_value=data),
             )
         else:
@@ -653,9 +653,9 @@ class TestGetRunTaskKwargs:
         env = {item["name"]: item["value"] for item in env_list}
         assert env == {
             "PREFECT__CLOUD__USE_LOCAL_SECRETS": "false",
-            "PREFECT__ENGINE__FLOW_RUNNER__DEFAULT_CLASS": "prefect.engine.cloud.CloudFlowRunner",
+            "PREFECT__ENGINE__FLOW_RUNNER__DEFAULT_CLASS": "prefectlegacy.engine.cloud.CloudFlowRunner",
             "PREFECT__BACKEND": backend,
-            "PREFECT__CLOUD__API": prefect.config.cloud.api,
+            "PREFECT__CLOUD__API": prefectlegacy.config.cloud.api,
             "PREFECT__CLOUD__AUTH_TOKEN": "",
             "PREFECT__CLOUD__API_KEY": "",
             "PREFECT__CLOUD__TENANT_ID": "",
@@ -664,7 +664,7 @@ class TestGetRunTaskKwargs:
             "PREFECT__CONTEXT__FLOW_ID": "flow-id",
             "PREFECT__CLOUD__SEND_FLOW_RUN_LOGS": "true",
             "PREFECT__LOGGING__LOG_TO_CLOUD": "true",
-            "PREFECT__LOGGING__LEVEL": prefect.config.logging.level,
+            "PREFECT__LOGGING__LEVEL": prefectlegacy.config.logging.level,
             "CUSTOM1": "VALUE1",
             "CUSTOM2": "OVERRIDE2",  # agent envs override agent run-task-kwargs
             "CUSTOM3": "OVERRIDE3",  # run-config envs override agent
@@ -700,7 +700,7 @@ class TestGetRunTaskKwargs:
         tenant_id = str(uuid.uuid4())
 
         monkeypatch.setattr(
-            "prefect.Client.load_auth_from_disk",
+            "prefectlegacy.Client.load_auth_from_disk",
             MagicMock(return_value={"api_key": "TEST_KEY", "tenant_id": tenant_id}),
         )
 

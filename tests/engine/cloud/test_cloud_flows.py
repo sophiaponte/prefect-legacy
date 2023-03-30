@@ -6,17 +6,17 @@ from unittest.mock import MagicMock, patch
 import pendulum
 import pytest
 
-import prefect
-from prefect.client.client import (
+import prefectlegacy
+from prefectlegacy.client.client import (
     Client,
     FlowRunInfoResult,
     ProjectInfo,
     TaskRunInfoResult,
 )
-from prefect.engine.cloud import CloudFlowRunner, CloudTaskRunner
-from prefect.engine.result import Result
-from prefect.engine.results import LocalResult, PrefectResult
-from prefect.engine.state import (
+from prefectlegacy.engine.cloud import CloudFlowRunner, CloudTaskRunner
+from prefectlegacy.engine.result import Result
+from prefectlegacy.engine.results import LocalResult, PrefectResult
+from prefectlegacy.engine.state import (
     Failed,
     Finished,
     Pending,
@@ -28,8 +28,8 @@ from prefect.engine.state import (
     TimedOut,
     TriggerFailed,
 )
-from prefect.executors import LocalExecutor
-from prefect.utilities.configuration import set_temporary_config
+from prefectlegacy.executors import LocalExecutor
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 pytestmark = pytest.mark.filterwarnings("ignore::UserWarning")
 
@@ -57,22 +57,22 @@ class TaskRun:
         self.map_index = map_index if map_index is not None else -1
 
 
-@prefect.task
+@prefectlegacy.task
 def whats_the_time():
-    return prefect.context.get("scheduled_start_time")
+    return prefectlegacy.context.get("scheduled_start_time")
 
 
-@prefect.task
+@prefectlegacy.task
 def plus_one(x):
     return x + 1
 
 
-@prefect.task
+@prefectlegacy.task
 def invert_fail_once(x):
     try:
         return 1 / x
     except:
-        if prefect.context.get("task_run_count", 0) < 2:
+        if prefectlegacy.context.get("task_run_count", 0) < 2:
             raise
         else:
             return 100
@@ -85,8 +85,8 @@ def cloud_settings():
             "cloud.graphql": "http://my-cloud.foo",
             "cloud.api_key": "api-key",
             "cloud.queue_interval": 0.1,
-            "engine.flow_runner.default_class": "prefect.engine.cloud.CloudFlowRunner",
-            "engine.task_runner.default_class": "prefect.engine.cloud.CloudTaskRunner",
+            "engine.flow_runner.default_class": "prefectlegacy.engine.cloud.CloudFlowRunner",
+            "engine.task_runner.default_class": "prefectlegacy.engine.cloud.CloudTaskRunner",
             "logging.level": "DEBUG",
         }
     ):
@@ -111,11 +111,11 @@ def mock_heartbeats(monkeypatch):
         mock_task_run_heartbeat = MagicMock(**task_kwargs)
 
         monkeypatch.setattr(
-            "prefect.engine.cloud.task_runner.CloudTaskRunner._heartbeat",
+            "prefectlegacy.engine.cloud.task_runner.CloudTaskRunner._heartbeat",
             mock_task_run_heartbeat,
         )
         monkeypatch.setattr(
-            "prefect.engine.cloud.flow_runner.CloudFlowRunner._heartbeat",
+            "prefectlegacy.engine.cloud.flow_runner.CloudFlowRunner._heartbeat",
             mock_flow_run_heartbeat,
         )
 
@@ -132,10 +132,10 @@ class MockedCloudClient(MagicMock):
         self.call_count = Counter()
 
         monkeypatch.setattr(
-            "prefect.engine.cloud.task_runner.Client", MagicMock(return_value=self)
+            "prefectlegacy.engine.cloud.task_runner.Client", MagicMock(return_value=self)
         )
         monkeypatch.setattr(
-            "prefect.engine.cloud.flow_runner.Client", MagicMock(return_value=self)
+            "prefectlegacy.engine.cloud.flow_runner.Client", MagicMock(return_value=self)
         )
 
     def get_flow_run_info(self, flow_run_id, *args, **kwargs):
@@ -256,7 +256,7 @@ class QueueingMockCloudClient(MockedCloudClient):
             # We assume the version locking succeeds in the parent class
             new_state = Queued(
                 start_time=pendulum.now("UTC").add(
-                    seconds=prefect.config.cloud.queue_interval
+                    seconds=prefectlegacy.config.cloud.queue_interval
                 )
             )
             fr.state = new_state
@@ -270,9 +270,9 @@ def test_simple_two_task_flow_2(monkeypatch, executor):
     task_run_id_1 = str(uuid.uuid4())
     task_run_id_2 = str(uuid.uuid4())
 
-    with prefect.Flow(name="test") as flow:
-        t1 = prefect.Task()
-        t2 = prefect.Task()
+    with prefectlegacy.Flow(name="test") as flow:
+        t1 = prefectlegacy.Task()
+        t2 = prefectlegacy.Task()
         t2.set_upstream(t1)
 
     client = MockedCloudClient(
@@ -292,7 +292,7 @@ def test_simple_two_task_flow_2(monkeypatch, executor):
         monkeypatch=monkeypatch,
     )
 
-    with prefect.context(flow_run_id=flow_run_id):
+    with prefectlegacy.context(flow_run_id=flow_run_id):
         state = CloudFlowRunner(flow=flow).run(
             return_tasks=flow.tasks, executor=executor
         )
@@ -309,7 +309,7 @@ def test_scheduled_start_time_is_in_context(monkeypatch, executor):
     flow_run_id = str(uuid.uuid4())
     task_run_id_1 = str(uuid.uuid4())
 
-    flow = prefect.Flow(name="test", tasks=[whats_the_time], result=Result())
+    flow = prefectlegacy.Flow(name="test", tasks=[whats_the_time], result=Result())
 
     client = MockedCloudClient(
         flow_runs=[FlowRun(id=flow_run_id)],
@@ -323,7 +323,7 @@ def test_scheduled_start_time_is_in_context(monkeypatch, executor):
         monkeypatch=monkeypatch,
     )
 
-    with prefect.context(flow_run_id=flow_run_id):
+    with prefectlegacy.context(flow_run_id=flow_run_id):
         state = CloudFlowRunner(flow=flow).run(
             return_tasks=flow.tasks, executor=executor
         )
@@ -341,9 +341,9 @@ def test_simple_two_task_flow_with_final_task_set_to_fail(monkeypatch, executor)
     task_run_id_1 = str(uuid.uuid4())
     task_run_id_2 = str(uuid.uuid4())
 
-    with prefect.Flow(name="test") as flow:
-        t1 = prefect.Task()
-        t2 = prefect.Task()
+    with prefectlegacy.Flow(name="test") as flow:
+        t1 = prefectlegacy.Task()
+        t2 = prefectlegacy.Task()
         t2.set_upstream(t1)
 
     client = MockedCloudClient(
@@ -362,7 +362,7 @@ def test_simple_two_task_flow_with_final_task_set_to_fail(monkeypatch, executor)
         monkeypatch=monkeypatch,
     )
 
-    with prefect.context(flow_run_id=flow_run_id):
+    with prefectlegacy.context(flow_run_id=flow_run_id):
         state = CloudFlowRunner(flow=flow).run(
             return_tasks=flow.tasks, executor=executor
         )
@@ -382,9 +382,9 @@ def test_simple_two_task_flow_with_final_task_already_running(monkeypatch, execu
     task_run_id_1 = str(uuid.uuid4())
     task_run_id_2 = str(uuid.uuid4())
 
-    with prefect.Flow(name="test") as flow:
-        t1 = prefect.Task()
-        t2 = prefect.Task()
+    with prefectlegacy.Flow(name="test") as flow:
+        t1 = prefectlegacy.Task()
+        t2 = prefectlegacy.Task()
         t2.set_upstream(t1)
 
     client = MockedCloudClient(
@@ -404,7 +404,7 @@ def test_simple_two_task_flow_with_final_task_already_running(monkeypatch, execu
         monkeypatch=monkeypatch,
     )
 
-    with prefect.context(flow_run_id=flow_run_id):
+    with prefectlegacy.context(flow_run_id=flow_run_id):
         state = CloudFlowRunner(flow=flow).run(
             return_tasks=flow.tasks, executor=executor
         )
@@ -419,7 +419,7 @@ def test_simple_two_task_flow_with_final_task_already_running(monkeypatch, execu
 
 @pytest.mark.parametrize("executor", ["local", "sync"], indirect=True)
 def test_simple_three_task_flow_with_one_failing_task(monkeypatch, executor):
-    @prefect.task
+    @prefectlegacy.task
     def error():
         1 / 0
 
@@ -428,9 +428,9 @@ def test_simple_three_task_flow_with_one_failing_task(monkeypatch, executor):
     task_run_id_2 = str(uuid.uuid4())
     task_run_id_3 = str(uuid.uuid4())
 
-    with prefect.Flow(name="test") as flow:
-        t1 = prefect.Task()
-        t2 = prefect.Task()
+    with prefectlegacy.Flow(name="test") as flow:
+        t1 = prefectlegacy.Task()
+        t2 = prefectlegacy.Task()
         t3 = error()
         t2.set_upstream(t1)
         t3.set_upstream(t2)
@@ -451,7 +451,7 @@ def test_simple_three_task_flow_with_one_failing_task(monkeypatch, executor):
         monkeypatch=monkeypatch,
     )
 
-    with prefect.context(flow_run_id=flow_run_id):
+    with prefectlegacy.context(flow_run_id=flow_run_id):
         state = CloudFlowRunner(flow=flow).run(
             return_tasks=flow.tasks, executor=executor
         )
@@ -473,7 +473,7 @@ def test_simple_three_task_flow_with_first_task_retrying(monkeypatch, executor):
     because they won't pass their upstream checks
     """
 
-    @prefect.task(max_retries=1, retry_delay=datetime.timedelta(minutes=20))
+    @prefectlegacy.task(max_retries=1, retry_delay=datetime.timedelta(minutes=20))
     def error():
         1 / 0
 
@@ -482,10 +482,10 @@ def test_simple_three_task_flow_with_first_task_retrying(monkeypatch, executor):
     task_run_id_2 = str(uuid.uuid4())
     task_run_id_3 = str(uuid.uuid4())
 
-    with prefect.Flow(name="test") as flow:
+    with prefectlegacy.Flow(name="test") as flow:
         t1 = error()
-        t2 = prefect.Task()
-        t3 = prefect.Task()
+        t2 = prefectlegacy.Task()
+        t3 = prefectlegacy.Task()
         t2.set_upstream(t1)
         t3.set_upstream(t2)
 
@@ -505,7 +505,7 @@ def test_simple_three_task_flow_with_first_task_retrying(monkeypatch, executor):
         monkeypatch=monkeypatch,
     )
 
-    with prefect.context(flow_run_id=flow_run_id):
+    with prefectlegacy.context(flow_run_id=flow_run_id):
         state = CloudFlowRunner(flow=flow).run(
             return_tasks=flow.tasks, executor=executor
         )
@@ -526,7 +526,7 @@ def test_simple_map(monkeypatch):
     flow_run_id = str(uuid.uuid4())
     task_run_id_1 = str(uuid.uuid4())
 
-    with prefect.Flow(name="test", result=PrefectResult()) as flow:
+    with prefectlegacy.Flow(name="test", result=PrefectResult()) as flow:
         t1 = plus_one.map([0, 1, 2])
 
     client = MockedCloudClient(
@@ -544,7 +544,7 @@ def test_simple_map(monkeypatch):
         monkeypatch=monkeypatch,
     )
 
-    with prefect.context(flow_run_id=flow_run_id):
+    with prefectlegacy.context(flow_run_id=flow_run_id):
         state = CloudFlowRunner(flow=flow).run(
             return_tasks=flow.tasks, executor=LocalExecutor()
         )
@@ -567,7 +567,7 @@ def test_deep_map(monkeypatch, executor):
     task_run_id_2 = str(uuid.uuid4())
     task_run_id_3 = str(uuid.uuid4())
 
-    with prefect.Flow(name="test", result=PrefectResult()) as flow:
+    with prefectlegacy.Flow(name="test", result=PrefectResult()) as flow:
         t1 = plus_one.map([0, 1, 2])
         t2 = plus_one.map(t1)
         t3 = plus_one.map(t2)
@@ -595,7 +595,7 @@ def test_deep_map(monkeypatch, executor):
         monkeypatch=monkeypatch,
     )
 
-    with prefect.context(flow_run_id=flow_run_id):
+    with prefectlegacy.context(flow_run_id=flow_run_id):
         state = CloudFlowRunner(flow=flow).run(
             return_tasks=flow.tasks, executor=executor
         )
@@ -628,7 +628,7 @@ def test_deep_map_with_a_failure(monkeypatch, executor):
     task_run_id_2 = str(uuid.uuid4())
     task_run_id_3 = str(uuid.uuid4())
 
-    with prefect.Flow(name="test", result=PrefectResult()) as flow:
+    with prefectlegacy.Flow(name="test", result=PrefectResult()) as flow:
         t1 = plus_one.map([-1, 0, 1])
         t2 = invert_fail_once.map(t1)
         t3 = plus_one.map(t2)
@@ -656,7 +656,7 @@ def test_deep_map_with_a_failure(monkeypatch, executor):
         monkeypatch=monkeypatch,
     )
 
-    with prefect.context(flow_run_id=flow_run_id):
+    with prefectlegacy.context(flow_run_id=flow_run_id):
         state = CloudFlowRunner(flow=flow).run(return_tasks=flow.tasks)
 
     assert state.is_failed()
@@ -708,7 +708,7 @@ def test_deep_map_with_a_retry(monkeypatch):
     task_run_id_2 = str(uuid.uuid4())
     task_run_id_3 = str(uuid.uuid4())
 
-    with prefect.Flow(name="test", result=PrefectResult()) as flow:
+    with prefectlegacy.Flow(name="test", result=PrefectResult()) as flow:
         t1 = plus_one.map([-1, 0, 1])
         t2 = invert_fail_once.map(t1)
         t3 = plus_one.map(t2)
@@ -742,7 +742,7 @@ def test_deep_map_with_a_retry(monkeypatch):
         monkeypatch=monkeypatch,
     )
 
-    with prefect.context(flow_run_id=flow_run_id):
+    with prefectlegacy.context(flow_run_id=flow_run_id):
         CloudFlowRunner(flow=flow).run(executor=LocalExecutor())
 
     assert client.flow_runs[flow_run_id].state.is_running()
@@ -787,7 +787,7 @@ def test_deep_map_with_a_retry(monkeypatch):
     ].pop()
     client.task_runs[failed_id].state.start_time = pendulum.now("UTC")
 
-    with prefect.context(flow_run_id=flow_run_id):
+    with prefectlegacy.context(flow_run_id=flow_run_id):
         CloudFlowRunner(flow=flow).run(executor=LocalExecutor())
 
     # t2's first child task should be successful
@@ -817,7 +817,7 @@ def test_states_are_hydrated_correctly_with_retries(monkeypatch, tmpdir):
     task_run_id_1 = str(uuid.uuid4())
     task_run_id_2 = str(uuid.uuid4())
 
-    with prefect.Flow(name="test-retries", result=LocalResult(dir=tmpdir)) as flow:
+    with prefectlegacy.Flow(name="test-retries", result=LocalResult(dir=tmpdir)) as flow:
         t1 = plus_one.map([-1, 0, 1])
         t2 = invert_fail_once.map(t1)
 
@@ -847,7 +847,7 @@ def test_states_are_hydrated_correctly_with_retries(monkeypatch, tmpdir):
         monkeypatch=monkeypatch,
     )
 
-    with prefect.context(flow_run_id=flow_run_id):
+    with prefectlegacy.context(flow_run_id=flow_run_id):
         CloudFlowRunner(flow=flow).run(executor=LocalExecutor())
 
     assert client.flow_runs[flow_run_id].state.is_running()
@@ -887,7 +887,7 @@ def test_states_are_hydrated_correctly_with_retries(monkeypatch, tmpdir):
     for idx, tr in client.task_runs.items():
         tr.state._result.value = None
 
-    with prefect.context(flow_run_id=flow_run_id):
+    with prefectlegacy.context(flow_run_id=flow_run_id):
         CloudFlowRunner(flow=flow).run(executor=LocalExecutor())
 
     # t2's first child task should be successful
@@ -906,13 +906,13 @@ def test_non_keyed_states_are_hydrated_correctly_with_retries(monkeypatch, tmpdi
     can affect the number of children spawned.
     """
 
-    @prefect.task
+    @prefectlegacy.task
     def return_list():
         return [1, 2, 3]
 
-    @prefect.task(max_retries=1, retry_delay=datetime.timedelta(minutes=20))
+    @prefectlegacy.task(max_retries=1, retry_delay=datetime.timedelta(minutes=20))
     def fail_once():
-        if prefect.context.get("task_run_count", 0) < 2:
+        if prefectlegacy.context.get("task_run_count", 0) < 2:
             raise SyntaxError("bad")
         else:
             return 100
@@ -921,7 +921,7 @@ def test_non_keyed_states_are_hydrated_correctly_with_retries(monkeypatch, tmpdi
     task_run_id_1 = str(uuid.uuid4())
     task_run_id_2 = str(uuid.uuid4())
 
-    with prefect.Flow(name="test-retries", result=LocalResult(dir=tmpdir)) as flow:
+    with prefectlegacy.Flow(name="test-retries", result=LocalResult(dir=tmpdir)) as flow:
         t1 = fail_once.map(upstream_tasks=[return_list])
 
     monkeypatch.setattr("requests.Session", MagicMock())
@@ -949,7 +949,7 @@ def test_non_keyed_states_are_hydrated_correctly_with_retries(monkeypatch, tmpdi
         monkeypatch=monkeypatch,
     )
 
-    with prefect.context(flow_run_id=flow_run_id):
+    with prefectlegacy.context(flow_run_id=flow_run_id):
         CloudFlowRunner(flow=flow).run(executor=LocalExecutor())
 
     assert client.flow_runs[flow_run_id].state.is_running()
@@ -980,7 +980,7 @@ def test_non_keyed_states_are_hydrated_correctly_with_retries(monkeypatch, tmpdi
     for idx, tr in client.task_runs.items():
         tr.state._result.value = None
 
-    with prefect.context(flow_run_id=flow_run_id):
+    with prefectlegacy.context(flow_run_id=flow_run_id):
         CloudFlowRunner(flow=flow).run(executor=LocalExecutor())
 
     assert (
@@ -995,9 +995,9 @@ def test_slug_mismatch_raises_informative_error(monkeypatch):
     task_run_id_1 = str(uuid.uuid4())
     task_run_id_2 = str(uuid.uuid4())
 
-    with prefect.Flow(name="test") as flow:
-        t1 = prefect.Task()
-        t2 = prefect.Task()
+    with prefectlegacy.Flow(name="test") as flow:
+        t1 = prefectlegacy.Task()
+        t2 = prefectlegacy.Task()
         t2.set_upstream(t1)
 
     client = MockedCloudClient(
@@ -1011,7 +1011,7 @@ def test_slug_mismatch_raises_informative_error(monkeypatch):
         monkeypatch=monkeypatch,
     )
 
-    with prefect.context(flow_run_id=flow_run_id):
+    with prefectlegacy.context(flow_run_id=flow_run_id):
         state = CloudFlowRunner(flow=flow).run(return_tasks=flow.tasks)
 
     assert state.is_failed()
@@ -1023,11 +1023,11 @@ def test_slug_mismatch_raises_informative_error(monkeypatch):
 
 
 def test_can_queue_successfully_and_run(monkeypatch):
-    @prefect.task
+    @prefectlegacy.task
     def return_one():
         return 1
 
-    with prefect.Flow("test-queues-work!") as flow:
+    with prefectlegacy.Flow("test-queues-work!") as flow:
         t1 = return_one()
 
     flow_run_id = str(uuid.uuid4())
@@ -1054,7 +1054,7 @@ def test_can_queue_successfully_and_run(monkeypatch):
         num_times_in_queue=6,
     )
 
-    with prefect.context(flow_run_id=flow_run_id):
+    with prefectlegacy.context(flow_run_id=flow_run_id):
         run_state = CloudFlowRunner(flow=flow).run(
             executor=LocalExecutor(), return_tasks=flow.tasks
         )

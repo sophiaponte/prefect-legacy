@@ -15,8 +15,8 @@ Prefect Cloud provides functionality to limit the number of simultaneous flow ru
 Labels can be set on a `Flow` via the run config
 
 ```python
-from prefect import Flow
-from prefect.run_configs import UniversalRun
+from prefectlegacy import Flow
+from prefectlegacy.run_configs import UniversalRun
 
 flow = Flow("example-flow")
 flow.run_config = UniversalRun(labels=["small-machine"])
@@ -123,7 +123,7 @@ Note that the ability to _alter_ or _update_ your task tag concurrency limits re
 Tagging your tasks is as simple as providing a list of tags to your `Task` at initialization via the `tags` keyword argument:
 
 ```python
-from prefect import task, Task
+from prefectlegacy import task, Task
 
 
 # While using the task decorator
@@ -168,7 +168,7 @@ You can edit and remove the concurrency limit of tags at any time. Select the bl
 To update your tag concurrency limits programmatically, use the Prefect library client:
 
 ```python
-from prefect import Client
+from prefectlegacy import Client
 
 client = Client()
 
@@ -219,7 +219,7 @@ You can view your Task tag concurrency limits by navigating to Team Settings -> 
 ::: tab Python client
 
 ```python
-from prefect import Client
+from prefectlegacy import Client
 
 client = Client()
 

@@ -9,7 +9,7 @@ The tasks in this module can be used to represent arbitrary functions.
 In general, users will not instantiate these tasks by hand; they will
 automatically be applied when users apply the `@task` decorator.
  ## FunctionTask
- <div class='class-sig' id='prefect-tasks-core-function-functiontask'><p class="prefect-sig">class </p><p class="prefect-class">prefect.tasks.core.function.FunctionTask</p>(fn, name=None, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/tasks/core/function.py#L14">[source]</a></span></div>
+ <div class='class-sig' id='prefect-tasks-core-function-functiontask'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.tasks.core.function.FunctionTask</p>(fn, name=None, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/tasks/core/function.py#L14">[source]</a></span></div>
 
 A convenience Task for functionally creating Task instances with arbitrary callable `run` methods.
 

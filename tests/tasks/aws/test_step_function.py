@@ -4,7 +4,7 @@ import pytest
 
 pytest.importorskip("boto3")
 
-from prefect.tasks.aws import StepActivate
+from prefectlegacy.tasks.aws import StepActivate
 
 
 class TestStepActivate:
@@ -20,7 +20,7 @@ class TestStepActivate:
         task = StepActivate(state_machine_arn="arn")
         client = MagicMock()
         boto3 = MagicMock(client=client)
-        monkeypatch.setattr("prefect.utilities.aws.boto3", boto3)
+        monkeypatch.setattr("prefectlegacy.utilities.aws.boto3", boto3)
         task.run(execution_name="name")
 
         called_method = client.mock_calls[1]

@@ -4,9 +4,9 @@ import pytest
 
 pytest.importorskip("boto3")
 
-import prefect
-from prefect.utilities.aws import get_boto_client, _CLIENT_CACHE as CACHE
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy.utilities.aws import get_boto_client, _CLIENT_CACHE as CACHE
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 @pytest.fixture(autouse=True)
@@ -17,14 +17,14 @@ def clear_boto3_cache():
 @pytest.fixture
 def mock_boto3(monkeypatch):
     boto3 = MagicMock()
-    monkeypatch.setattr("prefect.utilities.aws.boto3", boto3)
+    monkeypatch.setattr("prefectlegacy.utilities.aws.boto3", boto3)
     return boto3
 
 
 class TestGetBotoClient:
     def test_uses_context_secrets(self, mock_boto3):
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(
+            with prefectlegacy.context(
                 secrets=dict(
                     AWS_CREDENTIALS={
                         "ACCESS_KEY": "42",
@@ -49,7 +49,7 @@ class TestGetBotoClient:
             "SESSION_TOKEN": "please",
         }
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(
+            with prefectlegacy.context(
                 secrets=dict(
                     AWS_CREDENTIALS={
                         "ACCESS_KEY": "dont",

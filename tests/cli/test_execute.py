@@ -2,9 +2,9 @@ from unittest.mock import MagicMock, PropertyMock
 
 from click.testing import CliRunner
 
-import prefect
-from prefect.cli.execute import execute
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy.cli.execute import execute
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 def test_execute_init():
@@ -41,7 +41,7 @@ def test_execute_flowrun_flow_not_found(monkeypatch, cloud_api):
     session.return_value.post = post
     monkeypatch.setattr("requests.Session", session)
 
-    with prefect.context({"flow_run_id": "test"}):
+    with prefectlegacy.context({"flow_run_id": "test"}):
         runner = CliRunner()
         result = runner.invoke(execute, "flow-run")
 
@@ -57,9 +57,9 @@ def test_execute_flowrun_flow_fails(monkeypatch, cloud_api):
     data = MagicMock(data=MagicMock(flow_run=[MagicMock(flow=flow)]))
     client = MagicMock()
     client.return_value.graphql.return_value = data
-    monkeypatch.setattr("prefect.cli.execute.Client", client)
+    monkeypatch.setattr("prefectlegacy.cli.execute.Client", client)
 
-    with prefect.context({"flow_run_id": "test"}):
+    with prefectlegacy.context({"flow_run_id": "test"}):
         runner = CliRunner()
         result = runner.invoke(execute, "flow-run")
 

@@ -1,4 +1,4 @@
-from prefect import Flow, task
+from prefectlegacy import Flow, task
 
 # ------------------------------------
 # define some tasks

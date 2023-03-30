@@ -1,9 +1,9 @@
 import pytest
 
-import prefect
-from prefect.engine import results
-from prefect.engine.result import Result
-from prefect.serialization.result import StateResultSchema
+import prefectlegacy
+from prefectlegacy.engine import results
+from prefectlegacy.engine.result import Result
+from prefectlegacy.serialization.result import StateResultSchema
 
 
 def test_constant_result():
@@ -118,7 +118,7 @@ def test_s3_result():
 def test_secret_result():
     schema = StateResultSchema()
     result = results.SecretResult(
-        secret_task=prefect.tasks.secrets.EnvVarSecret(name="OS")
+        secret_task=prefectlegacy.tasks.secrets.EnvVarSecret(name="OS")
     )
     serialized = schema.dump(result)
 

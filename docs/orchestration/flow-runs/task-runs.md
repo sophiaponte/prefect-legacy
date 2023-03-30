@@ -10,7 +10,7 @@ Prefect does not store the _results_ of your task runs. The data that your task 
 
 ### Python
 
-The Prefect Core library provides an object for inspecting task runs without writing queries at `prefect.backend.TaskRunView`.
+The Prefect Core library provides an object for inspecting task runs without writing queries at `prefectlegacy.backend.TaskRunView`.
 
 #### Creating a `TaskRunView`
 
@@ -26,7 +26,7 @@ A `TaskRunView` is created by querying the backend for task run data. You can us
 
 When using a task slug, the `flow_run_id` is needed because the task may have been run in multiple flow runs.
 ```python
-from prefect.backend import TaskRunView
+from prefectlegacy.backend import TaskRunView
 
 task_run = TaskRunView.from_task_slug("say_hello-1", flow_run_id="8e445d74-9ca6-425b-98e5-72754b7ea174")
 # TaskRunView(
@@ -43,7 +43,7 @@ task_run = TaskRunView.from_task_slug("say_hello-1", flow_run_id="8e445d74-9ca6-
 ::: tab Task run id
 
 ```python
-from prefect.backend import TaskRunView
+from prefectlegacy.backend import TaskRunView
 
 task_run = TaskRunView.from_task_run_id("c8751f34-9d5e-4ea7-aead-8b50978dabb7")
 # TaskRunView(
@@ -81,7 +81,7 @@ The `get_result` method of a _child_ of a mapped task will return the single res
 
 For example, with the following flow:
 ```python
-from prefect import task, Flow
+from prefectlegacy import task, Flow
 
 @task
 def inc(x):
@@ -93,7 +93,7 @@ with Flow("example-mapped") as flow:
 
 You can retrieve all of the mapped results or a single result:
 ```python
-from prefect.backend import TaskRunView
+from prefectlegacy.backend import TaskRunView
 
 inc_parent = TaskRunView.from_task_slug("inc-1", flow_run_id="<id>")
 inc_parent.get_result()  # [1, 2, 3, 4, 5, 6]
@@ -104,7 +104,7 @@ inc_child.get_result()  # 3
 
 If your mapped task has many children, you can iterate through the children one at a time:
 ```python
-from prefect.backend import TaskRunView
+from prefectlegacy.backend import TaskRunView
 
 inc_parent = TaskRunView.from_task_slug("inc-1", flow_run_id="<id>")
 for child_task_run in inc_parent.iter_mapped():
@@ -125,7 +125,7 @@ For composing flows, the Prefect task library provides a task to retrieve the re
 Given a very simple 'child' flow
 
 ```python
-from prefect import Flow, task
+from prefectlegacy import Flow, task
 
 
 @task
@@ -140,8 +140,8 @@ with Flow("child") as child_flow:
 We can create a 'parent' flow that runs the 'child' flow and retrieves the results
 
 ```python
-from prefect import Flow
-from prefect.tasks.prefect import create_flow_run, get_task_run_result
+from prefectlegacy import Flow
+from prefectlegacy.tasks.prefect import create_flow_run, get_task_run_result
 
 with Flow("parent") as parent_flow:
     child_run_id = create_flow_run(flow_name="child")
@@ -160,7 +160,7 @@ Task run results will not be retrieved until the flow run with the task run is f
 
 #### Querying for task runs in a flow run
 
-Here we query for all of the task runs in a run of the `prefect.hello_world` flow
+Here we query for all of the task runs in a run of the `prefectlegacy.hello_world` flow
 
 ```graphql
 query {

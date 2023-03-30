@@ -21,7 +21,7 @@ Within a task, you may use these commands as many times as necessary, but they d
 As a best practice, such as when using `create_markdown_artifact()` to create artifacts like reports or summaries, compile your message string separately, then pass to `create_markdown_artifact()` or `update_markdown_artifact()` to create the full artifact.
 :::
 
-For more background on the design goals for the Artifacts API, see the [Introducing: The Artifacts API](https://www.prefect.io/blog/introducing-the-artifacts-api) blog post and the [Great Expectations task](/api/latest/tasks/great_expectations.html).
+For more background on the design goals for the Artifacts API, see the [Introducing: The Artifacts API](https://www.prefectlegacy.io/blog/introducing-the-artifacts-api) blog post and the [Great Expectations task](/api/latest/tasks/great_expectations.html).
 
 ## UI
 
@@ -41,21 +41,21 @@ You can navigate between the artifacts created for a task run by clicking the do
 
 ## Creating Link Artifacts
 
-To create link artifacts, just import `create_link_artifact` from `prefect.backend.artifacts`, then add a call to `create_link_artifact()` to any task orchestrated through a Prefect API. 
+To create link artifacts, just import `create_link_artifact` from `prefectlegacy.backend.artifacts`, then add a call to `create_link_artifact()` to any task orchestrated through a Prefect API. 
 
 ::: tip Import path
-If you are using a version prior to Prefect 0.15.8, import `create_link` from `prefect.artifacts`.
+If you are using a version prior to Prefect 0.15.8, import `create_link` from `prefectlegacy.artifacts`.
 :::
 
 Pass `create_link_artifact()` a string containing the absolute URL of the location to which you want to link. 
 
 ```python
-from prefect import task, Flow
-from prefect.backend.artifacts import create_link_artifact
+from prefectlegacy import task, Flow
+from prefectlegacy.backend.artifacts import create_link_artifact
 
 @task
 def make_artifact():
-    create_link_artifact("https://www.prefect.io/")
+    create_link_artifact("https://www.prefectlegacy.io/")
 ```
 
 After the task runs, navigate to the UI’s Artifacts tab to see the output.
@@ -69,10 +69,10 @@ Note that `update_link_artifact()` updates an existing link artifact by replacin
 
 ## Creating Markdown Artifacts
 
-To create link artifacts, just import `create_markdown_artifact` from `prefect.backend.artifacts`, then add a call to `create_markdown_artifact()` to any task orchestrated through a Prefect API. 
+To create link artifacts, just import `create_markdown_artifact` from `prefectlegacy.backend.artifacts`, then add a call to `create_markdown_artifact()` to any task orchestrated through a Prefect API. 
 
 ::: tip Import path
-If you are using a version prior to Prefect 0.15.8, import `create_markdown` from `prefect.artifacts`.
+If you are using a version prior to Prefect 0.15.8, import `create_markdown` from `prefectlegacy.artifacts`.
 :::
 
 Pass `create_markdown_artifact()` a string that will be rendered as an artifact. The string can contain any [Github-flavored Markdown](https://github.github.com/gfm/) markup including image references, links, and tables. 
@@ -80,12 +80,12 @@ Pass `create_markdown_artifact()` a string that will be rendered as an artifact.
 Note that any images referenced in your markdown must be linked by the absolute URL of a publicly available image. Linking to local files or by relative URL is not supported.
 
 ```python
-from prefect import task, Flow
-from prefect.backend.artifacts import create_markdown_artifact
+from prefectlegacy import task, Flow
+from prefectlegacy.backend.artifacts import create_markdown_artifact
 
 @task
 def make_artifact():
-    create_markdown_artifact("# Heading\n\nText with [link]("https://www.prefect.io/").")
+    create_markdown_artifact("# Heading\n\nText with [link]("https://www.prefectlegacy.io/").")
 ```
 
 After the task runs, navigate to the UI’s Artifacts tab to see the output.
@@ -100,8 +100,8 @@ In addition to creating an artifact, `create_markdown_artifact()` returns the ID
 Note that `update_markdown_artifact()` updates an existing markdown artifact by replacing the entire current markdown artifact with the new data provided. Here's an example of appending new report data to an existing artifact.
 
 ```python
-from prefect import task, Flow
-from prefect.backend.artifacts import create_markdown_artifact, update_markdown_artifact
+from prefectlegacy import task, Flow
+from prefectlegacy.backend.artifacts import create_markdown_artifact, update_markdown_artifact
 
 @task(nout=2)
 def make_report():
@@ -128,11 +128,11 @@ Explicit line endings and blank lins are important to rendering markdown correct
 
 ## Deleting Artifacts
 
-To delete existing link or markdown artifacts, import `delete_artifact` from `prefect.backend.artifacts`, then add a call to `delete_artifact()` to any task orchestrated through a Prefect API, passing the ID of the artifact to delete.
+To delete existing link or markdown artifacts, import `delete_artifact` from `prefectlegacy.backend.artifacts`, then add a call to `delete_artifact()` to any task orchestrated through a Prefect API, passing the ID of the artifact to delete.
 
 ```python
-from prefect import task, Flow
-from prefect.backend.artifacts import create_markdown_artifact, delete_artifact
+from prefectlegacy import task, Flow
+from prefectlegacy.backend.artifacts import create_markdown_artifact, delete_artifact
 
 @task
 def make_artifact(artifact_msg):

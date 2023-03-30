@@ -3,7 +3,7 @@
 Tasks in Prefect provide a way for dynamically naming task runs based on the inputs provided to them from upstream tasks. Creating a dynamic task run name is a great way to help identify errors that may occur in a flow, for example, easily showing which mapped task failed based on the input it received. See [the page on templating](/core/concepts/templating.html) for details on how dynamically templated names work.
 
 ::: warning Backend Only
-This feature only works when running in the context of an [API backend](/orchestration/) run using something like the [Prefect Server](/orchestration/server/overview.html) or [Prefect Cloud](https://cloud.prefect.io).
+This feature only works when running in the context of an [API backend](/orchestration/) run using something like the [Prefect Server](/orchestration/server/overview.html) or [Prefect Cloud](https://cloud.prefectlegacy.io).
 :::
 
 In the example snippet below we have a flow that maps over a set of data returned from an upstream task and (for demonstration purposes) it raises an error when it receives the `demo` string as an input.
@@ -11,7 +11,7 @@ In the example snippet below we have a flow that maps over a set of data returne
 :::: tabs
 ::: tab Functional API
 ```python
-from prefect import task, Flow
+from prefectlegacy import task, Flow
 
 @task
 def get_values():
@@ -30,7 +30,7 @@ with Flow("task_run_names") as flow:
 
 ::: tab Imperative API
 ```python
-from prefect import Task, Flow
+from prefectlegacy import Task, Flow
 
 class GetValues(Task):
     def run(self):
@@ -64,7 +64,7 @@ The backend will template the task run's name based on the `val` input it receiv
 :::: tabs
 ::: tab Functional API
 ```python{7}
-from prefect import task, Flow
+from prefectlegacy import task, Flow
 
 @task
 def get_values():
@@ -83,7 +83,7 @@ with Flow("task_run_names") as flow:
 
 ::: tab Imperative API
 ```python{15}
-from prefect import Task, Flow
+from prefectlegacy import Task, Flow
 
 class GetValues(Task):
     def run(self):

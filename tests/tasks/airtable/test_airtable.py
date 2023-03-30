@@ -1,8 +1,8 @@
 import pytest
 
-import prefect
-from prefect.tasks.airtable import WriteAirtableRow
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy.tasks.airtable import WriteAirtableRow
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 class TestWriteAirtableRow:

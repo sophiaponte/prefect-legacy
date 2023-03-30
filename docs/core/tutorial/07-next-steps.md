@@ -20,7 +20,7 @@ However, there is already a `Logger` object made available to you within `Tasks`
 ```python{3,4}
 @task
 def load_reference_data(ref_data):
-    logger = prefect.context.get("logger")
+    logger = prefectlegacy.context.get("logger")
     logger.info("saving reference data...")
 
     db = aclib.Database()
@@ -36,7 +36,7 @@ def load_reference_data(ref_data):
 In this particular Aircraft ETL example we did not have an explicit need to keep intermediate results at each step along the way. However, Prefect provides a `Result` abstraction that enables users to persist `Results` returned from each `Task` to a storage of choice:
 
 ```python{1,3}
-from prefect.engine.results import LocalResult
+from prefectlegacy.engine.results import LocalResult
 
 result = LocalResult(dir="./my-results")
 
@@ -69,8 +69,8 @@ In this tutorial we could have gone one step further and asked for fetching all 
 Within our tutorial `Tasks` were always user-provided functions, however, Prefect provides a [library of ready-made `Tasks`](/core/task_library/overview.html). Here's an example `Flow` that uses `ShellTasks` to run arbitrary commands:
 
 ```python{2,4,7-9}
-from prefect import Flow
-from prefect.tasks.shell import ShellTask
+from prefectlegacy import Flow
+from prefectlegacy.tasks.shell import ShellTask
  
 shell = ShellTask()
 with Flow("Simple Pipeline") as flow:

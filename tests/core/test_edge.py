@@ -1,8 +1,8 @@
 import pytest
 
-import prefect
-from prefect.core import Edge, Flow, Task
-from prefect.utilities import edges
+import prefectlegacy
+from prefectlegacy.core import Edge, Flow, Task
+from prefectlegacy.utilities import edges
 
 
 class TaskWithKey(Task):
@@ -97,12 +97,12 @@ def test_serialize_edge():
     t2 = Task()
     edge = Edge(t1, t2, key="key", mapped=True)
     assert edge.serialize() == dict(
-        upstream_task=dict(slug=t1.slug, __version__=prefect.__version__),
-        downstream_task=dict(slug=t2.slug, __version__=prefect.__version__),
+        upstream_task=dict(slug=t1.slug, __version__=prefectlegacy.__version__),
+        downstream_task=dict(slug=t2.slug, __version__=prefectlegacy.__version__),
         key="key",
         mapped=True,
         flattened=False,
-        __version__=prefect.__version__,
+        __version__=prefectlegacy.__version__,
     )
 
 

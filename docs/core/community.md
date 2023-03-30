@@ -10,7 +10,7 @@ Please consider [Chris White](https://github.com/cicdw) the main point of contac
 
 # Prefect Community Discourse
 
-[Prefect Discourse](https://discourse.prefect.io/) is a collaborative space to share knowledge, discuss ideas, find answers to common questions and get support. It's an online forum that allows you to easily find:
+[Prefect Discourse](https://discourse.prefectlegacy.io/) is a collaborative space to share knowledge, discuss ideas, find answers to common questions and get support. It's an online forum that allows you to easily find:
 - information about Prefect features,
 - information about Prefect integrations,
 - troubleshooting tips,
@@ -19,12 +19,12 @@ Please consider [Chris White](https://github.com/cicdw) the main point of contac
 - announcements about new releases and events.
 
 
-[Sign up](https://discourse.prefect.io/) and check out the [Getting started with Prefect Discourse](https://discourse.prefect.io/t/getting-started-with-prefect-discourse/25) guide.
+[Sign up](https://discourse.prefectlegacy.io/) and check out the [Getting started with Prefect Discourse](https://discourse.prefectlegacy.io/t/getting-started-with-prefect-discourse/25) guide.
 
 
 # Slack
 
-We have a public [Slack](https://prefect.io/slack) for chatting about Prefect, asking questions, and sharing tips.
+We have a public [Slack](https://prefectlegacy.io/slack) for chatting about Prefect, asking questions, and sharing tips.
 
 ## Slack Guidelines
 
@@ -53,7 +53,7 @@ Informative Slack threads are archived by our resident bot Marvin. Having well-w
 
 Oftentimes your question may have been answered somewhere else; some good resources to start looking before asking a question:
 * [Previous Slack messages](https://github.com/PrefectHQ/prefect/issues?q=is%3Aopen+is%3Aissue+label%3A%22Prefect+Slack+Community%22) (we do our best to archive relevant threads to GitHub!)
-* [Prefect documentation](https://docs.prefect.io/core/development/documentation.html)
+* [Prefect documentation](https://docs.prefectlegacy.io/core/development/documentation.html)
 * [Github issues](https://github.com/PrefectHQ/prefect/issues)
 * [StackOverflow](https://stackoverflow.com/questions/tagged/prefect)
 
@@ -71,4 +71,4 @@ It also helps other people if you post your question publicly. Similar to above,
 
 **Rule 7: Don't advertise material unrelated to Prefect**
 
-Our community is in the channel to learn more about Prefect. Showing us Prefect-related stuff that you're working on is highly encouraged. Advertising products and events unrelated to Prefect will be removed.
+Our community is in the channel to learn more about prefectlegacy. Showing us Prefect-related stuff that you're working on is highly encouraged. Advertising products and events unrelated to Prefect will be removed.

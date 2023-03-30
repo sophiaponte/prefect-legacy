@@ -7,12 +7,12 @@ A [flow](/core/concepts/flows.html) is a container for [tasks](/core/concepts/ta
 To run your flow, paste the code below into an interactive Python REPL session: 
 
 ```python
-import prefect
-from prefect import task, Flow
+import prefectlegacy
+from prefectlegacy import task, Flow
 
 @task
 def hello_task():
-    logger = prefect.context.get("logger")
+    logger = prefectlegacy.context.get("logger")
     logger.info("Hello world!")
 
 with Flow("hello-flow") as flow:
@@ -24,11 +24,11 @@ flow.run()
 You should see the following logs after running `flow.run()` :
 
 ```
-[2021-12-17 14:55:05-0500] INFO - prefect.FlowRunner | Beginning Flow run for 'hello-flow'
-[2021-12-17 14:55:05-0500] INFO - prefect.TaskRunner | Task 'hello_task': Starting task run...
-[2021-12-17 14:55:05-0500] INFO - prefect.hello_task | Hello world!
-[2021-12-17 14:55:05-0500] INFO - prefect.TaskRunner | Task 'hello_task': Finished task run for task with final state: 'Success'
-[2021-12-17 14:55:05-0500] INFO - prefect.FlowRunner | Flow run SUCCESS: all reference tasks succeeded
+[2021-12-17 14:55:05-0500] INFO - prefectlegacy.FlowRunner | Beginning Flow run for 'hello-flow'
+[2021-12-17 14:55:05-0500] INFO - prefectlegacy.TaskRunner | Task 'hello_task': Starting task run...
+[2021-12-17 14:55:05-0500] INFO - prefectlegacy.hello_task | Hello world!
+[2021-12-17 14:55:05-0500] INFO - prefectlegacy.TaskRunner | Task 'hello_task': Finished task run for task with final state: 'Success'
+[2021-12-17 14:55:05-0500] INFO - prefectlegacy.FlowRunner | Flow run SUCCESS: all reference tasks succeeded
 <Success: "All reference tasks succeeded.">
 ```
 
@@ -36,13 +36,13 @@ You can also save this code to a file called `hello_flow.py` and run it from a t
 
 ```
 $ python hello_flow.py
-[2021-12-17 14:52:24-0500] INFO - prefect.FlowRunner | Beginning Flow run for 'hello-flow'
-[2021-12-17 14:52:24-0500] INFO - prefect.TaskRunner | Task 'hello_task': Starting task run...
-[2021-12-17 14:52:24-0500] INFO - prefect.hello_task | Hello world!
-[2021-12-17 14:52:24-0500] INFO - prefect.TaskRunner | Task 'hello_task': Finished task run for task with final state: 'Success'
-[2021-12-17 14:52:24-0500] INFO - prefect.FlowRunner | Flow run SUCCESS: all reference tasks succeeded
+[2021-12-17 14:52:24-0500] INFO - prefectlegacy.FlowRunner | Beginning Flow run for 'hello-flow'
+[2021-12-17 14:52:24-0500] INFO - prefectlegacy.TaskRunner | Task 'hello_task': Starting task run...
+[2021-12-17 14:52:24-0500] INFO - prefectlegacy.hello_task | Hello world!
+[2021-12-17 14:52:24-0500] INFO - prefectlegacy.TaskRunner | Task 'hello_task': Finished task run for task with final state: 'Success'
+[2021-12-17 14:52:24-0500] INFO - prefectlegacy.FlowRunner | Flow run SUCCESS: all reference tasks succeeded
 ```
 
-If you're running into issues, check that your Python environment is properly set up to run Prefect. Refer to the [Prefect Core Installation](/core/getting_started/install.html) documentation for further details.
+If you're running into issues, check that your Python environment is properly set up to run prefectlegacy. Refer to the [Prefect Core Installation](/core/getting_started/install.html) documentation for further details.
 
 Now you're got a basic flow running locally, we can set up an API and UI using Prefect Cloud and register it. 

@@ -1,6 +1,6 @@
 import pytest
 
-from prefect.tasks.gcp.secretmanager import GCPSecret
+from prefectlegacy.tasks.gcp.secretmanager import GCPSecret
 
 
 class TestGCPSecretsTask:

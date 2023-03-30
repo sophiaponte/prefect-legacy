@@ -1,4 +1,4 @@
-from prefect.run_configs import UniversalRun
+from prefectlegacy.run_configs import UniversalRun
 
 
 def test_no_args():

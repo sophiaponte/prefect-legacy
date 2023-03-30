@@ -6,8 +6,8 @@ import sys
 from unittest.mock import MagicMock, call
 from subprocess import CalledProcessError
 
-import prefect
-from prefect.backend.execution import (
+import prefectlegacy
+from prefectlegacy.backend.execution import (
     _fail_flow_run,
     _fail_flow_run_on_exception,
     _get_flow_run_scheduled_start_time,
@@ -16,10 +16,10 @@ from prefect.backend.execution import (
     generate_flow_run_environ,
     execute_flow_run_in_subprocess,
 )
-from prefect.run_configs import UniversalRun
-from prefect.engine.state import Failed, Scheduled, Success, Running, Submitted
-from prefect.utilities.graphql import GraphQLResult
-from prefect.utilities.configuration import set_temporary_config
+from prefectlegacy.run_configs import UniversalRun
+from prefectlegacy.engine.state import Failed, Scheduled, Success, Running, Submitted
+from prefectlegacy.utilities.graphql import GraphQLResult
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 CONFIG_TENANT_ID = str(uuid.uuid4())
@@ -32,8 +32,8 @@ def cloud_mocks(monkeypatch):
         Client = MagicMock()
 
     mocks = CloudMocks()
-    monkeypatch.setattr("prefect.backend.execution.FlowRunView", mocks.FlowRunView)
-    monkeypatch.setattr("prefect.Client", mocks.Client)
+    monkeypatch.setattr("prefectlegacy.backend.execution.FlowRunView", mocks.FlowRunView)
+    monkeypatch.setattr("prefectlegacy.Client", mocks.Client)
 
     return mocks
 
@@ -47,13 +47,13 @@ class TestExecuteFlowRunInSubprocess:
             fail_flow_run = MagicMock()
 
         mocks = Mocks()
-        monkeypatch.setattr("prefect.backend.execution.subprocess", mocks.subprocess)
+        monkeypatch.setattr("prefectlegacy.backend.execution.subprocess", mocks.subprocess)
         monkeypatch.setattr(
-            "prefect.backend.execution._wait_for_flow_run_start_time",
+            "prefectlegacy.backend.execution._wait_for_flow_run_start_time",
             mocks.wait_for_flow_run_start_time,
         )
         monkeypatch.setattr(
-            "prefect.backend.execution._fail_flow_run", mocks.fail_flow_run
+            "prefectlegacy.backend.execution._fail_flow_run", mocks.fail_flow_run
         )
 
         # Since we mocked the module this error cannot be used in try/catch without
@@ -84,13 +84,13 @@ class TestExecuteFlowRunInSubprocess:
             "PREFECT__LOGGING__FORMAT": "[%(asctime)s] %(levelname)s - %(name)s | %(message)s",
             "PREFECT__LOGGING__DATEFMT": "%Y-%m-%d %H:%M:%S%z",
             "PREFECT__BACKEND": "cloud",
-            "PREFECT__CLOUD__API": "https://api.prefect.io",
+            "PREFECT__CLOUD__API": "https://api.prefectlegacy.io",
             "PREFECT__CLOUD__TENANT_ID": "",
             "PREFECT__CLOUD__API_KEY": cloud_mocks.Client().api_key,
             "PREFECT__CLOUD__AUTH_TOKEN": cloud_mocks.Client().api_key,
             "PREFECT__CONTEXT__FLOW_RUN_ID": "flow-run-id",
             "PREFECT__CONTEXT__FLOW_ID": cloud_mocks.FlowRunView.from_flow_run_id().flow_id,
-            "PREFECT__ENGINE__FLOW_RUNNER__DEFAULT_CLASS": "prefect.engine.cloud.CloudFlowRunner",
+            "PREFECT__ENGINE__FLOW_RUNNER__DEFAULT_CLASS": "prefectlegacy.engine.cloud.CloudFlowRunner",
         }
         expected_env = {**base_env, **generated_env}
 
@@ -220,10 +220,10 @@ def test_generate_flow_run_environ():
         "PREFECT__CONTEXT__FLOW_ID": "flow-id",
         "PREFECT__CLOUD__API_KEY": "api-key",
         "PREFECT__CLOUD__AUTH_TOKEN": "api-key",  # Backwards compatibility for tokens
-        # Set from prefect config
-        "PREFECT__LOGGING__LEVEL": prefect.config.logging.level,
-        "PREFECT__LOGGING__FORMAT": prefect.config.logging.format,
-        "PREFECT__LOGGING__DATEFMT": prefect.config.logging.datefmt,
+        # Set from prefectlegacy config
+        "PREFECT__LOGGING__LEVEL": prefectlegacy.config.logging.level,
+        "PREFECT__LOGGING__FORMAT": prefectlegacy.config.logging.format,
+        "PREFECT__LOGGING__DATEFMT": prefectlegacy.config.logging.datefmt,
         "PREFECT__CLOUD__SEND_FLOW_RUN_LOGS": "CONFIG_SEND_RUN_LOGS",
         "PREFECT__BACKEND": "CONFIG_BACKEND",
         "PREFECT__CLOUD__API": "CONFIG_API",
@@ -232,7 +232,7 @@ def test_generate_flow_run_environ():
         "A": "RUN_CONFIG",
         "B": "RUN_CONFIG",
         # Hard-coded
-        "PREFECT__ENGINE__FLOW_RUNNER__DEFAULT_CLASS": "prefect.engine.cloud.CloudFlowRunner",
+        "PREFECT__ENGINE__FLOW_RUNNER__DEFAULT_CLASS": "prefectlegacy.engine.cloud.CloudFlowRunner",
     }
 
 
@@ -248,15 +248,15 @@ class TestWaitForFlowRunStartTime:
 
         mocks = Mocks()
         monkeypatch.setattr(
-            "prefect.backend.execution._get_flow_run_scheduled_start_time",
+            "prefectlegacy.backend.execution._get_flow_run_scheduled_start_time",
             mocks.get_flow_run_scheduled_start_time,
         )
         monkeypatch.setattr(
-            "prefect.backend.execution._get_next_task_run_start_time",
+            "prefectlegacy.backend.execution._get_next_task_run_start_time",
             mocks.get_next_task_run_start_time,
         )
-        monkeypatch.setattr("prefect.backend.execution.time.sleep", mocks.sleep)
-        monkeypatch.setattr("prefect.backend.execution.pendulum.now", mocks.now)
+        monkeypatch.setattr("prefectlegacy.backend.execution.time.sleep", mocks.sleep)
+        monkeypatch.setattr("prefectlegacy.backend.execution.pendulum.now", mocks.now)
         return mocks
 
     def test_flow_run_is_ready_immediately(self, timing_mocks):
@@ -483,7 +483,7 @@ def test_get_flow_run_scheduled_start_time_raises_on_multiple_flow_runs(cloud_mo
 
 @pytest.mark.parametrize("is_finished", [True, False])
 def test_fail_flow_run_on_exception(monkeypatch, cloud_mocks, is_finished, caplog):
-    monkeypatch.setattr("prefect.backend.execution._fail_flow_run", MagicMock())
+    monkeypatch.setattr("prefectlegacy.backend.execution._fail_flow_run", MagicMock())
     cloud_mocks.FlowRunView.from_flow_run_id().state.is_finished.return_value = (
         is_finished
     )
@@ -496,9 +496,9 @@ def test_fail_flow_run_on_exception(monkeypatch, cloud_mocks, is_finished, caplo
 
     # Fails in Cloud if the run is not finished already
     if is_finished:
-        prefect.backend.execution._fail_flow_run.assert_not_called()
+        prefectlegacy.backend.execution._fail_flow_run.assert_not_called()
     else:
-        prefect.backend.execution._fail_flow_run.assert_called_once_with(
+        prefectlegacy.backend.execution._fail_flow_run.assert_called_once_with(
             "flow-run-id",
             message=f"fail message: {ValueError('Exception message')!r}",
         )
@@ -517,7 +517,7 @@ def test_fail_flow_run(cloud_mocks):
         [
             dict(
                 flow_run_id="flow-run-id",
-                name="prefect.backend.execution",
+                name="prefectlegacy.backend.execution",
                 message="fail message",
                 level="ERROR",
             )

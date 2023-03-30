@@ -3,9 +3,9 @@ from unittest.mock import MagicMock
 import cloudpickle
 import pytest
 
-import prefect
-from prefect.engine.results import S3Result
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy.engine.results import S3Result
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 pytest.importorskip("boto3")
 pytest.importorskip("botocore")
@@ -13,18 +13,18 @@ pytest.importorskip("botocore")
 
 @pytest.fixture
 def mock_boto3(monkeypatch):
-    from prefect.utilities.aws import _CLIENT_CACHE
+    from prefectlegacy.utilities.aws import _CLIENT_CACHE
 
     _CLIENT_CACHE.clear()
 
     boto3 = MagicMock()
-    monkeypatch.setattr("prefect.utilities.aws.boto3", boto3)
+    monkeypatch.setattr("prefectlegacy.utilities.aws.boto3", boto3)
     secrets = dict(
         AWS_CREDENTIALS=dict(
             ACCESS_KEY="access_key", SECRET_ACCESS_KEY="secret_access_key"
         )
     )
-    with set_temporary_config({"cloud.use_local_secrets": True}), prefect.context(
+    with set_temporary_config({"cloud.use_local_secrets": True}), prefectlegacy.context(
         secrets=secrets
     ):
         yield boto3
@@ -59,8 +59,8 @@ class TestS3Result:
     def test_s3_writes_to_blob_with_rendered_filename(self, mock_boto3):
         result = S3Result(bucket="foo", location="{thing}/here.txt")
 
-        with prefect.context(thing="yes!"):
-            new_result = result.write("so-much-data", **prefect.context)
+        with prefectlegacy.context(thing="yes!"):
+            new_result = result.write("so-much-data", **prefectlegacy.context)
 
         used_uri = mock_boto3.client.return_value.upload_fileobj.call_args[1]["Key"]
 
@@ -76,8 +76,8 @@ class TestS3Result:
             upload_options=upload_options,
         )
 
-        with prefect.context(thing="yes!"):
-            result.write("so-much-data", **prefect.context)
+        with prefectlegacy.context(thing="yes!"):
+            result.write("so-much-data", **prefectlegacy.context)
 
         extra_args = mock_boto3.client.return_value.upload_fileobj.call_args[1][
             "ExtraArgs"

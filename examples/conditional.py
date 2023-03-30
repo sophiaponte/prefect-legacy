@@ -37,8 +37,8 @@ The resulting flow looks like:
 """
 from random import random
 
-from prefect import task, Flow, case
-from prefect.tasks.control_flow import merge
+from prefectlegacy import task, Flow, case
+from prefectlegacy.tasks.control_flow import merge
 
 
 @task

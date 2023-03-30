@@ -4,7 +4,7 @@ import pytest
 
 dulwich = pytest.importorskip("dulwich")
 
-from prefect.utilities.git import TemporaryGitRepo
+from prefectlegacy.utilities.git import TemporaryGitRepo
 
 
 @pytest.fixture

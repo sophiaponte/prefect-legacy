@@ -2,9 +2,9 @@ from unittest.mock import MagicMock
 
 import pytest
 
-import prefect
-from prefect.tasks.redis import RedisExecute, RedisGet, RedisSet
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy.tasks.redis import RedisExecute, RedisGet, RedisSet
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 class TestRedisSet:
@@ -34,9 +34,9 @@ class TestRedisSet:
     def test_creds_are_pulled_from_secret(self, monkeypatch):
         task = RedisSet()
         redis = MagicMock()
-        monkeypatch.setattr("prefect.tasks.redis.redis_tasks.redis.Redis", redis)
+        monkeypatch.setattr("prefectlegacy.tasks.redis.redis_tasks.redis.Redis", redis)
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(secrets=dict(REDIS_PASSWORD="42")):
+            with prefectlegacy.context(secrets=dict(REDIS_PASSWORD="42")):
                 task.run(redis_key="foo", redis_val="bar")
         assert redis.call_args[1]["password"] == 42
 
@@ -44,9 +44,9 @@ class TestRedisSet:
         redis_params = {"custom_parameter": "value"}
         task = RedisSet(redis_connection_params=redis_params)
         redis = MagicMock()
-        monkeypatch.setattr("prefect.tasks.redis.redis_tasks.redis.Redis", redis)
+        monkeypatch.setattr("prefectlegacy.tasks.redis.redis_tasks.redis.Redis", redis)
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(secrets=dict(REDIS_PASSWORD="42")):
+            with prefectlegacy.context(secrets=dict(REDIS_PASSWORD="42")):
                 task.run(redis_key="foo", redis_val="bar")
         assert redis.call_args[1]["custom_parameter"] == "value"
 
@@ -64,9 +64,9 @@ class TestRedisGet:
     def test_creds_are_pulled_from_secret(self, monkeypatch):
         task = RedisGet()
         redis = MagicMock()
-        monkeypatch.setattr("prefect.tasks.redis.redis_tasks.redis.Redis", redis)
+        monkeypatch.setattr("prefectlegacy.tasks.redis.redis_tasks.redis.Redis", redis)
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(secrets=dict(REDIS_PASSWORD="42")):
+            with prefectlegacy.context(secrets=dict(REDIS_PASSWORD="42")):
                 task.run(redis_key="foo")
         assert redis.call_args[1]["password"] == 42
 
@@ -74,9 +74,9 @@ class TestRedisGet:
         redis_params = {"custom_parameter": "value"}
         task = RedisGet(redis_connection_params=redis_params)
         redis = MagicMock()
-        monkeypatch.setattr("prefect.tasks.redis.redis_tasks.redis.Redis", redis)
+        monkeypatch.setattr("prefectlegacy.tasks.redis.redis_tasks.redis.Redis", redis)
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(secrets=dict(REDIS_PASSWORD="42")):
+            with prefectlegacy.context(secrets=dict(REDIS_PASSWORD="42")):
                 task.run(redis_key="foo")
         assert redis.call_args[1]["custom_parameter"] == "value"
 
@@ -94,9 +94,9 @@ class TestRedisExecute:
     def test_creds_are_pulled_from_secret(self, monkeypatch):
         task = RedisExecute()
         redis = MagicMock()
-        monkeypatch.setattr("prefect.tasks.redis.redis_tasks.redis.Redis", redis)
+        monkeypatch.setattr("prefectlegacy.tasks.redis.redis_tasks.redis.Redis", redis)
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(secrets=dict(REDIS_PASSWORD="42")):
+            with prefectlegacy.context(secrets=dict(REDIS_PASSWORD="42")):
                 task.run(redis_cmd="GET foo")
         assert redis.call_args[1]["password"] == 42
 
@@ -104,8 +104,8 @@ class TestRedisExecute:
         redis_params = {"custom_parameter": "value"}
         task = RedisExecute(redis_connection_params=redis_params)
         redis = MagicMock()
-        monkeypatch.setattr("prefect.tasks.redis.redis_tasks.redis.Redis", redis)
+        monkeypatch.setattr("prefectlegacy.tasks.redis.redis_tasks.redis.Redis", redis)
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(secrets=dict(REDIS_PASSWORD="42")):
+            with prefectlegacy.context(secrets=dict(REDIS_PASSWORD="42")):
                 task.run(redis_cmd="GET foo")
         assert redis.call_args[1]["custom_parameter"] == "value"

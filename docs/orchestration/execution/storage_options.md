@@ -20,8 +20,8 @@ Version `0.12.5` introduced script-based storage for all storage options. For mo
 [Local Storage](/api/latest/storage.html#local) is the default `Storage` option for all flows. This stores the flow as bytes in the local filesystem, which means it can only be run by a [local agent](/orchestration/agents/local.html) running on the same machine.
 
 ```python
-from prefect import Flow
-from prefect.storage import Local
+from prefectlegacy import Flow
+from prefectlegacy.storage import Local
 
 flow = Flow("local-flow", storage=Local())
 
@@ -45,8 +45,8 @@ In more recent releases of Prefect Core, your flow will default to using a `Loca
 [Azure Storage](/api/latest/storage.html#azure) is a storage option that uploads flows to an Azure Blob container.
 
 ```python
-from prefect import Flow
-from prefect.storage import Azure
+from prefectlegacy import Flow
+from prefectlegacy.storage import Azure
 
 flow = Flow("azure-flow", storage=Azure(container="<my-container>", connection_string_secret="<my-connection-string>"))
 
@@ -68,8 +68,8 @@ Azure Storage uses an Azure [connection string](https://docs.microsoft.com/en-us
 [S3 Storage](/api/latest/storage.html#s3) is a storage option that uploads flows to an AWS S3 bucket.
 
 ```python
-from prefect import Flow
-from prefect.storage import S3
+from prefectlegacy import Flow
+from prefectlegacy.storage import S3
 
 flow = Flow("s3-flow", storage=S3(bucket="<my-bucket>"))
 
@@ -91,8 +91,8 @@ S3 Storage uses AWS credentials the same way as [boto3](https://boto3.amazonaws.
 [GCS Storage](/api/latest/storage.html#gcs) is a storage option that uploads flows to a Google Cloud Storage bucket.
 
 ```python
-from prefect import Flow
-from prefect.storage import GCS
+from prefectlegacy import Flow
+from prefectlegacy.storage import GCS
 
 flow = Flow("gcs-flow", storage=GCS(bucket="<my-bucket>"))
 
@@ -164,8 +164,8 @@ CodeCommit uses AWS credentials the same way as [boto3](https://boto3.amazonaws.
 [Docker Storage](/api/latest/storage.html#docker) is a storage option that puts flows inside of a Docker image and pushes them to a container registry. This method of Storage has deployment compatability with the [Docker Agent](/orchestration/agents/docker.html), [Kubernetes Agent](/orchestration/agents/kubernetes.html), and [Fargate Agent](/orchestration/agents/fargate.html).
 
 ```python
-from prefect import Flow
-from prefect.storage import Docker
+from prefectlegacy import Flow
+from prefectlegacy.storage import Docker
 
 flow = Flow("gcs-flow", storage=Docker(registry_url="<my-registry.io>", image_name="my_flow"))
 
@@ -187,8 +187,8 @@ Docker Storage uses the [Docker SDK for Python](https://docker-py.readthedocs.io
 For example, the following code could be used to store flows in DropBox.
 
 ```python
-from prefect import Flow
-from prefect.storage import Webhook
+from prefectlegacy import Flow
+from prefectlegacy.storage import Webhook
 
 flow = Flow(
     "dropbox-flow",
@@ -233,9 +233,9 @@ Template strings in `${}` are used to reference sensitive information. Given `${
 Prefect allows for flows to be stored in cloud storage services and executed in containerized environments. This has the added benefit of rapidly deploying new versions of flows without having to rebuild images each time. To enable this functionality add an image name to the flow's Environment metadata.
 
 ```python
-from prefect import Flow
-from prefect.environments import LocalEnvironment
-from prefect.storage import S3
+from prefectlegacy import Flow
+from prefectlegacy.environments import LocalEnvironment
+from prefectlegacy.storage import S3
 
 flow = Flow("example")
 

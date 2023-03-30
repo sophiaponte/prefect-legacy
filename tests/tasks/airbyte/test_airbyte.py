@@ -3,16 +3,16 @@ import requests
 import responses
 import logging
 
-from prefect.tasks.airbyte import (
+from prefectlegacy.tasks.airbyte import (
     AirbyteConnectionTask,
     AirbyteConfigurationExport,
 )
-from prefect.tasks.airbyte.airbyte import (
+from prefectlegacy.tasks.airbyte.airbyte import (
     AirbyteServerNotHealthyException,
     ConnectionNotFoundException,
     JobNotFoundException,
 )
-from prefect.tasks.airbyte.airbyte import AirbyteClient
+from prefectlegacy.tasks.airbyte.airbyte import AirbyteClient
 
 logging.basicConfig()
 log = logging.getLogger()

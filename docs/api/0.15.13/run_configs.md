@@ -5,7 +5,7 @@ editLink: false
 # Run Configuration
 ---
  ## RunConfig
- <div class='class-sig' id='prefect-run-configs-base-runconfig'><p class="prefect-sig">class </p><p class="prefect-class">prefect.run_configs.base.RunConfig</p>(env=None, labels=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/run_configs/base.py#L6">[source]</a></span></div>
+ <div class='class-sig' id='prefect-run-configs-base-runconfig'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.run_configs.base.RunConfig</p>(env=None, labels=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/run_configs/base.py#L6">[source]</a></span></div>
 
 Base class for RunConfigs.
 
@@ -15,14 +15,14 @@ A "run config" is an object for configuring a flow run, which maps to a specific
 
 |methods: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |:----|
- | <div class='method-sig' id='prefect-run-configs-base-runconfig-serialize'><p class="prefect-class">prefect.run_configs.base.RunConfig.serialize</p>()<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/run_configs/base.py#L24">[source]</a></span></div>
+ | <div class='method-sig' id='prefect-run-configs-base-runconfig-serialize'><p class="prefect-class">prefectlegacy.run_configs.base.RunConfig.serialize</p>()<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/run_configs/base.py#L24">[source]</a></span></div>
 <p class="methods">Returns a serialized version of the RunConfig.<br><br>**Returns**:     <ul class="args"><li class="args">`dict`: the serialized RunConfig</li></ul></p>|
 
 ---
 <br>
 
  ## UniversalRun
- <div class='class-sig' id='prefect-run-configs-base-universalrun'><p class="prefect-sig">class </p><p class="prefect-class">prefect.run_configs.base.UniversalRun</p>(env=None, labels=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/run_configs/base.py#L41">[source]</a></span></div>
+ <div class='class-sig' id='prefect-run-configs-base-universalrun'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.run_configs.base.UniversalRun</p>(env=None, labels=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/run_configs/base.py#L41">[source]</a></span></div>
 
 Configure a flow-run to run universally on any Agent.
 
@@ -51,7 +51,7 @@ flow.run_config = UniversalRun(env={"SOME_VAR": "value"}, labels=["label-1", "la
 <br>
 
  ## LocalRun
- <div class='class-sig' id='prefect-run-configs-local-localrun'><p class="prefect-sig">class </p><p class="prefect-class">prefect.run_configs.local.LocalRun</p>(env=None, working_dir=None, labels=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/run_configs/local.py#L7">[source]</a></span></div>
+ <div class='class-sig' id='prefect-run-configs-local-localrun'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.run_configs.local.LocalRun</p>(env=None, working_dir=None, labels=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/run_configs/local.py#L7">[source]</a></span></div>
 
 Configure a flow-run to run as a Local Process.
 
@@ -86,7 +86,7 @@ flow.run_config = LocalRun(env={"SOME_VAR": "value"})
 <br>
 
  ## DockerRun
- <div class='class-sig' id='prefect-run-configs-docker-dockerrun'><p class="prefect-sig">class </p><p class="prefect-class">prefect.run_configs.docker.DockerRun</p>(image=None, env=None, labels=None, ports=None, host_config=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/run_configs/docker.py#L6">[source]</a></span></div>
+ <div class='class-sig' id='prefect-run-configs-docker-dockerrun'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.run_configs.docker.DockerRun</p>(image=None, env=None, labels=None, ports=None, host_config=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/run_configs/docker.py#L6">[source]</a></span></div>
 
 Configure a flow-run to run as a Docker container.
 
@@ -113,7 +113,7 @@ flow.run_config = DockerRun(env={"SOME_VAR": "value"})
 <br>
 
  ## KubernetesRun
- <div class='class-sig' id='prefect-run-configs-kubernetes-kubernetesrun'><p class="prefect-sig">class </p><p class="prefect-class">prefect.run_configs.kubernetes.KubernetesRun</p>(job_template_path=None, job_template=None, image=None, env=None, cpu_limit=None, cpu_request=None, memory_limit=None, memory_request=None, service_account_name=None, image_pull_secrets=None, labels=None, image_pull_policy=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/run_configs/kubernetes.py#L9">[source]</a></span></div>
+ <div class='class-sig' id='prefect-run-configs-kubernetes-kubernetesrun'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.run_configs.kubernetes.KubernetesRun</p>(job_template_path=None, job_template=None, image=None, env=None, cpu_limit=None, cpu_request=None, memory_limit=None, memory_request=None, service_account_name=None, image_pull_secrets=None, labels=None, image_pull_policy=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/run_configs/kubernetes.py#L9">[source]</a></span></div>
 
 Configure a flow-run to run as a Kubernetes Job.
 
@@ -167,7 +167,7 @@ flow.run_config = KubernetesRun(
 <br>
 
  ## ECSRun
- <div class='class-sig' id='prefect-run-configs-ecs-ecsrun'><p class="prefect-sig">class </p><p class="prefect-class">prefect.run_configs.ecs.ECSRun</p>(task_definition=None, task_definition_path=None, task_definition_arn=None, image=None, env=None, cpu=None, memory=None, task_role_arn=None, execution_role_arn=None, run_task_kwargs=None, labels=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/run_configs/ecs.py#L9">[source]</a></span></div>
+ <div class='class-sig' id='prefect-run-configs-ecs-ecsrun'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.run_configs.ecs.ECSRun</p>(task_definition=None, task_definition_path=None, task_definition_arn=None, image=None, env=None, cpu=None, memory=None, task_role_arn=None, execution_role_arn=None, run_task_kwargs=None, labels=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/run_configs/ecs.py#L9">[source]</a></span></div>
 
 Configure a flow-run to run as an ECS Task.
 
@@ -284,11 +284,11 @@ flow.run_config = ECSRun(
 
 7) An example flow showing ECSRun with a `task_definition` defined as dictionary, and S3 storage: 
 ```python
-import prefect
-from prefect.storage import S3
-from prefect.run_configs import ECSRun
-from prefect import task, Flow
-from prefect.client.secrets import Secret
+import prefectlegacy
+from prefectlegacy.storage import S3
+from prefectlegacy.run_configs import ECSRun
+from prefectlegacy import task, Flow
+from prefectlegacy.client.secrets import Secret
 
 
 FLOW_NAME = "ecs_demo_ecr"
@@ -322,8 +322,8 @@ RUN_CONFIG = ECSRun(
 
 @task
 def say_hi():
-    logger = prefect.context.get("logger")
-    logger.info("Hi from Prefect %s from flow %s", prefect.__version__, FLOW_NAME)
+    logger = prefectlegacy.context.get("logger")
+    logger.info("Hi from prefectlegacy %s from flow %s", prefectlegacy.__version__, FLOW_NAME)
 
 
 with Flow(FLOW_NAME, storage=STORAGE, run_config=RUN_CONFIG,) as flow:
@@ -343,7 +343,7 @@ with Flow(FLOW_NAME, storage=STORAGE, run_config=RUN_CONFIG,) as flow:
 <br>
 
  ## VertexRun
- <div class='class-sig' id='prefect-run-configs-vertex-vertexrun'><p class="prefect-sig">class </p><p class="prefect-class">prefect.run_configs.vertex.VertexRun</p>(env=None, labels=None, image=None, machine_type=&quot;e2-standard-4&quot;, scheduling=None, service_account=None, network=None, worker_pool_specs=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/run_configs/vertex.py#L6">[source]</a></span></div>
+ <div class='class-sig' id='prefect-run-configs-vertex-vertexrun'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.run_configs.vertex.VertexRun</p>(env=None, labels=None, image=None, machine_type=&quot;e2-standard-4&quot;, scheduling=None, service_account=None, network=None, worker_pool_specs=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/run_configs/vertex.py#L6">[source]</a></span></div>
 
 Configure a flow-run to run as a Vertex CustomJob.
 

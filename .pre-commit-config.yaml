@@ -14,4 +14,4 @@ repos:
       language_version: python3
       types: [python]
       # only in src for now
-      files: ^src/prefect/
+      files: ^src/prefectlegacy/

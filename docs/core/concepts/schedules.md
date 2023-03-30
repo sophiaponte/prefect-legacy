@@ -9,9 +9,9 @@ Prefect assumes that flows can be run at any time, for any reason. However, it i
 Simple schedules can be attached to Flows via the `schedule` keyword argument:
 
 ```python
-from prefect import task, Flow
+from prefectlegacy import task, Flow
 from datetime import timedelta
-from prefect.schedules import IntervalSchedule
+from prefectlegacy.schedules import IntervalSchedule
 
 
 @task
@@ -51,8 +51,8 @@ Prefect does not support sub-minute schedules.
 
 ```python
 from datetime import timedelta
-from prefect.schedules import Schedule
-from prefect.schedules.clocks import IntervalClock
+from prefectlegacy.schedules import Schedule
+from prefectlegacy.schedules.clocks import IntervalClock
 
 schedule = Schedule(clocks=[IntervalClock(timedelta(hours=24))])
 
@@ -85,8 +85,8 @@ Clocks can also be generated from cron strings with the Prefect [`CronClock`](/a
 
 ```python
 from datetime import timedelta
-from prefect.schedules import Schedule
-from prefect.schedules.clocks import CronClock
+from prefectlegacy.schedules import Schedule
+from prefectlegacy.schedules.clocks import CronClock
 
 schedule = Schedule(clocks=[CronClock("0 0 * * *")])
 
@@ -105,8 +105,8 @@ For more ad-hoc schedules, Prefect provides a [`DatesClock`](/api/latest/schedul
 
 ```python
 import pendulum
-from prefect.schedules import Schedule
-from prefect.schedules.clocks import DatesClock
+from prefectlegacy.schedules import Schedule
+from prefectlegacy.schedules.clocks import DatesClock
 
 schedule = Schedule(
     clocks=[DatesClock([pendulum.now().add(days=1), pendulum.now().add(days=2)])]
@@ -126,8 +126,8 @@ For example, `RRuleClock` can specify a schedule recurring every day for a week:
 ```python
 from dateutil.rrule import rrule, DAILY
 import pendulum
-from prefect.schedules import Schedule
-from prefect.schedules.clocks import RRuleClock
+from prefectlegacy.schedules import Schedule
+from prefectlegacy.schedules.clocks import RRuleClock
 
 start_date = pendulum.now().add(days=1)
 r_rule = rrule(freq=DAILY, count=7)
@@ -140,13 +140,13 @@ schedule = Schedule(clocks=[RRuleClock(r_rule, start_date=start_date)])
 All clocks support an optional `parameter_defaults` argument that allows users to specify varying `Parameter` values for each flow run generated from this clock.  For example, suppose we have the following flow that logs the value of the `Parameter` that is passed to it:
 
 ```python
-import prefect
-from prefect import task, Flow, Parameter
+import prefectlegacy
+from prefectlegacy import task, Flow, Parameter
 
 
 @task
 def log_param(p):
-    logger = prefect.context["logger"]
+    logger = prefectlegacy.context["logger"]
     logger.info(f"Received parameter value {p}")
 
 
@@ -160,7 +160,7 @@ Each time we run this flow, we can optionally pass a new value for the `p` param
 
 ```python
 import datetime
-from prefect.schedules import clocks, Schedule
+from prefectlegacy.schedules import clocks, Schedule
 
 now = datetime.datetime.utcnow()
 
@@ -186,9 +186,9 @@ When we run this flow on its schedule as above, we will see the parameter value 
 
 ```
 ...
-INFO - prefect.Task: log_param | Received parameter value CLOCK 2
+INFO - prefectlegacy.Task: log_param | Received parameter value CLOCK 2
 ...
-INFO - prefect.Task: log_param | Received parameter value CLOCK 1
+INFO - prefectlegacy.Task: log_param | Received parameter value CLOCK 1
 ...
 ```
 

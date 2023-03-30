@@ -5,9 +5,9 @@ import pytest
 
 pytest.importorskip("boto3")
 
-import prefect
-from prefect.tasks.aws import S3Download, S3Upload, S3List
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy.tasks.aws import S3Download, S3Upload, S3List
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 @pytest.fixture
@@ -15,7 +15,7 @@ def mocked_boto_client(monkeypatch):
     boto3 = MagicMock()
     client = boto3.session.Session().client()
     boto3.client = MagicMock(return_value=client)
-    monkeypatch.setattr("prefect.utilities.aws.boto3", boto3)
+    monkeypatch.setattr("prefectlegacy.utilities.aws.boto3", boto3)
     return client
 
 
@@ -91,7 +91,7 @@ class TestS3Upload:
     def test_generated_key_is_str(self, mocked_boto_client):
         task = S3Upload(bucket="test")
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(
+            with prefectlegacy.context(
                 secrets=dict(
                     AWS_CREDENTIALS={"ACCESS_KEY": "42", "SECRET_ACCESS_KEY": "99"}
                 )

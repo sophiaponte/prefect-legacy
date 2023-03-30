@@ -10,9 +10,9 @@ from unittest.mock import MagicMock
 import pytest
 from toolz import curry
 
-from prefect import Task, task
-from prefect.engine.state import State
-from prefect.utilities.tasks import defaults_from_attrs
+from prefectlegacy import Task, task
+from prefectlegacy.engine.state import State
+from prefectlegacy.utilities.tasks import defaults_from_attrs
 
 try:
     from generate_docs import (
@@ -156,7 +156,7 @@ class MyTask(Task):
 
 
 code = """
-from prefect import task, Task, Flow
+from prefectlegacy import task, Task, Flow
 import random
 
 @task
@@ -250,7 +250,7 @@ def test_format_signature_with_wraps(obj, exp):
 
 @pytest.mark.parametrize(
     "obj,exp",
-    [(task, "prefect.utilities.tasks.task"), (State, "prefect.engine.state.State")],
+    [(task, "prefectlegacy.utilities.tasks.task"), (State, "prefectlegacy.engine.state.State")],
 )
 def test_create_absolute_path_on_prefect_object(obj, exp):
     path = create_absolute_path(obj)

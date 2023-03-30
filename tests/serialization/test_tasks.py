@@ -4,10 +4,10 @@ from typing import Any
 import marshmallow
 import pytest
 
-import prefect
-from prefect.core import Edge, Flow, Parameter, Task
-from prefect.serialization.task import ParameterSchema, TaskSchema
-from prefect.utilities.serialization import to_qualified_name
+import prefectlegacy
+from prefectlegacy.core import Edge, Flow, Parameter, Task
+from prefectlegacy.serialization.task import ParameterSchema, TaskSchema
+from prefectlegacy.utilities.serialization import to_qualified_name
 
 
 def test_serialize_empty_dict():
@@ -36,7 +36,7 @@ def test_deserialize_task():
         max_retries=5,
         retry_delay=datetime.timedelta(seconds=5),
         timeout=60,
-        trigger=prefect.triggers.all_failed,
+        trigger=prefectlegacy.triggers.all_failed,
         skip_on_upstream_skip=False,
         cache_for=datetime.timedelta(hours=1),
         cache_key="test",
@@ -131,15 +131,15 @@ def test_deserialize_parameter_requires_name():
 @pytest.mark.parametrize(
     "trigger",
     [
-        prefect.triggers.all_finished,
-        prefect.triggers.manual_only,
-        prefect.triggers.always_run,
-        prefect.triggers.all_successful,
-        prefect.triggers.all_failed,
-        prefect.triggers.any_successful,
-        prefect.triggers.any_failed,
-        prefect.triggers.some_failed,
-        prefect.triggers.some_successful,
+        prefectlegacy.triggers.all_finished,
+        prefectlegacy.triggers.manual_only,
+        prefectlegacy.triggers.always_run,
+        prefectlegacy.triggers.all_successful,
+        prefectlegacy.triggers.all_failed,
+        prefectlegacy.triggers.any_successful,
+        prefectlegacy.triggers.any_failed,
+        prefectlegacy.triggers.some_failed,
+        prefectlegacy.triggers.some_successful,
     ],
 )
 def test_trigger(trigger):
@@ -149,7 +149,7 @@ def test_trigger(trigger):
 
 
 @pytest.mark.parametrize(
-    "trigger", [prefect.triggers.some_failed, prefect.triggers.some_successful]
+    "trigger", [prefectlegacy.triggers.some_failed, prefectlegacy.triggers.some_successful]
 )
 @pytest.mark.parametrize(
     "bounds", [(1, 5), (0.1, 0.9), (1, None), (0.1, None), (None, 42), (None, 0.5)]
@@ -174,17 +174,17 @@ def test_unknown_trigger():
 
     t = Task(trigger=hello)
     t2 = TaskSchema().load(TaskSchema().dump(t))
-    assert t2.trigger is prefect.triggers.all_successful  # falls back to default
+    assert t2.trigger is prefectlegacy.triggers.all_successful  # falls back to default
 
 
 @pytest.mark.parametrize(
     "cache_validator",
     [
-        prefect.engine.cache_validators.duration_only,
-        prefect.engine.cache_validators.all_inputs,
-        prefect.engine.cache_validators.all_parameters,
-        prefect.engine.cache_validators.partial_inputs_only,
-        prefect.engine.cache_validators.partial_parameters_only,
+        prefectlegacy.engine.cache_validators.duration_only,
+        prefectlegacy.engine.cache_validators.all_inputs,
+        prefectlegacy.engine.cache_validators.all_parameters,
+        prefectlegacy.engine.cache_validators.partial_inputs_only,
+        prefectlegacy.engine.cache_validators.partial_parameters_only,
     ],
 )
 def test_cache_validator(cache_validator):
@@ -196,16 +196,16 @@ def test_cache_validator(cache_validator):
 
 
 def test_cache_validator_never_use():
-    t = Task(cache_validator=prefect.engine.cache_validators.never_use)
+    t = Task(cache_validator=prefectlegacy.engine.cache_validators.never_use)
     t2 = TaskSchema().load(TaskSchema().dump(t))
-    assert t2.cache_validator is prefect.engine.cache_validators.never_use
+    assert t2.cache_validator is prefectlegacy.engine.cache_validators.never_use
 
 
 @pytest.mark.parametrize(
     "validator",
     [
-        prefect.engine.cache_validators.partial_inputs_only,
-        prefect.engine.cache_validators.partial_parameters_only,
+        prefectlegacy.engine.cache_validators.partial_inputs_only,
+        prefectlegacy.engine.cache_validators.partial_parameters_only,
     ],
 )
 @pytest.mark.parametrize("validate_on", [["x"], ["longer"], ["x", "y"]])
@@ -238,7 +238,7 @@ def test_unknown_cache_validator():
     t2 = TaskSchema().load(TaskSchema().dump(t))
 
     # falls back to default
-    assert t2.cache_validator is prefect.engine.cache_validators.never_use
+    assert t2.cache_validator is prefectlegacy.engine.cache_validators.never_use
 
 
 def test_inputs_outputs():

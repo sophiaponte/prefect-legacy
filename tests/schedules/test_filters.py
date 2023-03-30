@@ -1,7 +1,7 @@
 import pendulum
 import pytest
 
-import prefect.schedules.filters as filters
+import prefectlegacy.schedules.filters as filters
 
 
 def test_on_datetime_0():

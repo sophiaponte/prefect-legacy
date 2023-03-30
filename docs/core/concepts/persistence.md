@@ -26,22 +26,22 @@ Prefect even supports caching output by a shared key, which can be accessed betw
 Output caching is controlled with three `Task` arguments: `cache_for`, `cache_validator` and `cache_key`.
 
 - `cache_for`: a `timedelta` indicating how long the output should be cached
-- `cache_validator`: a `callable` indicating how the cache should be expired. The default is `duration_only`, meaning the cache will be active for the duration of `cache_for`. Other validators can be found in `prefect.engine.cache_validators` and include mechanisms for invalidating the cache if the task receives different inputs or if the flow is run with different parameters.
+- `cache_validator`: a `callable` indicating how the cache should be expired. The default is `duration_only`, meaning the cache will be active for the duration of `cache_for`. Other validators can be found in `prefectlegacy.engine.cache_validators` and include mechanisms for invalidating the cache if the task receives different inputs or if the flow is run with different parameters.
 - `cache_key`: an optional key under which to store the output cache; specifying this key allows different Tasks as well as different Flows to share a common cache.
 
 ```python
 # this task will be cached for 1 hour
-task_1 = prefect.Task(
+task_1 = prefectlegacy.Task(
     cache_for=datetime.timedelta(hours=1))
 
 # this task will be cached for 1 hour, but only if the flow is run with the same parameters
-task_2 = prefect.Task(
+task_2 = prefectlegacy.Task(
     cache_for=datetime.timedelta(hours=1),
-    cache_validator=prefect.engine.cache_validators.all_parameters)
+    cache_validator=prefectlegacy.engine.cache_validators.all_parameters)
 ```
 
 ::: warning The cache is stored in context
-Note that when running Prefect Core locally, your Tasks' cached states will be stored in memory within `prefect.context`.
+Note that when running Prefect Core locally, your Tasks' cached states will be stored in memory within `prefectlegacy.context`.
 :::
 
 ## Persisting Output
@@ -49,8 +49,8 @@ Note that when running Prefect Core locally, your Tasks' cached states will be s
 Oftentimes it is useful to persist your task's data in an external location. You could always write this logic directly into the `Task` itself, but this can sometimes make testing difficult. Prefect offers a notion of task "checkpointing" that ensures that every time a task is successfully run, its return value is written to persistent storage based on the configuration in a [Result](results.md) object for the task. To configure your tasks for checkpointing, provide a `Result` matching the storage backend you want to the task's `result` kwarg and set `checkpoint=True` at task initialization:
 
 ```python
-from prefect.engine.results import LocalResult
-from prefect import task, Task
+from prefectlegacy.engine.results import LocalResult
+from prefectlegacy import task, Task
 
 
 class MyTask(Task):
@@ -83,8 +83,8 @@ You can combine the concepts of persistent output and skipping task execution by
 To enable this behavior for a task, provide the target location to the task's `target` kwarg along with the `result` and `checkpoint` kwargs necessary to enable checkpointing. Whenever this task is run, it will first check to see if the storage backend configured by the result has a file matching the name of the target, and if so, will enter a `Cached` state with the data from the target file as the task's return value. If it has not been cached, the output of the task will be written to the `target` location and be available as a cache for future runs of this task, even between running Python processes.
 
 ```python
-from prefect.engine.results import LocalResult
-from prefect import task, Task
+from prefectlegacy.engine.results import LocalResult
+from prefectlegacy import task, Task
 
 
 # create a task via the task decorator
@@ -94,11 +94,11 @@ def func_task():
 ```
 
 ::: tip Targets can be templated
-Note that `target`s can optionally be templated, using [values found in `prefect.context`](/api/latest/utilities/context.html).  For example, the following target specification will store data based on the day of the week the flow is run on:
+Note that `target`s can optionally be templated, using [values found in `prefectlegacy.context`](/api/latest/utilities/context.html).  For example, the following target specification will store data based on the day of the week the flow is run on:
 
 ```python
-from prefect.engine.results import LocalResult
-from prefect import task, Task
+from prefectlegacy.engine.results import LocalResult
+from prefectlegacy import task, Task
 
 
 # create a task via the task decorator

@@ -1,6 +1,6 @@
 # Configuration Options
 
-A full list of configuration options can be seen in the Prefect [config.toml](https://github.com/PrefectHQ/prefect/blob/master/src/prefect/config.toml). To update configuration settings you can update them in `./prefect/config.toml` or by setting [environment variables](/core/concepts/configuration.html#environment-variables).
+A full list of configuration options can be seen in the Prefect [config.toml](https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/config.toml). To update configuration settings you can update them in `./prefect/config.toml` or by setting [environment variables](/core/concepts/configuration.html#environment-variables).
 
 For more on configuration, you can also see the [Prefect Core configuration docs](/core/concepts/configuration.html).
 

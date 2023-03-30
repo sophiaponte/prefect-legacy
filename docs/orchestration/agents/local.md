@@ -37,7 +37,7 @@ default) or [LocalRun](/orchestration/flow_config/run_configs.md#localrun)
 environment for a flow (exposing `env`, `working_dir`, etc...):
 
 ```python
-from prefect.run_configs import LocalRun
+from prefectlegacy.run_configs import LocalRun
 
 # Configure extra environment variables for this flow,
 # and set a custom working directory
@@ -141,14 +141,14 @@ to spread the load across multiple agents. For instance:
 
 Flow 1:
 ```python
-from prefect.run_configs import UniversalRun
+from prefectlegacy.run_configs import UniversalRun
 ...
 with Flow(name="example1", run_config=UniversalRun(labels=["prod1"])) as flow:
 ```
 
 Flow 2:
 ```python
-from prefect.run_configs import UniversalRun
+from prefectlegacy.run_configs import UniversalRun
 ...
 with Flow(name="example2", run_config=UniversalRun(labels=["prod2"])) as flow:
 ```

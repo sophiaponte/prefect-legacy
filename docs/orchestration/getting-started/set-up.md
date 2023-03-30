@@ -14,9 +14,9 @@ This guide focusses on setting up Prefect Cloud. More information on Prefect Ser
 
 ### Create (or log into) your Prefect Cloud account
 
-To use Prefect Cloud, log in to or set up a free-tier account for Prefect Cloud at [https://cloud.prefect.io](https://cloud.prefect.io).
+To use Prefect Cloud, log in to or set up a free-tier account for Prefect Cloud at [https://cloud.prefectlegacy.io](https://cloud.prefectlegacy.io).
 
-If your team needs support for additional users, automations, multi-tenant permissions, SSO, and other features, you can easily [scale up to a bigger Prefect Cloud license](https://www.prefect.io/pricing/).
+If your team needs support for additional users, automations, multi-tenant permissions, SSO, and other features, you can easily [scale up to a bigger Prefect Cloud license](https://www.prefectlegacy.io/pricing/).
 
 ### Set the Prefect Cloud backend 
 
@@ -36,7 +36,7 @@ Next you'll need to authenticate with the backend before you can proceed further
 
 To authenticate, you'll need to create an [API Key](/orchestration/concepts/api_keys.md) and save it. 
 
-- Navigate to the [API keys page](https://cloud.prefect.io/user/keys). In the User menu in the top right corner go to **Account Settings** -> **API Keys** -> **Create An API Key**.
+- Navigate to the [API keys page](https://cloud.prefectlegacy.io/user/keys). In the User menu in the top right corner go to **Account Settings** -> **API Keys** -> **Create An API Key**.
 - Copy the created key
 - Log in with the Prefect CLI by running the following command: 
 

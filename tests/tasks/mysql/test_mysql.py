@@ -2,7 +2,7 @@ import pytest
 import pymysql
 from unittest.mock import MagicMock
 
-from prefect.tasks.mysql.mysql import MySQLExecute, MySQLFetch
+from prefectlegacy.tasks.mysql.mysql import MySQLExecute, MySQLFetch
 
 
 class TestMySQLExecute:

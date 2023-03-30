@@ -22,8 +22,8 @@ access.
 For example, to configure a flow to use `Docker` storage:
 
 ```python
-from prefect import Flow
-from prefect.storage import Docker
+from prefectlegacy import Flow
+from prefectlegacy.storage import Docker
 
 with Flow("example", storage=Docker()) as flow:
     ...
@@ -44,8 +44,8 @@ selecting a [docker image](./docker.md) to use (if not using `Docker` storage).
 For example, to configure a flow to run on Kubernetes:
 
 ```python
-from prefect import Flow
-from prefect.run_configs import KubernetesRun
+from prefectlegacy import Flow
+from prefectlegacy.run_configs import KubernetesRun
 
 with Flow("example", run_config=KubernetesRun()) as flow:
     ...
@@ -65,8 +65,8 @@ A flow's `executor` is configured on the flow itself. For example, to configure
 a flow to use a `LocalDaskExecutor`:
 
 ```python
-from prefect import Flow
-from prefect.executors import LocalDaskExecutor
+from prefectlegacy import Flow
+from prefectlegacy.executors import LocalDaskExecutor
 
 with Flow("example", executor=LocalDaskExecutor()) as flow:
     ...

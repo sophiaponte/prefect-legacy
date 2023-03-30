@@ -1,5 +1,5 @@
-import prefect
-from prefect.engine import state
+import prefectlegacy
+from prefectlegacy.engine import state
 from marshmallow import Schema
 
 
@@ -16,4 +16,4 @@ def test_state():
     https://github.com/PrefectHQ/prefect/pull/2738
     """
     a = state.Submitted(state=state.Success())
-    prefect.serialization.state.StateSchema().load(a.serialize())
+    prefectlegacy.serialization.state.StateSchema().load(a.serialize())

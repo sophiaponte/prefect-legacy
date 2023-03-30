@@ -23,17 +23,17 @@ footer: Copyright © 2018-present Prefect Technologies, Inc.
 </div>
 
 
-Prefect Core is now Prefect 1.0! Check [this blog post](https://www.prefect.io/blog/prefect-core-is-now-prefect-1-0/) to learn more.
+Prefect Core is now Prefect 1.0! Check [this blog post](https://www.prefectlegacy.io/blog/prefect-core-is-now-prefect-1-0/) to learn more.
 
-When we say Prefect 1.0, we mean it as a generation of a product, not as a specific release. This distinction is important since we are actively working on a new generation of Prefect based on [the Orion engine](https://www.prefect.io/blog/announcing-prefect-orion) &mdash; [Prefect 2.0](https://www.prefect.io/blog/introducing-prefect-2-0/)! The documentation for Prefect 2.0 is available on [orion-docs.prefect.io](https://orion-docs.prefect.io). 
+When we say Prefect 1.0, we mean it as a generation of a product, not as a specific release. This distinction is important since we are actively working on a new generation of Prefect based on [the Orion engine](https://www.prefectlegacy.io/blog/announcing-prefect-orion) &mdash; [Prefect 2.0](https://www.prefectlegacy.io/blog/introducing-prefect-2-0/)! The documentation for Prefect 2.0 is available on [orion-docs.prefectlegacy.io](https://orion-docs.prefectlegacy.io). 
 
 If you use a previous version of Prefect (before the 1.0 release), you may either:
 
 - Transition your flows to the latest 1.0 release &mdash; for more details, check out our [Upgrading to Prefect 1.0](/orchestration/faq/upgrading_1.0) guide and [Changelog](/api/latest/changelog/).
-- Start using Prefect 2.0 already! You can even sign up for a free [Cloud 2.0](https://orion-docs.prefect.io/ui/cloud/) account on [beta.prefect.io](https://beta.prefect.io/).
+- Start using Prefect 2.0 already! You can even sign up for a free [Cloud 2.0](https://orion-docs.prefectlegacy.io/ui/cloud/) account on [beta.prefectlegacy.io](https://beta.prefectlegacy.io/).
 
 
-If you are unsure which Prefect version to choose for your specific use case, [this Prefect Discourse page](https://discourse.prefect.io/t/should-i-start-with-prefect-2-0-orion-skipping-prefect-1-0/544) may help you decide.
+If you are unsure which Prefect version to choose for your specific use case, [this Prefect Discourse page](https://discourse.prefectlegacy.io/t/should-i-start-with-prefect-2-0-orion-skipping-prefect-1-0/544) may help you decide.
 
 
 
@@ -42,7 +42,7 @@ If you are unsure which Prefect version to choose for your specific use case, [t
 
 ## Automate all the things
 
-If you can do it with Python, you can automate it with Prefect.
+If you can do it with Python, you can automate it with prefectlegacy.
 
 </div>
 <div class="feature">
@@ -69,12 +69,12 @@ We've rebuilt data engineering for the data science era.
 
 Prefect is a new workflow management system, designed for modern infrastructure and powered by the open-source Prefect Core workflow engine. Users organize `Tasks` into `Flows`, and Prefect takes care of the rest.
 
-Read the [docs](/core/); get the [code](https://github.com/PrefectHQ/prefect); ask us [anything](https://www.prefect.io/slack); chat with the community via [Prefect Discourse](https://discourse.prefect.io/)!
+Read the [docs](/core/); get the [code](https://github.com/PrefectHQ/prefect); ask us [anything](https://www.prefectlegacy.io/slack); chat with the community via [Prefect Discourse](https://discourse.prefectlegacy.io/)!
 
 ### Hello, world! 👋
 
 ```python
-from prefect import task, Flow, Parameter
+from prefectlegacy import task, Flow, Parameter
 
 
 @task(log_stdout=True)

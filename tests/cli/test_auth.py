@@ -7,11 +7,11 @@ import pytest
 import json
 from click.testing import CliRunner
 
-import prefect
-import prefect.backend
-from prefect.cli.auth import auth
-from prefect.utilities.configuration import set_temporary_config
-from prefect.exceptions import AuthorizationError
+import prefectlegacy
+import prefectlegacy.backend
+from prefectlegacy.cli.auth import auth
+from prefectlegacy.utilities.configuration import set_temporary_config
+from prefectlegacy.exceptions import AuthorizationError
 
 
 def test_auth_init():
@@ -41,11 +41,11 @@ def test_auth_login_with_api_key(patch_post, monkeypatch, cloud_api):
     Client = MagicMock()
     Client()._get_auth_tenant = MagicMock(return_value="tenant-id")
     TenantView = MagicMock()
-    TenantView.from_tenant_id.return_value = prefect.backend.TenantView(
+    TenantView.from_tenant_id.return_value = prefectlegacy.backend.TenantView(
         tenant_id="id", name="Name", slug="tenant-slug"
     )
-    monkeypatch.setattr("prefect.cli.auth.TenantView", TenantView)
-    monkeypatch.setattr("prefect.cli.auth.Client", Client)
+    monkeypatch.setattr("prefectlegacy.cli.auth.TenantView", TenantView)
+    monkeypatch.setattr("prefectlegacy.cli.auth.Client", Client)
 
     runner = CliRunner()
     result = runner.invoke(auth, ["login", "--key", "test"])
@@ -94,11 +94,11 @@ def test_auth_logout_after_login(patch_post, monkeypatch, cloud_api):
     Client = MagicMock()
     Client()._get_auth_tenant = MagicMock(return_value="tenant-id")
     TenantView = MagicMock()
-    TenantView.from_tenant_id.return_value = prefect.backend.TenantView(
+    TenantView.from_tenant_id.return_value = prefectlegacy.backend.TenantView(
         tenant_id="id", name="Name", slug="tenant-slug"
     )
-    monkeypatch.setattr("prefect.cli.auth.TenantView", TenantView)
-    monkeypatch.setattr("prefect.cli.auth.Client", Client)
+    monkeypatch.setattr("prefectlegacy.cli.auth.TenantView", TenantView)
+    monkeypatch.setattr("prefectlegacy.cli.auth.Client", Client)
 
     runner = CliRunner()
 
@@ -112,7 +112,7 @@ def test_auth_logout_after_login(patch_post, monkeypatch, cloud_api):
 def test_auth_logout_not_confirm(patch_post, cloud_api):
     patch_post(dict(data=dict(auth_info=dict(tenant_id="id"))))
 
-    client = prefect.Client(api_key="foo")
+    client = prefectlegacy.Client(api_key="foo")
     client.save_auth_to_disk()
 
     runner = CliRunner()
@@ -149,7 +149,7 @@ def test_list_tenants(patch_post, cloud_api):
 
 
 def test_switch_tenants_success(monkeypatch, cloud_api):
-    monkeypatch.setattr("prefect.cli.auth.Client", MagicMock())
+    monkeypatch.setattr("prefectlegacy.cli.auth.Client", MagicMock())
 
     runner = CliRunner()
     result = runner.invoke(auth, ["switch-tenants", "--slug", "slug"])
@@ -160,7 +160,7 @@ def test_switch_tenants_success(monkeypatch, cloud_api):
 def test_switch_tenants_failed(monkeypatch, cloud_api):
     client = MagicMock()
     client.return_value.switch_tenant = MagicMock(side_effect=AuthorizationError())
-    monkeypatch.setattr("prefect.cli.auth.Client", client)
+    monkeypatch.setattr("prefectlegacy.cli.auth.Client", client)
 
     runner = CliRunner()
     result = runner.invoke(auth, ["switch-tenants", "--slug", "slug"])
@@ -235,7 +235,7 @@ def test_create_key_fails_on_user_retrieval(patch_post, cloud_api):
     runner = CliRunner()
     result = runner.invoke(auth, ["create-key", "-n", "name"])
     assert result.exit_code == 1
-    assert "Failed to retrieve the current user id from Prefect Cloud" in result.output
+    assert "Failed to retrieve the current user id from prefectlegacy Cloud" in result.output
 
 
 def test_create_key_fails_on_key_creation(patch_posts, cloud_api):
@@ -244,7 +244,7 @@ def test_create_key_fails_on_key_creation(patch_posts, cloud_api):
     runner = CliRunner()
     result = runner.invoke(auth, ["create-key", "-n", "name"])
     assert result.exit_code == 1
-    assert "Unexpected response from Prefect Cloud" in result.output
+    assert "Unexpected response from prefectlegacy Cloud" in result.output
 
 
 def test_list_keys(patch_post, cloud_api):
@@ -266,7 +266,7 @@ def test_list_keys_fails_with_unexpected_response(patch_post, cloud_api):
     runner = CliRunner()
     result = runner.invoke(auth, ["list-keys"])
     assert result.exit_code == 1
-    assert "Unexpected response from Prefect Cloud" in result.output
+    assert "Unexpected response from prefectlegacy Cloud" in result.output
 
 
 def test_list_keys_fails_with_no_keys(patch_post, cloud_api):

@@ -12,7 +12,7 @@ sidebarDepth: 0
 
 <!-- # Welcome! -->
 
-[Prefect Core](https://www.prefect.io/products/core) is a new kind of workflow management system that makes it easy to take your data pipelines and add semantics like retries, logging, dynamic mapping, caching, failure notifications, and more. 
+[Prefect Core](https://www.prefectlegacy.io/products/core) is a new kind of workflow management system that makes it easy to take your data pipelines and add semantics like retries, logging, dynamic mapping, caching, failure notifications, and more. 
 
 We started with a simple premise:
 

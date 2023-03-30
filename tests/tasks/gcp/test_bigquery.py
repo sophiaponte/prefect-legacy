@@ -3,15 +3,15 @@ from unittest.mock import MagicMock
 import pytest
 from google.cloud.exceptions import NotFound
 
-import prefect
-from prefect.tasks.gcp import (
+import prefectlegacy
+from prefectlegacy.tasks.gcp import (
     BigQueryLoadGoogleCloudStorage,
     BigQueryLoadFile,
     BigQueryStreamingInsert,
     BigQueryTask,
     CreateBigQueryTable,
 )
-from prefect.utilities.configuration import set_temporary_config
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 class TestBigQueryInitialization:
@@ -162,7 +162,7 @@ class TestDryRuns:
             query=MagicMock(return_value=MagicMock(total_bytes_processed=1200))
         )
         monkeypatch.setattr(
-            "prefect.tasks.gcp.bigquery.get_bigquery_client",
+            "prefectlegacy.tasks.gcp.bigquery.get_bigquery_client",
             MagicMock(return_value=client),
         )
 
@@ -175,7 +175,7 @@ class TestDryRuns:
             query=MagicMock(return_value=MagicMock(total_bytes_processed=21836427))
         )
         monkeypatch.setattr(
-            "prefect.tasks.gcp.bigquery.get_bigquery_client",
+            "prefectlegacy.tasks.gcp.bigquery.get_bigquery_client",
             MagicMock(return_value=client),
         )
 
@@ -219,10 +219,10 @@ class TestCreateBigQueryTableInitialization:
 
     def test_skip_signal_is_raised_if_table_exists(self, monkeypatch):
         monkeypatch.setattr(
-            "prefect.tasks.gcp.bigquery.get_bigquery_client", MagicMock()
+            "prefectlegacy.tasks.gcp.bigquery.get_bigquery_client", MagicMock()
         )
         task = CreateBigQueryTable()
-        with pytest.raises(prefect.engine.signals.SUCCESS) as exc:
+        with pytest.raises(prefectlegacy.engine.signals.SUCCESS) as exc:
             task.run()
 
         assert "already exists" in str(exc.value)
@@ -241,7 +241,7 @@ class TestBigQueryTaskResult:
 
         client = MagicMock(query=MagicMock(return_value=res))
         monkeypatch.setattr(
-            "prefect.tasks.gcp.bigquery.get_bigquery_client",
+            "prefectlegacy.tasks.gcp.bigquery.get_bigquery_client",
             MagicMock(return_value=client),
         )
 
@@ -258,7 +258,7 @@ class TestBigQueryTaskResult:
 
         client = MagicMock(query=MagicMock(return_value=res))
         monkeypatch.setattr(
-            "prefect.tasks.gcp.bigquery.get_bigquery_client",
+            "prefectlegacy.tasks.gcp.bigquery.get_bigquery_client",
             MagicMock(return_value=client),
         )
 

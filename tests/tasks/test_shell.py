@@ -6,9 +6,9 @@ import tempfile
 
 import pytest
 
-from prefect import Flow
-from prefect.tasks.shell import ShellTask
-from prefect.utilities.debug import raise_on_exception
+from prefectlegacy import Flow
+from prefectlegacy.tasks.shell import ShellTask
+from prefectlegacy.utilities.debug import raise_on_exception
 
 
 def test_shell_initializes_and_runs_basic_cmd():
@@ -94,7 +94,7 @@ def test_shell_task_env_can_be_set_at_init():
 
 
 def test_shell_logs_non_zero_exit(caplog):
-    caplog.set_level(level=logging.ERROR, logger="prefect.ShellTask")
+    caplog.set_level(level=logging.ERROR, logger="prefectlegacy.ShellTask")
     with Flow(name="test") as f:
         task = ShellTask()(command="ls surely_a_dir_that_doesnt_exist")
     out = f.run()
@@ -178,7 +178,7 @@ def test_shell_log_stream_as_info_string_input(caplog, stream_output):
 
 
 def test_shell_logs_stderr_on_non_zero_exit(caplog):
-    caplog.set_level(level=logging.ERROR, logger="prefect.ShellTask")
+    caplog.set_level(level=logging.ERROR, logger="prefectlegacy.ShellTask")
     with Flow(name="test") as f:
         task = ShellTask(log_stderr=True, return_all=True)(
             command="ls surely_a_dir_that_doesnt_exist"

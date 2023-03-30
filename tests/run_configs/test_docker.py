@@ -1,4 +1,4 @@
-from prefect.run_configs import DockerRun
+from prefectlegacy.run_configs import DockerRun
 
 
 def test_no_args():

@@ -7,7 +7,7 @@ A `Task` represents a discrete action in a Prefect workflow.
 A task is like a function: it optionally takes inputs, performs an action, and produces an optional result. In fact, the easiest way to create a task is by decorating a Python function:
 
 ```python
-from prefect import task
+from prefectlegacy import task
 
 @task
 def plus_one(x):
@@ -17,7 +17,7 @@ def plus_one(x):
 For more sophisticated tasks that may require customization, you can subclass the `Task` class directly:
 
 ```python
-from prefect import Task
+from prefectlegacy import Task
 
 class HTTPGetTask(Task):
 
@@ -107,7 +107,7 @@ trigger_fn(upstream_states: Set[State]) -> bool
 If a non-`Task` input is provided to a task, it is automatically converted to a `Constant`.
 
 ```python
-from prefect import Flow, task
+from prefectlegacy import Flow, task
 
 @task
 def add(x, y):
@@ -128,7 +128,7 @@ When using the [functional API](flows.html#functional-api), Prefect tasks suppor
 
 ```python
 import random
-from prefect import Flow, task
+from prefectlegacy import Flow, task
 
 @task
 def a_number():
@@ -156,7 +156,7 @@ When using the [functional API](flows.html#functional-api), Prefect tasks can au
 
 ```python
 import random
-from prefect import Flow, task
+from prefectlegacy import Flow, task
 
 @task
 def a_number():
@@ -181,7 +181,7 @@ Prefect will perform automatic collection extraction for lists, tuples, sets, an
 When using the [functional API](flows.html#functional-api), Prefect tasks can be indexed to retrieve specific results.
 
 ```python
-from prefect import Flow, task
+from prefectlegacy import Flow, task
 
 @task
 def fn():
@@ -206,7 +206,7 @@ separately. By default Prefect tasks aren't iterable, so the standard Python
 pattern will error:
 
 ```python
-from prefect import Flow, task
+from prefectlegacy import Flow, task
 
 @task
 def inc_and_dec(x):
@@ -258,7 +258,7 @@ Generally speaking, Prefect's [functional API](flows.html#functional-api) allows
 In addition, you can call `Task.map()` to automatically map a task over its inputs. Prefect will generate a dynamic copy of the task for each element of the input. If you don't want an input to be treated as iterable (for example, you want to provide it to every dynamic copy), just wrap it with Prefect's `unmapped()` annotation.
 
 ```python
-from prefect import task, unmapped
+from prefectlegacy import task, unmapped
 
 @task
 def add(x, y):
@@ -311,7 +311,7 @@ Task(slug="my-task")
 Sometimes, it is useful to group a variety a tasks in multiple ways. Prefect provides `tags` for this purpose. Tags may be specified either as a keyword argument or with a convenient context manager. The context manager can be nested.
 
 ```python
-from prefect import tags
+from prefectlegacy import tags
 
 with tags('red', 'blue'):
     t = Task()

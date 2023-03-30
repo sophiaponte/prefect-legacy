@@ -9,9 +9,9 @@ import box
 import pytest
 from click.testing import CliRunner
 
-from prefect import Flow
-from prefect.cli import cli
-from prefect.cli.build_register import (
+from prefectlegacy import Flow
+from prefectlegacy.cli import cli
+from prefectlegacy.cli.build_register import (
     TerminalError,
     watch_for_changes,
     load_flows_from_script,
@@ -22,10 +22,10 @@ from prefect.cli.build_register import (
     register_serialized_flow,
     expand_paths,
 )
-from prefect.engine.results import LocalResult
-from prefect.run_configs import UniversalRun
-from prefect.storage import S3, Local, Module
-from prefect.utilities.graphql import GraphQLResult
+from prefectlegacy.engine.results import LocalResult
+from prefectlegacy.run_configs import UniversalRun
+from prefectlegacy.storage import S3, Local, Module
+from prefectlegacy.utilities.graphql import GraphQLResult
 
 
 def test_expand_paths_glob(tmpdir):
@@ -183,7 +183,7 @@ class TestWatchForChanges:
 def mock_get_project_id(monkeypatch):
     get_project_id = MagicMock()
     get_project_id.return_value = "my-project-id"
-    monkeypatch.setattr("prefect.cli.build_register.get_project_id", get_project_id)
+    monkeypatch.setattr("prefectlegacy.cli.build_register.get_project_id", get_project_id)
     return get_project_id
 
 
@@ -281,8 +281,8 @@ class TestRegister:
 
         source = textwrap.dedent(
             """
-            from prefect import Flow
-            from prefect.storage import S3
+            from prefectlegacy import Flow
+            from prefectlegacy.storage import S3
             from my_prefect_helper_file import helper
             f1 = Flow("f1")
             f1.storage = S3("my-bucket", key="my-key", stored_as_script=True)
@@ -321,8 +321,8 @@ class TestRegister:
         monkeypatch.syspath_prepend(str(tmpdir))
         source = textwrap.dedent(
             """
-            from prefect import Flow
-            from prefect.storage import Module
+            from prefectlegacy import Flow
+            from prefectlegacy.storage import Module
             f1 = Flow("f1")
             f1.storage = Module("mymodule.submodule")
             f2 = Flow("f2")
@@ -369,7 +369,7 @@ class TestRegister:
         ]
         data = json.dumps({"version": 1, "flows": flows}).encode("utf-8")
         monkeypatch.setattr(
-            "prefect.cli.build_register.read_bytes_from_path",
+            "prefectlegacy.cli.build_register.read_bytes_from_path",
             MagicMock(return_value=data),
         )
         res = load_flows_from_json("https://some/url/flows.json")
@@ -377,7 +377,7 @@ class TestRegister:
 
     def test_load_flows_from_json_fail_read(self, monkeypatch, capsys):
         monkeypatch.setattr(
-            "prefect.cli.build_register.read_bytes_from_path",
+            "prefectlegacy.cli.build_register.read_bytes_from_path",
             MagicMock(side_effect=ValueError("oh no!")),
         )
         with pytest.raises(TerminalError):
@@ -389,7 +389,7 @@ class TestRegister:
 
     def test_load_flows_from_json_schema_error(self, monkeypatch):
         monkeypatch.setattr(
-            "prefect.cli.build_register.read_bytes_from_path",
+            "prefectlegacy.cli.build_register.read_bytes_from_path",
             MagicMock(return_value=json.dumps({"bad": "file"})),
         )
         with pytest.raises(
@@ -399,7 +399,7 @@ class TestRegister:
 
     def test_load_flows_from_json_unsupported_version(self, monkeypatch, capsys):
         monkeypatch.setattr(
-            "prefect.cli.build_register.read_bytes_from_path",
+            "prefectlegacy.cli.build_register.read_bytes_from_path",
             MagicMock(return_value=json.dumps({"version": 2, "flows": []})),
         )
         with pytest.raises(TerminalError, match="is version 2, only version 1"):
@@ -437,7 +437,7 @@ class TestRegister:
             ("old-id-8", 2, False),
         ]
         monkeypatch.setattr(
-            "prefect.cli.build_register.register_serialized_flow",
+            "prefectlegacy.cli.build_register.register_serialized_flow",
             register_serialized_flow,
         )
 
@@ -542,7 +542,7 @@ class TestRegister:
         path = str(tmpdir.join("test.py"))
         source = textwrap.dedent(
             """
-            from prefect import Flow
+            from prefectlegacy import Flow
 
             flow1 = Flow("flow 1")
             flow2 = Flow("flow 2")
@@ -557,7 +557,7 @@ class TestRegister:
             ("old-id-2", 2, False),
         ]
         monkeypatch.setattr(
-            "prefect.cli.build_register.register_serialized_flow",
+            "prefectlegacy.cli.build_register.register_serialized_flow",
             register_serialized_flow,
         )
 
@@ -607,7 +607,7 @@ class TestRegister:
         path = str(tmpdir.join("test.py"))
         source = textwrap.dedent(
             """
-            from prefect import Flow
+            from prefectlegacy import Flow
 
             flow1 = Flow("flow 1")
             flow2 = Flow("flow 2")
@@ -673,7 +673,7 @@ class TestRegister:
     def test_register_cli_project_not_found(self, monkeypatch):
         client = MagicMock()
         client.graphql.return_value = GraphQLResult({"data": {"project": []}})
-        monkeypatch.setattr("prefect.Client", MagicMock(return_value=client))
+        monkeypatch.setattr("prefectlegacy.Client", MagicMock(return_value=client))
         cmd = [
             "register",
             "--project",
@@ -710,8 +710,8 @@ class TestBuild:
         path = str(tmpdir.join("test.py"))
         source = textwrap.dedent(
             """
-            from prefect import Flow
-            from prefect.run_configs import LocalRun
+            from prefectlegacy import Flow
+            from prefectlegacy.run_configs import LocalRun
 
             flow1 = Flow("flow 1")
             flow2 = Flow("flow 2", run_config=LocalRun(labels=["new"]))
@@ -780,8 +780,8 @@ class TestBuild:
         path = str(tmpdir.join("test.py"))
         source = textwrap.dedent(
             """
-            from prefect import Flow
-            from prefect.storage import Module
+            from prefectlegacy import Flow
+            from prefectlegacy.storage import Module
 
             class BadModule(Module):
                 def build(self):

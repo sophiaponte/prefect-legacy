@@ -43,7 +43,7 @@ The initial release of Prefect Server with Prefect Core 0.12.6 is no longer supp
 :::
 
 ::: warning Docker and Docker Compose required
-Because of [the diverse collection of services required](architecture.html) to run the full backend, Prefect Server ships as a docker-compose file that allows each of these services to run inside a custom configured Docker image within an appropriately configured Docker network.  This allows users to get up and running with a single CLI command. docker-compose is not included in our Python requirements file as it is not necessary for general use of Prefect. We require a minimum docker-compose version of `1.18.0`.
+Because of [the diverse collection of services required](architecture.html) to run the full backend, Prefect Server ships as a docker-compose file that allows each of these services to run inside a custom configured Docker image within an appropriately configured Docker network.  This allows users to get up and running with a single CLI command. docker-compose is not included in our Python requirements file as it is not necessary for general use of prefectlegacy. We require a minimum docker-compose version of `1.18.0`.
 :::
 
 ## Prefect Server vs. Prefect Cloud - which should I choose?
@@ -64,7 +64,7 @@ Prefect Cloud supports users as a first-class concept, which allows for:
 
 ### API network accessibility and custom deployments
 
-Because Prefect Cloud's API is accessible from any location with access to `api.prefect.io`, it is much easier to customize your flow deployments and developer workflows without the hassle of maintaining a network endpoint. From registering flows with your favorite CI/CD tool to running multiple Agents across different clusters and machines, all you need to ensure is that your tools and services have an appropriately permissioned Cloud API key.
+Because Prefect Cloud's API is accessible from any location with access to `api.prefectlegacy.io`, it is much easier to customize your flow deployments and developer workflows without the hassle of maintaining a network endpoint. From registering flows with your favorite CI/CD tool to running multiple Agents across different clusters and machines, all you need to ensure is that your tools and services have an appropriately permissioned Cloud API key.
 
 ### Enterprise features
 
@@ -86,4 +86,4 @@ Prefect Cloud was designed with scale and performance in mind.  Depending on the
 
 Various support tiers are available to Prefect Cloud customers, ranging from dedicated consulting hours to shared Slack channels.  Premium support is not offered for Prefect Server.
 
-For more details, please [contact us](mailto:hello@prefect.io).
+For more details, please [contact us](mailto:hello@prefectlegacy.io).

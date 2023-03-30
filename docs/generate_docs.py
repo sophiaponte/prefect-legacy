@@ -315,7 +315,7 @@ def create_absolute_path(obj):
 @preprocess
 def get_source(obj):
     commit = os.getenv("GIT_SHA", "master")
-    base_url = "https://github.com/PrefectHQ/prefect/blob/{}/src/prefect/".format(
+    base_url = "https://github.com/PrefectHQ/prefect/blob/{}/src/prefectlegacy/".format(
         commit
     )
     dir_struct = inspect.getfile(obj).split(os.sep)
@@ -410,9 +410,9 @@ def build_example(path):
         - markdown (str): the rendered example in markdown
         - flows (Dict[str, Flow]): the flows found in the example
     """
-    from prefect import Flow
-    from prefect.storage import GitHub
-    from prefect.run_configs import UniversalRun
+    from prefectlegacy import Flow
+    from prefectlegacy.storage import GitHub
+    from prefectlegacy.run_configs import UniversalRun
 
     # Use the current commit (if specified in the environment)
     ref = os.getenv("GIT_SHA", "master")
@@ -450,7 +450,7 @@ def build_example(path):
     )
     output = res.stdout.decode("utf-8").strip()
 
-    register_lines = [f"prefect register --json https://docs.prefect.io/examples.json"]
+    register_lines = [f"prefect register --json https://docs.prefectlegacy.io/examples.json"]
     for name in sorted(flows):
         register_lines.append(f"    --name {name!r}")
     register_lines.append(f"    --project 'Prefect Examples'")
@@ -574,7 +574,7 @@ if __name__ == "__main__":
 
                 # API Reference
 
-                This API reference is automatically generated from Prefect's source code
+                This API reference is automatically generated from prefectlegacy's source code
                 and unit-tested to ensure it's up to date.
 
                 """
@@ -664,7 +664,7 @@ The functionality here is experimental, and may change between versions without 
 <path d="M19 24L22.4375 27L29 20.5" stroke="#fff" stroke-width="2"/>
 </svg>
 <div>
-These tasks have been tested and verified by Prefect.
+These tasks have been tested and verified by prefectlegacy.
 </div>
 </div>
 :::

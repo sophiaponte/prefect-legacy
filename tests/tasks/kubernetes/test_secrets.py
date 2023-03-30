@@ -2,15 +2,15 @@ from unittest.mock import MagicMock
 
 import pytest
 
-import prefect
-from prefect.tasks.kubernetes import KubernetesSecret
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy.tasks.kubernetes import KubernetesSecret
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 @pytest.fixture
 def kube_secret():
     with set_temporary_config({"cloud.use_local_secrets": True}):
-        with prefect.context(secrets=dict(KUBERNETES_API_KEY="test_key")):
+        with prefectlegacy.context(secrets=dict(KUBERNETES_API_KEY="test_key")):
             yield
 
 
@@ -25,7 +25,7 @@ def client_read_namespaced_secret(monkeypatch):
     monkeypatch.setattr("kubernetes.client.CoreV1Api.read_namespaced_secret", secret)
     client = MagicMock()
     monkeypatch.setattr(
-        "prefect.tasks.kubernetes.service.get_kubernetes_client",
+        "prefectlegacy.tasks.kubernetes.service.get_kubernetes_client",
         MagicMock(return_value=client),
     )
     return secret

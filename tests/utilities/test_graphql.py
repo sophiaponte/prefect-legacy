@@ -7,8 +7,8 @@ import pytest
 from box import Box
 from requests import Response, Request
 
-from prefect.engine.state import Pending
-from prefect.utilities.graphql import (
+from prefectlegacy.engine.state import Pending
+from prefectlegacy.utilities.graphql import (
     EnumValue,
     GQLObject,
     GraphQLResult,

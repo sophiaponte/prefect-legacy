@@ -29,7 +29,7 @@ default) or [VertexRun](/orchestration/flow_config/run_configs.md#vertexrun)
 environment for a flow (exposing `env`, `image`, `machine_type`, etc...):
 
 ```python
-from prefect.run_configs import VertexRun
+from prefectlegacy.run_configs import VertexRun
 
 # Configure extra environment variables for this flow,
 # and set a custom image and machine type

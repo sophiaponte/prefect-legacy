@@ -40,7 +40,7 @@ If using the functional API to declare your tasks using the `@task` decorator th
 ```python
 @task
 def my_task():
-    logger = prefect.context.get("logger")
+    logger = prefectlegacy.context.get("logger")
 
     logger.info("An info message.")
     logger.warning("A warning message.")
@@ -49,7 +49,7 @@ def my_task():
 If using the imperative API to declare your tasks as classes then the logger can be used directly from `self.logger`:
 
 ```python
-class MyTask(prefect.Task):
+class MyTask(prefectlegacy.Task):
     def run(self):
         self.logger.info("An info message.")
         self.logger.warning("A warning message.")
@@ -62,7 +62,7 @@ Tasks also provide an optional argument to toggle the logging of stdout—`log_s
 :::: tabs
 ::: tab Functional API
 ```python
-from prefect import task, Flow
+from prefectlegacy import task, Flow
 
 @task(log_stdout=True)
 def my_task():
@@ -74,7 +74,7 @@ flow = Flow("log-stdout", tasks=[my_task])
 
 ::: tab Imperative API
 ```python
-from prefect import Task, Flow
+from prefectlegacy import Task, Flow
 
 class MyTask(Task):
     def run(self):

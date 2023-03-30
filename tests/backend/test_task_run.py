@@ -7,12 +7,12 @@ import sys
 import os
 from unittest.mock import MagicMock, call
 
-from prefect.backend import TaskRunView
-from prefect.backend.task_run import NotLoaded
-from prefect.engine.result import Result
-from prefect.engine.results import LocalResult
-from prefect.engine.state import Success, Mapped, State
-from prefect.utilities.graphql import EnumValue
+from prefectlegacy.backend import TaskRunView
+from prefectlegacy.backend.task_run import NotLoaded
+from prefectlegacy.engine.result import Result
+from prefectlegacy.engine.results import LocalResult
+from prefectlegacy.engine.state import Success, Mapped, State
+from prefectlegacy.utilities.graphql import EnumValue
 
 TASK_RUN_DATA_1 = {
     "id": "id-1",
@@ -60,7 +60,7 @@ def test_task_run_view_query_for_task_runs_allows_returns_all_task_run_data(patc
 
 def test_task_run_view_query_for_task_runs_uses_where_in_query(monkeypatch):
     post = MagicMock(return_value={"data": {"task_run": [TASK_RUN_DATA_1]}})
-    monkeypatch.setattr("prefect.client.client.Client.post", post)
+    monkeypatch.setattr("prefectlegacy.client.client.Client.post", post)
 
     TaskRunView._query_for_task_runs(where={"foo": {"_eq": "bar"}})
 
@@ -72,7 +72,7 @@ def test_task_run_view_query_for_task_runs_uses_where_in_query(monkeypatch):
 
 def test_task_run_view_query_for_task_runs_uses_order_by_in_query(monkeypatch):
     post = MagicMock(return_value={"data": {"task_run": [TASK_RUN_DATA_1]}})
-    monkeypatch.setattr("prefect.client.client.Client.post", post)
+    monkeypatch.setattr("prefectlegacy.client.client.Client.post", post)
 
     TaskRunView._query_for_task_runs(where={}, order_by={"foo": EnumValue("asc")})
 
@@ -84,7 +84,7 @@ def test_task_run_view_query_for_task_runs_uses_order_by_in_query(monkeypatch):
 
 def test_task_run_view_query_for_task_runs_includes_all_required_data(monkeypatch):
     graphql = MagicMock(return_value={"data": {"task_run": [TASK_RUN_DATA_1]}})
-    monkeypatch.setattr("prefect.client.client.Client.graphql", graphql)
+    monkeypatch.setattr("prefectlegacy.client.client.Client.graphql", graphql)
 
     TaskRunView._query_for_task_runs(where={})
 
@@ -136,7 +136,7 @@ def test_task_run_view_from_returns_instance(patch_post, from_method):
 
 def test_task_run_view_from_task_run_id_where_clause(monkeypatch):
     post = MagicMock(return_value={"data": {"task_run": [TASK_RUN_DATA_1]}})
-    monkeypatch.setattr("prefect.client.client.Client.post", post)
+    monkeypatch.setattr("prefectlegacy.client.client.Client.post", post)
 
     TaskRunView.from_task_run_id(task_run_id="id-1")
 
@@ -149,7 +149,7 @@ def test_task_run_view_from_task_run_id_where_clause(monkeypatch):
 @pytest.mark.parametrize("map_index", [None, -1, 0, 3])
 def test_task_run_view_from_task_slug_where_clause(monkeypatch, map_index):
     post = MagicMock(return_value={"data": {"task_run": [TASK_RUN_DATA_1]}})
-    monkeypatch.setattr("prefect.client.client.Client.post", post)
+    monkeypatch.setattr("prefectlegacy.client.client.Client.post", post)
 
     kwargs = {}
     if map_index is not None:  # None indicating not to pass an arg

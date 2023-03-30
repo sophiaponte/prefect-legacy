@@ -22,7 +22,7 @@ We will proceed in stages, introducing Prefect functionality as we go:
 As we proceed, we hope to ensure that our Flow is _reproducible_ and _reusable_ in the future.
 
 ::: warning BeautifulSoup4
-To easily navigate the webpages, we will be using the package [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/), which is not a requirement for Prefect. To install `BeautifulSoup4`, run either:
+To easily navigate the webpages, we will be using the package [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/), which is not a requirement for prefectlegacy. To install `BeautifulSoup4`, run either:
 
 ```
 pip install beautifulsoup4 # OR
@@ -47,7 +47,7 @@ To ease in, let's import everything we need and create the `retrieve_url` task:
 ```python
 import requests
 from bs4 import BeautifulSoup
-from prefect import task, Flow, Parameter
+from prefectlegacy import task, Flow, Parameter
 
 
 @task(tags=["web"])
@@ -253,7 +253,7 @@ If you are following along and executing the code locally, it is recommended you
 :::
 
 ```python
-from prefect.executors import DaskExecutor
+from prefectlegacy.executors import DaskExecutor
 
 executor = DaskExecutor()
 
@@ -278,7 +278,7 @@ Awesome - we significantly improved our execution speed practically for free!
 
 ## Extend flow to write to a database
 
-Now that we have successfully scraped all of the dialogue, the next natural step is to store this in a database for querying. In order to ensure our entire workflow remains reproducible in the future, we want to extend the current flow with new tasks (as opposed to creating a new flow from scratch). Moreover, we will pull from Prefect's task library for the common task of executing a SQL script against a sqlite database.
+Now that we have successfully scraped all of the dialogue, the next natural step is to store this in a database for querying. In order to ensure our entire workflow remains reproducible in the future, we want to extend the current flow with new tasks (as opposed to creating a new flow from scratch). Moreover, we will pull from prefectlegacy's task library for the common task of executing a SQL script against a sqlite database.
 
 To this end, we first create three new tasks:
 
@@ -287,7 +287,7 @@ To this end, we first create three new tasks:
 - `insert_episode`: executes the created script and inserts dialogue into the `"XFILES"` table using the builtin Prefect `SQLiteQuery`
 
 ```python
-from prefect.tasks.database import SQLiteScript
+from prefectlegacy.tasks.database import SQLiteScript
 
 create_db = SQLiteScript(name="Create DB",
                              db="xfiles_db.sqlite",
@@ -311,7 +311,7 @@ Notice that for `create_db` we provide the script at initialization, whereas for
 To extend our flow, we can use our current `flow` to open a context manager and add tasks like normal. Note that we are utilizing the fact that `dialogue` is a task that was defined in our current session.
 
 ```python
-from prefect import unmapped
+from prefectlegacy import unmapped
 
 with flow:
     db = create_db()

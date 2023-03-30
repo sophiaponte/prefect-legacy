@@ -16,7 +16,7 @@ For Slack notifications, we recommend:
 - [SlackTask](/api/latest/tasks/notifications.html#slacktask)
 - [Notifications and State Handlers](/core/concepts/notifications.html)
 
-You'll find an excellent tutorial demonstrating [How to send Slack notifications using the SlackTask](https://discourse.prefect.io/t/how-to-send-slack-notifications-using-the-slacktask/497) in the [Prefect Community Discourse](https://discourse.prefect.io/).
+You'll find an excellent tutorial demonstrating [How to send Slack notifications using the SlackTask](https://discourse.prefectlegacy.io/t/how-to-send-slack-notifications-using-the-slacktask/497) in the [Prefect Community Discourse](https://discourse.prefectlegacy.io/).
 
 :::
 
@@ -24,8 +24,8 @@ Prefect lets you easily setup callback hooks to get notified when certain state 
 This can be as simple as:
 
 ```python
-from prefect import Flow, task
-from prefect.utilities.notifications import slack_notifier
+from prefectlegacy import Flow, task
+from prefectlegacy.utilities.notifications import slack_notifier
 
 
 @task(name="1/x task", state_handlers=[slack_notifier])
@@ -110,9 +110,9 @@ The default settings are to be notified on _every_ state change for the task / f
 The `slack_notifier` state handler is [_curried_](https://en.wikipedia.org/wiki/Currying), meaning you can call it early to bind certain keyword arguments. For example, suppose we only wanted to be notified on `Failed` states; in that case, we could do:
 
 ```python
-from prefect import task
-from prefect.engine.state import Failed
-from prefect.utilities.notifications import slack_notifier
+from prefectlegacy import task
+from prefectlegacy.engine.state import Failed
+from prefectlegacy.utilities.notifications import slack_notifier
 
 handler = slack_notifier(only_states=[Failed]) # we can call it early
 

@@ -6,12 +6,12 @@ from unittest.mock import MagicMock
 import pendulum
 import pytest
 
-from prefect.agent import Agent
-from prefect.engine.state import Scheduled, Failed, Submitted
-from prefect.utilities.configuration import set_temporary_config
-from prefect.exceptions import AuthorizationError
-from prefect.utilities.graphql import GraphQLResult, EnumValue, with_args
-from prefect.utilities.compatibility import nullcontext
+from prefectlegacy.agent import Agent
+from prefectlegacy.engine.state import Scheduled, Failed, Submitted
+from prefectlegacy.utilities.configuration import set_temporary_config
+from prefectlegacy.exceptions import AuthorizationError
+from prefectlegacy.utilities.graphql import GraphQLResult, EnumValue, with_args
+from prefectlegacy.utilities.compatibility import nullcontext
 
 
 def test_agent_init(cloud_api):
@@ -153,7 +153,7 @@ def test_get_ready_flow_runs(monkeypatch, cloud_api):
     )
     client = MagicMock()
     client.return_value.graphql = gql_return
-    monkeypatch.setattr("prefect.agent.agent.Client", client)
+    monkeypatch.setattr("prefectlegacy.agent.agent.Client", client)
 
     agent = Agent()
     flow_runs = agent._get_ready_flow_runs()
@@ -163,7 +163,7 @@ def test_get_ready_flow_runs(monkeypatch, cloud_api):
 def test_get_ready_flow_runs_ignores_currently_submitting_runs(monkeypatch, cloud_api):
     Client = MagicMock()
     Client().graphql.return_value.data.get_runs_in_queue.flow_run_ids = ["id1", "id2"]
-    monkeypatch.setattr("prefect.agent.agent.Client", Client)
+    monkeypatch.setattr("prefectlegacy.agent.agent.Client", Client)
 
     agent = Agent()
     agent.submitting_flow_runs.add("id2")
@@ -177,7 +177,7 @@ def test_get_ready_flow_runs_copies_submitting_flow_runs(
     Client().graphql.return_value.data.get_runs_in_queue.flow_run_ids = [
         "already-submitted-id"
     ]
-    monkeypatch.setattr("prefect.agent.agent.Client", Client)
+    monkeypatch.setattr("prefectlegacy.agent.agent.Client", Client)
 
     agent = Agent()
     agent.logger.setLevel(logging.DEBUG)
@@ -192,9 +192,9 @@ def test_get_ready_flow_runs_copies_submitting_flow_runs(
 
 def test_get_flow_run_metadata(monkeypatch, cloud_api):
     Client = MagicMock()
-    monkeypatch.setattr("prefect.agent.agent.Client", Client)
+    monkeypatch.setattr("prefectlegacy.agent.agent.Client", Client)
     now = pendulum.now()
-    monkeypatch.setattr("prefect.agent.agent.pendulum.now", lambda *args: now)
+    monkeypatch.setattr("prefectlegacy.agent.agent.pendulum.now", lambda *args: now)
 
     agent = Agent()
     agent._get_flow_run_metadata(["id1", "id2"])
@@ -383,7 +383,7 @@ def test_submit_deploy_flow_run_jobs(monkeypatch, cloud_api):
     )
     client = MagicMock()
     client.return_value.graphql = gql_return
-    monkeypatch.setattr("prefect.agent.agent.Client", client)
+    monkeypatch.setattr("prefectlegacy.agent.agent.Client", client)
 
     executor = MagicMock()
     future_mock = MagicMock()
@@ -408,7 +408,7 @@ def test_submit_deploy_flow_run_jobs_no_runs_found(monkeypatch, cloud_api):
     )
     client = MagicMock()
     client.return_value.graphql = gql_return
-    monkeypatch.setattr("prefect.agent.agent.Client", client)
+    monkeypatch.setattr("prefectlegacy.agent.agent.Client", client)
 
     executor = MagicMock()
 
@@ -423,7 +423,7 @@ def test_deploy_flow_run_sleeps_until_start_time(monkeypatch, cloud_api):
     )
     client = MagicMock()
     client.return_value.write_run_logs = gql_return
-    monkeypatch.setattr("prefect.agent.agent.Client", MagicMock(return_value=client))
+    monkeypatch.setattr("prefectlegacy.agent.agent.Client", MagicMock(return_value=client))
     sleep = MagicMock()
     monkeypatch.setattr("time.sleep", sleep)
 
@@ -465,7 +465,7 @@ def test_deploy_flow_run_logs_flow_run_exceptions(monkeypatch, caplog, cloud_api
     )
     client = MagicMock()
     client.return_value.write_run_logs = gql_return
-    monkeypatch.setattr("prefect.agent.agent.Client", MagicMock(return_value=client))
+    monkeypatch.setattr("prefectlegacy.agent.agent.Client", MagicMock(return_value=client))
 
     agent = Agent()
     agent.deploy_flow = MagicMock(side_effect=Exception("Error Here"))
@@ -499,7 +499,7 @@ def test_deploy_flow_run_logs_flow_run_exceptions(monkeypatch, caplog, cloud_api
 def test_submit_deploy_flow_run_jobs_raises_exception_and_logs(monkeypatch, cloud_api):
     client = MagicMock()
     client.return_value.graphql.side_effect = ValueError("Error")
-    monkeypatch.setattr("prefect.agent.agent.Client", client)
+    monkeypatch.setattr("prefectlegacy.agent.agent.Client", client)
 
     executor = MagicMock()
 
@@ -537,7 +537,7 @@ def test_setup_api_connection_attaches_agent_id(cloud_api):
 
 def test_agent_retrieve_config(monkeypatch, cloud_api):
     monkeypatch.setattr(
-        "prefect.agent.agent.Client.get_agent_config",
+        "prefectlegacy.agent.agent.Client.get_agent_config",
         MagicMock(return_value={"settings": "yes"}),
     )
 
@@ -600,17 +600,17 @@ def test_agent_poke_api(monkeypatch, cloud_api):
 
     submit_deploy_flow_run_jobs = MagicMock()
     monkeypatch.setattr(
-        "prefect.agent.agent.Agent._submit_deploy_flow_run_jobs",
+        "prefectlegacy.agent.agent.Agent._submit_deploy_flow_run_jobs",
         submit_deploy_flow_run_jobs,
     )
 
     setup_api_connection = MagicMock(return_value="id")
     monkeypatch.setattr(
-        "prefect.agent.agent.Agent._setup_api_connection", setup_api_connection
+        "prefectlegacy.agent.agent.Agent._setup_api_connection", setup_api_connection
     )
 
     heartbeat = MagicMock()
-    monkeypatch.setattr("prefect.agent.agent.Agent.heartbeat", heartbeat)
+    monkeypatch.setattr("prefectlegacy.agent.agent.Agent.heartbeat", heartbeat)
 
     with socket.socket() as sock:
         sock.bind(("", 0))
@@ -645,14 +645,14 @@ def test_agent_poke_api(monkeypatch, cloud_api):
 def test_catch_errors_in_heartbeat_thread(monkeypatch, cloud_api, caplog):
     """Check that errors in the heartbeat thread are caught, logged, and the thread keeps going"""
     monkeypatch.setattr(
-        "prefect.agent.agent.Agent._submit_deploy_flow_run_jobs", MagicMock()
+        "prefectlegacy.agent.agent.Agent._submit_deploy_flow_run_jobs", MagicMock()
     )
     monkeypatch.setattr(
-        "prefect.agent.agent.Agent._setup_api_connection", MagicMock(return_value="id")
+        "prefectlegacy.agent.agent.Agent._setup_api_connection", MagicMock(return_value="id")
     )
 
     heartbeat = MagicMock(side_effect=ValueError)
-    monkeypatch.setattr("prefect.agent.agent.Agent.heartbeat", heartbeat)
+    monkeypatch.setattr("prefectlegacy.agent.agent.Agent.heartbeat", heartbeat)
     agent = Agent(max_polls=2)
 
     # Ignore registration

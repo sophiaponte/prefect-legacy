@@ -6,18 +6,18 @@ import uuid
 
 pytest.importorskip("google.cloud.aiplatform")
 
-from prefect import config
-from prefect.agent.vertex import VertexAgent
-from prefect.run_configs import LocalRun, UniversalRun, VertexRun
-from prefect.storage import Local
-from prefect.utilities.configuration import set_temporary_config
-from prefect.utilities.graphql import GraphQLResult
+from prefectlegacy import config
+from prefectlegacy.agent.vertex import VertexAgent
+from prefectlegacy.run_configs import LocalRun, UniversalRun, VertexRun
+from prefectlegacy.storage import Local
+from prefectlegacy.utilities.configuration import set_temporary_config
+from prefectlegacy.utilities.graphql import GraphQLResult
 
 
 @pytest.fixture(autouse=True)
 def aiplatform(monkeypatch):
     client = MagicMock()
-    monkeypatch.setattr("prefect.agent.vertex.agent.get_client", lambda options: client)
+    monkeypatch.setattr("prefectlegacy.agent.vertex.agent.get_client", lambda options: client)
     return client
 
 
@@ -76,7 +76,7 @@ class TestEnvVars:
         "PREFECT__CONTEXT__FLOW_RUN_ID": "flow-run-id",
         "PREFECT__CONTEXT__FLOW_ID": "flow-id",
         "PREFECT__CLOUD__USE_LOCAL_SECRETS": "false",
-        "PREFECT__ENGINE__FLOW_RUNNER__DEFAULT_CLASS": "prefect.engine.cloud.CloudFlowRunner",
+        "PREFECT__ENGINE__FLOW_RUNNER__DEFAULT_CLASS": "prefectlegacy.engine.cloud.CloudFlowRunner",
         "PREFECT__LOGGING__LOG_TO_CLOUD": "true",
     }
 
@@ -273,7 +273,7 @@ class TestDeployFlow:
                             },
                             {
                                 "name": "PREFECT__ENGINE__FLOW_RUNNER__DEFAULT_CLASS",
-                                "value": "prefect.engine.cloud.CloudFlowRunner",
+                                "value": "prefectlegacy.engine.cloud.CloudFlowRunner",
                             },
                             {"name": "PREFECT__LOGGING__LOG_TO_CLOUD", "value": "true"},
                             {"name": "PREFECT__CLOUD__AUTH_TOKEN", "value": ""},

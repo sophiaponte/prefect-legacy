@@ -17,7 +17,7 @@ In the unconfigured case, all `State` objects produced by a flow have a basic `R
 ```python
 # access the underlying Result instance
 >>> type(state._result)
-prefect.engine.result.Result
+prefectlegacy.engine.result.Result
 
 # this is the type of your Task's return value
 >>> type(state._result.value)
@@ -74,8 +74,8 @@ If you want to use the `Result` API yourself, such as in a task, instantiate a c
 For example, if your task needs to read a file from an S3 bucket, consider using Prefect's `S3Result` to identify the S3 file and interact with it:
 
 ```python
-from prefect import Flow, task
-from prefect.engine.results import S3Result
+from prefectlegacy import Flow, task
+from prefectlegacy.engine.results import S3Result
 
 @task
 def my_task():
@@ -94,8 +94,8 @@ Checkpointing is only turned on by default when running on Prefect Cloud or Serv
 :::
 
 ```python
-from prefect import Flow, task
-from prefect.engine.results import LocalResult
+from prefectlegacy import Flow, task
+from prefectlegacy.engine.results import LocalResult
 
 @task(result=LocalResult(dir='~/Desktop/HelloWorld/results'))
 def my_task():
@@ -152,11 +152,11 @@ Configuring a task to persist results requires two steps. First, enable checkpoi
 1. Alternatively, you can set a Task-level result. This is achieved using the `result` keyword argument at Task initialization (or in the `@task` decorator). If you provide a result here, it will _always_ be used if the _output_ of this Task needs to be cached for any reason whatsoever.
 
 ::: tip The Hierarchy
-Task-level results will _always_ be used over flow-level results. Neither will be used if a task's `checkpoint` kwarg is set to `False`, or the global `prefect.config.tasks.checkpointing` value is set to `False`.
+Task-level results will _always_ be used over flow-level results. Neither will be used if a task's `checkpoint` kwarg is set to `False`, or the global `prefectlegacy.config.tasks.checkpointing` value is set to `False`.
 :::
 
 ::: warning `Results` are always attached to their task's outputs
-For example, suppose task A is configured to use result A, and task B to use result B, and that A passes data downstream to B. If B fails and requests a retry, it needs to cache its inputs, one of which came from A. If you are using Cloud, [Cloud will use results to persist the input cache](https://docs.prefect.io/orchestration/faq/dataflow.html#when-is-data-persisted), and since the data is from task A it will use the result configured on A.
+For example, suppose task A is configured to use result A, and task B to use result B, and that A passes data downstream to B. If B fails and requests a retry, it needs to cache its inputs, one of which came from A. If you are using Cloud, [Cloud will use results to persist the input cache](https://docs.prefectlegacy.io/orchestration/faq/dataflow.html#when-is-data-persisted), and since the data is from task A it will use the result configured on A.
 :::
 
 ::: warning Parameters are different
@@ -168,7 +168,7 @@ There is one exception to the rule for Results: Prefect Parameters. Prefect Para
 A `Serializer` tells Prefect how to transform Python objects into bytes and recover them later. The default implementation (`PickleSerializer`) uses `cloudpickle`, but you can write your own by adopting this template:
 
 ```python
-class MySerializer(prefect.engine.serializers.Serializer):
+class MySerializer(prefectlegacy.engine.serializers.Serializer):
 
     def serialize(self, value: Any) -> bytes:
         # transform a Python object into bytes
@@ -195,8 +195,8 @@ By default, Prefect will store task results in a file / directory structure base
 Note that if you pursue option two above, Python string templating allows for powerful configuration. For example, the code below writes task results to both a hardcoded location as well as a location based on the day of the week:
 
 ```python
-from prefect import task, Flow
-from prefect.engine.results import LocalResult
+from prefectlegacy import task, Flow
+from prefectlegacy.engine.results import LocalResult
 
 
 @task(result=LocalResult(location="initial_data.prefect"))

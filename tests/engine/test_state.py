@@ -9,10 +9,10 @@ import pendulum
 import cloudpickle
 import pytest
 
-import prefect
-from prefect.engine.result import Result, NoResult
-from prefect.engine.results import PrefectResult
-from prefect.engine.state import (
+import prefectlegacy
+from prefectlegacy.engine.result import Result, NoResult
+from prefectlegacy.engine.results import prefectlegacyResult
+from prefectlegacy.engine.state import (
     Cancelled,
     Cached,
     ClientFailed,
@@ -36,14 +36,14 @@ from prefect.engine.state import (
     ValidationFailed,
     _MetaState,
 )
-from prefect.serialization.state import StateSchema
+from prefectlegacy.serialization.state import StateSchema
 
 all_states = sorted(
     set(
         cls
-        for cls in prefect.engine.state.__dict__.values()
+        for cls in prefectlegacy.engine.state.__dict__.values()
         if isinstance(cls, type)
-        and issubclass(cls, prefect.engine.state.State)
+        and issubclass(cls, prefectlegacy.engine.state.State)
         and not cls is _MetaState
     ),
     key=lambda c: c.__name__,
@@ -113,14 +113,14 @@ class TestCreateStates:
 
     @pytest.mark.parametrize("cls", all_states)
     def test_create_state_with_tags_in_context(self, cls):
-        with prefect.context(task_tags=set("abcdef")):
+        with prefectlegacy.context(task_tags=set("abcdef")):
             state = cls()
         assert state.message is None
         assert state.result is None
         assert state._result == NoResult
         assert state.context == dict(tags=list(set("abcdef")))
 
-        with prefect.context(task_tags=set("abcdef")):
+        with prefectlegacy.context(task_tags=set("abcdef")):
             state = cls(context={"tags": ["foo"]})
         assert state.context == dict(tags=["foo"])
 
@@ -192,7 +192,7 @@ def test_only_scheduled_states_have_task_run_count_in_context(cls):
     the current run_count across multiple state changes.  Persisting this data
     in a Finished state causes the run count to "freeze" across runs.
     """
-    with prefect.context(task_run_count=910):
+    with prefectlegacy.context(task_run_count=910):
         state = cls()
 
     if state.context.get("task_run_count") is not None:
@@ -214,7 +214,7 @@ def test_looped_stores_default_loop_count():
 
 
 def test_looped_stores_default_loop_count_in_context():
-    with prefect.context(task_loop_count=5):
+    with prefectlegacy.context(task_loop_count=5):
         state = Looped()
     assert state.loop_count == 5
 
@@ -230,7 +230,7 @@ def test_retry_stores_default_run_count():
 
 
 def test_retry_stores_default_run_count_in_context():
-    with prefect.context(task_run_count=5):
+    with prefectlegacy.context(task_run_count=5):
         state = Retrying()
     assert state.run_count == 5
 
@@ -315,7 +315,7 @@ def test_states_with_mutable_attrs_are_hashable():
 def test_serialize_method(cls):
     serialized = cls().serialize()
     assert isinstance(serialized, dict)
-    assert isinstance(prefect.serialization.state.StateSchema().load(serialized), cls)
+    assert isinstance(prefectlegacy.serialization.state.StateSchema().load(serialized), cls)
 
 
 class TestStateHierarchy:
@@ -754,7 +754,7 @@ def test_state_pickle_with_unpicklable_exception_converts_to_repr():
     assert isinstance(state.result, UnpicklableException)
 
 
-@patch("prefect.engine.state.super")
+@patch("prefectlegacy.engine.state.super")
 def test_state_sizeof(mock_super):
     state = State(result=10)
     mock_super().__sizeof__.return_value = 55

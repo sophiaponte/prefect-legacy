@@ -2,7 +2,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from prefect.tasks.sodasql import SodaSQLScan
+from prefectlegacy.tasks.sodasql import SodaSQLScan
 
 
 class TestSodaSQLScan:
@@ -32,7 +32,7 @@ class TestSodaSQLScan:
         non_existing_warehouse_file = "/foo/warehouse.yml"
         sb_mock = MagicMock()
         sb_mock.side_effect = AttributeError
-        monkeypatch.setattr("prefect.tasks.sodasql.sodasql_tasks.ScanBuilder", sb_mock)
+        monkeypatch.setattr("prefectlegacy.tasks.sodasql.sodasql_tasks.ScanBuilder", sb_mock)
         soda_sql_scan_task = SodaSQLScan(
             scan_def=non_existing_scan_file, warehouse_def=non_existing_warehouse_file
         )
@@ -44,7 +44,7 @@ class TestSodaSQLScan:
         invalid_warehouse_dict = {"foo": "test"}
         sb_mock = MagicMock()
         sb_mock.side_effect = AssertionError
-        monkeypatch.setattr("prefect.tasks.sodasql.sodasql_tasks.ScanBuilder", sb_mock)
+        monkeypatch.setattr("prefectlegacy.tasks.sodasql.sodasql_tasks.ScanBuilder", sb_mock)
         soda_sql_scan_task = SodaSQLScan(
             scan_def=invalid_scan_dict, warehouse_def=invalid_warehouse_dict
         )

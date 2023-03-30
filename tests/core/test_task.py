@@ -5,13 +5,13 @@ from typing import Any, Tuple
 
 import pytest
 
-import prefect
-from prefect.core import Edge, Flow, Parameter, Task
-from prefect.engine.cache_validators import all_inputs, duration_only, never_use
-from prefect.engine.results import PrefectResult, LocalResult
-from prefect.utilities.configuration import set_temporary_config
-from prefect.configuration import process_task_defaults
-from prefect.utilities.tasks import task
+import prefectlegacy
+from prefectlegacy.core import Edge, Flow, Parameter, Task
+from prefectlegacy.engine.cache_validators import all_inputs, duration_only, never_use
+from prefectlegacy.engine.results import prefectlegacyResult, LocalResult
+from prefectlegacy.utilities.configuration import set_temporary_config
+from prefectlegacy.configuration import process_task_defaults
+from prefectlegacy.utilities.tasks import task
 
 
 class AddTask(Task):
@@ -132,10 +132,10 @@ class TestCreateTask:
 
     def test_create_task_with_trigger(self):
         t1 = Task()
-        assert t1.trigger is prefect.triggers.all_successful
+        assert t1.trigger is prefectlegacy.triggers.all_successful
 
-        t2 = Task(trigger=prefect.triggers.all_failed)
-        assert t2.trigger == prefect.triggers.all_failed
+        t2 = Task(trigger=prefectlegacy.triggers.all_failed)
+        assert t2.trigger == prefectlegacy.triggers.all_failed
 
     def test_create_task_without_state_handler(self):
         assert Task().state_handlers == []
@@ -364,13 +364,13 @@ class TestCreateTask:
 def test_task_has_logger():
     t = Task()
     assert isinstance(t.logger, logging.Logger)
-    assert t.logger.name == "prefect.Task"
+    assert t.logger.name == "prefectlegacy.Task"
 
 
 def test_task_has_logger_with_informative_name():
     t = Task(name="foo")
     assert isinstance(t.logger, logging.Logger)
-    assert t.logger.name == "prefect.foo"
+    assert t.logger.name == "prefectlegacy.foo"
 
 
 def test_task_produces_no_result():
@@ -388,7 +388,7 @@ def test_tags_are_added_when_arguments_are_bound():
     t1 = AddTask(tags=["math"])
     t2 = AddTask(tags=["math"])
 
-    with prefect.context(tags=["test"]):
+    with prefectlegacy.context(tags=["test"]):
         with Flow(name="test"):
             t1.bind(1, 2)
             t3 = t2(1, 2)
@@ -407,11 +407,11 @@ def test_tags():
     t3 = Task(tags=["test", "test2", "test"])
     assert t3.tags == {"test", "test2"}
 
-    with prefect.context(tags=["test"]):
+    with prefectlegacy.context(tags=["test"]):
         t4 = Task()
         assert t4.tags == {"test"}
 
-    with prefect.context(tags=["test1", "test2"]):
+    with prefectlegacy.context(tags=["test1", "test2"]):
         t5 = Task(tags=["test3"])
         assert t5.tags == {"test1", "test2", "test3"}
 
@@ -603,7 +603,7 @@ class TestSerialization:
 
         assert isinstance(s, dict)
         assert s["slug"] == t.slug
-        assert s["type"] == "prefect.core.task.Task"
+        assert s["type"] == "prefectlegacy.core.task.Task"
         assert s["name"] == t.name
 
     def test_subclass_serialization(self):
@@ -618,7 +618,7 @@ class TestSerialization:
     def test_deserialization(self):
         t = Task(name="test")
         s = t.serialize()
-        t2 = prefect.serialization.task.TaskSchema().load(s)
+        t2 = prefectlegacy.serialization.task.TaskSchema().load(s)
         assert isinstance(t2, Task)
         assert t2.name == t.name
 
@@ -628,7 +628,7 @@ class TestSerialization:
 
         t = NewTask(name="test")
         s = t.serialize()
-        t2 = prefect.serialization.task.TaskSchema().load(s)
+        t2 = prefectlegacy.serialization.task.TaskSchema().load(s)
         assert type(t2) is Task
         assert not isinstance(t2, NewTask)
         assert t2.name == t.name
@@ -643,7 +643,7 @@ class TestSerialization:
     def test_parameter_deserialization(self):
         p = Parameter(name="p")
         serialized = p.serialize()
-        p2 = prefect.serialization.task.ParameterSchema().load(serialized)
+        p2 = prefectlegacy.serialization.task.ParameterSchema().load(serialized)
         assert isinstance(p2, Parameter)
         assert p2.name == p.name
         assert p2.required == p.required
@@ -699,7 +699,7 @@ class TestTaskArgs:
     def test_tags_are_appended_to_when_updating_with_task_args(self):
         t = AddTask(tags=["math"])
 
-        with prefect.context(tags=["test"]):
+        with prefectlegacy.context(tags=["test"]):
             with Flow(name="test"):
                 t2 = t(1, 2, task_args={"name": "test-tags", "tags": ["new-tag"]})
 
@@ -828,7 +828,7 @@ def test_task_called_outside_flow_context_raises_helpful_error(use_function_task
 
     if use_function_task:
 
-        @prefect.task
+        @prefectlegacy.task
         def fn(x):
             return x
 
@@ -854,9 +854,9 @@ def test_task_called_outside_flow_context_raises_helpful_error(use_function_task
 
 
 def test_result_pipe():
-    t = prefect.task(lambda x, foo: x + 1)
+    t = prefectlegacy.task(lambda x, foo: x + 1)
 
-    with prefect.Flow("test"):
+    with prefectlegacy.Flow("test"):
         # A task created using .pipe should be identical to one created by using __call__
         assert vars(t(1, foo="bar")) == vars(t.pipe(t, foo="bar"))
 

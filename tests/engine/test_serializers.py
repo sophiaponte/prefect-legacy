@@ -5,7 +5,7 @@ import cloudpickle
 import pendulum
 import pytest
 
-from prefect.engine.serializers import (
+from prefectlegacy.engine.serializers import (
     CompressedSerializer,
     DateTimeSerializer,
     JSONSerializer,

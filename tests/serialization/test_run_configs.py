@@ -1,7 +1,7 @@
 import pytest
 
-from prefect.run_configs import KubernetesRun, LocalRun, DockerRun, ECSRun, UniversalRun
-from prefect.serialization.run_config import RunConfigSchema, RunConfigSchemaBase
+from prefectlegacy.run_configs import KubernetesRun, LocalRun, DockerRun, ECSRun, UniversalRun
+from prefectlegacy.serialization.run_config import RunConfigSchema, RunConfigSchemaBase
 
 
 def test_serialized_run_config_sorts_labels():

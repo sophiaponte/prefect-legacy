@@ -2,7 +2,7 @@ import functools
 import json
 import pytest
 import responses
-from prefect.tasks.toloka.helpers import download_json
+from prefectlegacy.tasks.toloka.helpers import download_json
 
 
 URL = "https://some.url"

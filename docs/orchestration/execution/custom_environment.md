@@ -21,9 +21,9 @@ Make sure the name of your custom environment does not match the names of any pr
 ```python
 from typing import Any, Callable, List
 
-from prefect import config
-from prefect.environments.execution import Environment
-from prefect.storage import Storage
+from prefectlegacy import config
+from prefectlegacy.environments.execution import Environment
+from prefectlegacy.storage import Storage
 
 
 class MyCustomEnvironment(Environment):
@@ -78,7 +78,7 @@ class MyCustomEnvironment(Environment):
             self.on_start()
 
         try:
-            from prefect.engine import (
+            from prefectlegacy.engine import (
                 get_default_executor_class,
                 get_default_flow_runner_class,
             )
@@ -108,8 +108,8 @@ class MyCustomEnvironment(Environment):
 # ###################### #
 
 
-from prefect import task, Flow
-from prefect.storage import Docker
+from prefectlegacy import task, Flow
+from prefectlegacy.storage import Docker
 
 
 @task

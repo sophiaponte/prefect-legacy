@@ -43,7 +43,7 @@ default) or [ECSRun](/orchestration/flow_config/run_configs.md#ecsrun)
 environment for a flow (exposing `env`, `image`, `cpu`, etc...):
 
 ```python
-from prefect.run_configs import ECSRun
+from prefectlegacy.run_configs import ECSRun
 
 # Configure extra environment variables for this flow,
 # and set a custom image
@@ -252,7 +252,7 @@ requiring the user to define a `flow` container as well). Any option available t
 [`register_task_definition`](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ecs.html#ECS.Client.register_task_definition)
 may be specified here. For reference, the default template packaged with
 Prefect can be found
-[here](https://github.com/PrefectHQ/prefect/blob/master/src/prefect/agent/ecs/task_definition.yaml).
+[here](https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/agent/ecs/task_definition.yaml).
 
 To provide your own task definition template, you can use the `--task-definition` flag.
 This takes a path to a job template YAML file. The path can be local to the agent,
@@ -322,7 +322,7 @@ Let's see an example of creating a Fargate service type for Prefect Agent using 
                 },
                 {
                     "name": "PREFECT__CLOUD__API",
-                    "value": "https://api.prefect.io"
+                    "value": "https://api.prefectlegacy.io"
                 }
             ],
             "logConfiguration": {

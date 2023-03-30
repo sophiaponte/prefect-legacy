@@ -41,7 +41,7 @@ You can adjust the memory that Docker makes available to containers in the Setti
 
 ## Where to go next
 
-The [Prefect Community Slack](https://prefect.io/slack) is a great place to ask for help! You can also write a new post in our [GitHub Discussion Board](https://github.com/PrefectHQ/prefect/discussions/new).
+The [Prefect Community Slack](https://prefectlegacy.io/slack) is a great place to ask for help! You can also write a new post in our [GitHub Discussion Board](https://github.com/PrefectHQ/prefect/discussions/new).
 
 ::: tip Save the output from `prefect server start`
 If you ask for help, someone may ask to see the text that the `prefect server start` command generated when you ran it. Saving a copy of that text now will help speed up troubleshooting later!

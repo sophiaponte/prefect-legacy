@@ -81,7 +81,7 @@ Overall, there are a couple of ways how you could tackle it:
 
 ```python
 import pendulum
-from prefect.engine.signals import RETRY
+from prefectlegacy.engine.signals import RETRY
 
 @task
 def my_sensor(**kwargs):
@@ -134,13 +134,13 @@ with Flow("example") as flow:
 
 ### How can I set a custom flow run name?
 
-The flow run name cannot be set in advance, but it can be changed using the [RenameFlowRun](/api/latest/tasks/prefect.html#renameflowrun) task after the flow run has been created. You can use this task inside the flow block, or through a flow-level state handler. When calling the task from a state handler, make sure to call the task’s  `.run()` method.
+The flow run name cannot be set in advance, but it can be changed using the [RenameFlowRun](/api/latest/tasks/prefectlegacy.html#renameflowrun) task after the flow run has been created. You can use this task inside the flow block, or through a flow-level state handler. When calling the task from a state handler, make sure to call the task’s  `.run()` method.
 
 Here is a flow-level state handler example:
 
 ```python
-from prefect import Flow, task
-from prefect.tasks.prefect import RenameFlowRun
+from prefectlegacy import Flow, task
+from prefectlegacy.tasks.prefect import RenameFlowRun
 
 def rename_handler(obj, new_state, old_state):
     if new_state.is_running():
@@ -191,13 +191,13 @@ And if you have a strict requirement that every process must run in a container,
 You can pass a callable to the DaskExecutor that sizes the DaskExecutor dynamically at runtime.
 
 ```python
-from prefect import Flow
-from prefect.executors import DaskExecutor
+from prefectlegacy import Flow
+from prefectlegacy.executors import DaskExecutor
 
 def dynamic_executor():
     from distributed import LocalCluster
     # could be instead some other class e.g. from dask_cloudprovider.aws import FargateCluster
-    return LocalCluster(n_workers=prefect.context.parameters["n_workers"])
+    return LocalCluster(n_workers=prefectlegacy.context.parameters["n_workers"])
 
 with Flow("example", executor=DaskExecutor(cluster_class=dynamic_executor)) as flow:
     flow.add_task(Parameter("n_workers", default=5))
@@ -208,8 +208,8 @@ with Flow("example", executor=DaskExecutor(cluster_class=dynamic_executor)) as f
 If the task itself throws an error, the task will also fail as a result. If there is some other condition that you want to trigger a Failed state, the most direct way is by simply raising a FAIL signal:
 
 ```python
-from prefect import task
-from prefect.engine.signals import FAIL
+from prefectlegacy import task
+from prefectlegacy.engine.signals import FAIL
 
 @task
 def my_task(condition: bool=True):

@@ -5,9 +5,9 @@ import pytest
 import responses
 from responses import matchers
 
-from prefect import Flow
-from prefect.tasks.dbt import DbtCloudRunJob, DbtShellTask
-from prefect.tasks.dbt.dbt_cloud_utils import (
+from prefectlegacy import Flow
+from prefectlegacy.tasks.dbt import DbtCloudRunJob, DbtShellTask
+from prefectlegacy.tasks.dbt.dbt_cloud_utils import (
     USER_AGENT_HEADER,
     TriggerDbtCloudRunFailed,
 )

@@ -2,8 +2,8 @@ import pytest
 from click.testing import CliRunner
 from unittest.mock import MagicMock
 
-from prefect.cli.heartbeat import heartbeat, flow_run
-from prefect.utilities.configuration import set_temporary_config
+from prefectlegacy.cli.heartbeat import heartbeat, flow_run
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 def test_heartbeat_init():
@@ -42,8 +42,8 @@ def test_heartbeat_multiple_flow_run_heartbeats(patch_post, cloud_api):
 
 def test_heartbeat_is_robust_to_exceptions(cloud_api, monkeypatch, caplog):
     Client = MagicMock()
-    monkeypatch.setattr("prefect.cli.heartbeat.Client", Client)
-    monkeypatch.setattr("prefect.cli.heartbeat.time.sleep", MagicMock())
+    monkeypatch.setattr("prefectlegacy.cli.heartbeat.Client", Client)
+    monkeypatch.setattr("prefectlegacy.cli.heartbeat.time.sleep", MagicMock())
     Client().update_flow_run_heartbeat.side_effect = ValueError("Foo")
 
     runner = CliRunner()
@@ -61,8 +61,8 @@ def test_heartbeat_is_robust_to_exceptions(cloud_api, monkeypatch, caplog):
 
 def test_heartbeat_does_not_ignore_base_exceptions(cloud_api, monkeypatch, caplog):
     Client = MagicMock()
-    monkeypatch.setattr("prefect.cli.heartbeat.Client", Client)
-    monkeypatch.setattr("prefect.cli.heartbeat.time.sleep", MagicMock())
+    monkeypatch.setattr("prefectlegacy.cli.heartbeat.Client", Client)
+    monkeypatch.setattr("prefectlegacy.cli.heartbeat.time.sleep", MagicMock())
     Client().update_flow_run_heartbeat.side_effect = KeyboardInterrupt()
 
     runner = CliRunner()
@@ -83,9 +83,9 @@ def test_heartbeat_does_not_ignore_base_exceptions(cloud_api, monkeypatch, caplo
 def test_heartbeat_exceptions_are_logged_to_cloud(cloud_api, monkeypatch, terminal_exc):
     Client = MagicMock()
     LOG_MANAGER = MagicMock()
-    monkeypatch.setattr("prefect.cli.heartbeat.Client", Client)
-    monkeypatch.setattr("prefect.utilities.logging.LOG_MANAGER", LOG_MANAGER)
-    monkeypatch.setattr("prefect.cli.heartbeat.time.sleep", MagicMock())
+    monkeypatch.setattr("prefectlegacy.cli.heartbeat.Client", Client)
+    monkeypatch.setattr("prefectlegacy.utilities.logging.LOG_MANAGER", LOG_MANAGER)
+    monkeypatch.setattr("prefectlegacy.cli.heartbeat.time.sleep", MagicMock())
     Client().update_flow_run_heartbeat.side_effect = (
         KeyboardInterrupt() if terminal_exc else ValueError("Foo")
     )
@@ -96,7 +96,7 @@ def test_heartbeat_exceptions_are_logged_to_cloud(cloud_api, monkeypatch, termin
     # The exception was logged both times
     log = LOG_MANAGER.enqueue.call_args[0][0]
     assert log["flow_run_id"] == "id"
-    assert log["name"] == "prefect.subprocess_heartbeat"
+    assert log["name"] == "prefectlegacy.subprocess_heartbeat"
     assert log["level"] == "ERROR"
 
     if terminal_exc:

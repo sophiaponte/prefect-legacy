@@ -10,16 +10,16 @@ import pytest
 import requests
 import toml
 
-import prefect
-from prefect.client.client import Client, FlowRunInfoResult, TaskRunInfoResult
-from prefect.utilities.graphql import GraphQLResult
-from prefect.engine.result import Result
-from prefect.engine.state import Pending, Running, State
-from prefect.storage import Local
-from prefect.run_configs import LocalRun
-from prefect.utilities.configuration import set_temporary_config
-from prefect.exceptions import ClientError, AuthorizationError, ObjectNotFoundError
-from prefect.utilities.graphql import decompress
+import prefectlegacy
+from prefectlegacy.client.client import Client, FlowRunInfoResult, TaskRunInfoResult
+from prefectlegacy.utilities.graphql import GraphQLResult
+from prefectlegacy.engine.result import Result
+from prefectlegacy.engine.state import Pending, Running, State
+from prefectlegacy.storage import Local
+from prefectlegacy.run_configs import LocalRun
+from prefectlegacy.utilities.configuration import set_temporary_config
+from prefectlegacy.exceptions import ClientError, AuthorizationError, ObjectNotFoundError
+from prefectlegacy.utilities.graphql import decompress
 
 # Note: Because we're running tests in parallel this must be a hard-coded instead of
 # dynamically generating a new UUID
@@ -93,7 +93,7 @@ class TestClientAuthentication:
     def test_client_save_auth_to_disk(self):
 
         # Ensure saving is robust to a missing directory
-        Path(prefect.context.config.home_dir).rmdir()
+        Path(prefectlegacy.context.config.home_dir).rmdir()
 
         client = Client(api_key="KEY", tenant_id=TEST_TENANT_ID)
         client.save_auth_to_disk()
@@ -303,7 +303,7 @@ def test_version_header(monkeypatch):
         client = Client()
     client.get("/foo/bar")
     assert get.call_args[1]["headers"]["X-PREFECT-CORE-VERSION"] == str(
-        prefect.__version__
+        prefectlegacy.__version__
     )
 
 
@@ -322,7 +322,7 @@ def test_version_header_cant_be_overridden(monkeypatch):
         client = Client()
     client.get("/foo/bar", headers={"X-PREFECT-CORE-VERSION": "-1"})
     assert get.call_args[1]["headers"]["X-PREFECT-CORE-VERSION"] == str(
-        prefect.__version__
+        prefectlegacy.__version__
     )
 
 
@@ -401,7 +401,7 @@ class TestClientGraphQLErrorHandling:
     ):
         formatter = MagicMock(return_value="Formatted graphql message")
         monkeypatch.setattr(
-            "prefect.client.client.format_graphql_request_error", formatter
+            "prefectlegacy.client.client.format_graphql_request_error", formatter
         )
 
         with pytest.raises(ClientError, match="Formatted graphql message"):
@@ -416,7 +416,7 @@ class TestClientGraphQLErrorHandling:
             raise Exception("Bad formatter")
 
         monkeypatch.setattr(
-            "prefect.client.client.format_graphql_request_error", erroring_formatter
+            "prefectlegacy.client.client.format_graphql_request_error", erroring_formatter
         )
 
         with pytest.raises(
@@ -438,7 +438,7 @@ def test_client_register_raises_if_required_param_isnt_scheduled(
     patch_post(response)
 
     monkeypatch.setattr(
-        "prefect.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
+        "prefectlegacy.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
     )
 
     with set_temporary_config(
@@ -450,19 +450,19 @@ def test_client_register_raises_if_required_param_isnt_scheduled(
     ):
         client = Client()
 
-    a = prefect.schedules.clocks.DatesClock(
+    a = prefectlegacy.schedules.clocks.DatesClock(
         [pendulum.now("UTC").add(seconds=0.1)], parameter_defaults=dict(x=1)
     )
-    b = prefect.schedules.clocks.DatesClock(
+    b = prefectlegacy.schedules.clocks.DatesClock(
         [pendulum.now("UTC").add(seconds=0.25)], parameter_defaults=dict(y=2)
     )
 
-    x = prefect.Parameter("x", required=True)
+    x = prefectlegacy.Parameter("x", required=True)
 
-    flow = prefect.Flow(
-        "test", schedule=prefect.schedules.Schedule(clocks=[a, b]), tasks=[x]
+    flow = prefectlegacy.Flow(
+        "test", schedule=prefectlegacy.schedules.Schedule(clocks=[a, b]), tasks=[x]
     )
-    flow.storage = prefect.storage.Local(tmpdir)
+    flow.storage = prefectlegacy.storage.Local(tmpdir)
     flow.result = flow.storage.result
 
     with pytest.raises(
@@ -496,7 +496,7 @@ def test_client_register_doesnt_raise_for_scheduled_params(
     patch_post(response)
 
     monkeypatch.setattr(
-        "prefect.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
+        "prefectlegacy.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
     )
 
     with set_temporary_config(
@@ -508,20 +508,20 @@ def test_client_register_doesnt_raise_for_scheduled_params(
     ):
         client = Client()
 
-    a = prefect.schedules.clocks.DatesClock(
+    a = prefectlegacy.schedules.clocks.DatesClock(
         [pendulum.now("UTC").add(seconds=0.1)], parameter_defaults=dict(x=1)
     )
-    b = prefect.schedules.clocks.DatesClock(
+    b = prefectlegacy.schedules.clocks.DatesClock(
         [pendulum.now("UTC").add(seconds=0.25)], parameter_defaults=dict(x=2, y=5)
     )
 
-    x = prefect.Parameter("x", required=True)
-    y = prefect.Parameter("y", default=1)
+    x = prefectlegacy.Parameter("x", required=True)
+    y = prefectlegacy.Parameter("y", default=1)
 
-    flow = prefect.Flow(
-        "test", schedule=prefect.schedules.Schedule(clocks=[a, b]), tasks=[x, y]
+    flow = prefectlegacy.Flow(
+        "test", schedule=prefectlegacy.schedules.Schedule(clocks=[a, b]), tasks=[x, y]
     )
-    flow.storage = prefect.storage.Local(tmpdir)
+    flow.storage = prefectlegacy.storage.Local(tmpdir)
     flow.result = flow.storage.result
 
     flow_id = client.register(
@@ -550,7 +550,7 @@ def test_client_register(patch_post, compressed, monkeypatch, tmpdir):
     patch_post(response)
 
     monkeypatch.setattr(
-        "prefect.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
+        "prefectlegacy.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
     )
 
     with set_temporary_config(
@@ -561,7 +561,7 @@ def test_client_register(patch_post, compressed, monkeypatch, tmpdir):
         }
     ):
         client = Client()
-    flow = prefect.Flow(name="test", storage=prefect.storage.Local(tmpdir))
+    flow = prefectlegacy.Flow(name="test", storage=prefectlegacy.storage.Local(tmpdir))
     flow.result = flow.storage.result
 
     flow_id = client.register(
@@ -593,10 +593,10 @@ def test_client_register_raises_for_keyed_flows_with_no_result(
     patch_post(response)
 
     monkeypatch.setattr(
-        "prefect.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
+        "prefectlegacy.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
     )
 
-    @prefect.task
+    @prefectlegacy.task
     def a(x):
         pass
 
@@ -608,8 +608,8 @@ def test_client_register_raises_for_keyed_flows_with_no_result(
         }
     ):
         client = Client()
-    with prefect.Flow(name="test", storage=prefect.storage.Local(tmpdir)) as flow:
-        a(prefect.Task())
+    with prefectlegacy.Flow(name="test", storage=prefectlegacy.storage.Local(tmpdir)) as flow:
+        a(prefectlegacy.Task())
 
     flow.result = None
 
@@ -641,7 +641,7 @@ def test_client_register_doesnt_raise_if_no_keyed_edges(
     patch_post(response)
 
     monkeypatch.setattr(
-        "prefect.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
+        "prefectlegacy.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
     )
 
     with set_temporary_config(
@@ -652,7 +652,7 @@ def test_client_register_doesnt_raise_if_no_keyed_edges(
         }
     ):
         client = Client()
-    flow = prefect.Flow(name="test", storage=prefect.storage.Local(tmpdir))
+    flow = prefectlegacy.Flow(name="test", storage=prefectlegacy.storage.Local(tmpdir))
     flow.result = None
 
     flow_id = client.register(
@@ -681,7 +681,7 @@ def test_client_register_builds_flow(patch_post, compressed, monkeypatch, tmpdir
     post = patch_post(response)
 
     monkeypatch.setattr(
-        "prefect.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
+        "prefectlegacy.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
     )
 
     with set_temporary_config(
@@ -692,7 +692,7 @@ def test_client_register_builds_flow(patch_post, compressed, monkeypatch, tmpdir
         }
     ):
         client = Client()
-    flow = prefect.Flow(name="test", storage=prefect.storage.Local(tmpdir))
+    flow = prefectlegacy.Flow(name="test", storage=prefectlegacy.storage.Local(tmpdir))
     flow.result = flow.storage.result
 
     client.register(
@@ -733,9 +733,9 @@ def test_client_register_docker_image_name(patch_post, compressed, monkeypatch, 
     post = patch_post(response)
 
     monkeypatch.setattr(
-        "prefect.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
+        "prefectlegacy.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
     )
-    monkeypatch.setattr("prefect.storage.Docker._build_image", MagicMock())
+    monkeypatch.setattr("prefectlegacy.storage.Docker._build_image", MagicMock())
 
     with set_temporary_config(
         {
@@ -745,9 +745,9 @@ def test_client_register_docker_image_name(patch_post, compressed, monkeypatch, 
         }
     ):
         client = Client()
-    flow = prefect.Flow(
+    flow = prefectlegacy.Flow(
         name="test",
-        storage=prefect.storage.Docker(image_name="test_image"),
+        storage=prefectlegacy.storage.Docker(image_name="test_image"),
     )
     flow.result = flow.storage.result
 
@@ -793,7 +793,7 @@ def test_client_register_optionally_avoids_building_flow(
     post = patch_post(response)
 
     monkeypatch.setattr(
-        "prefect.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
+        "prefectlegacy.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
     )
 
     with set_temporary_config(
@@ -804,7 +804,7 @@ def test_client_register_optionally_avoids_building_flow(
         }
     ):
         client = Client()
-    flow = prefect.Flow(name="test")
+    flow = prefectlegacy.Flow(name="test")
     flow.result = Result()
 
     client.register(
@@ -834,14 +834,14 @@ def test_client_register_with_bad_proj_name(patch_post, monkeypatch, cloud_api):
     patch_post({"data": {"project": []}})
 
     monkeypatch.setattr(
-        "prefect.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
+        "prefectlegacy.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
     )
 
     with set_temporary_config(
         {"cloud.api_key": "key", "cloud.tenant_id": TEST_TENANT_ID, "backend": "cloud"}
     ):
         client = Client()
-    flow = prefect.Flow(name="test")
+    flow = prefectlegacy.Flow(name="test")
     flow.result = Result()
 
     with pytest.raises(ValueError) as exc:
@@ -864,7 +864,7 @@ def test_client_create_project_that_already_exists(patch_posts, monkeypatch):
     )
 
     monkeypatch.setattr(
-        "prefect.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
+        "prefectlegacy.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
     )
 
     with set_temporary_config(
@@ -881,7 +881,7 @@ def test_client_delete_project(patch_post, monkeypatch):
     )
 
     monkeypatch.setattr(
-        "prefect.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
+        "prefectlegacy.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
     )
 
     with set_temporary_config(
@@ -904,7 +904,7 @@ def test_client_delete_project_error(patch_post, monkeypatch):
     project_name = "my-default-project"
 
     monkeypatch.setattr(
-        "prefect.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
+        "prefectlegacy.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
     )
 
     with set_temporary_config(
@@ -920,7 +920,7 @@ def test_client_register_with_flow_that_cant_be_deserialized(patch_post, monkeyp
     patch_post({"data": {"project": [{"id": "proj-id"}]}})
 
     monkeypatch.setattr(
-        "prefect.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
+        "prefectlegacy.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
     )
 
     with set_temporary_config(
@@ -932,11 +932,11 @@ def test_client_register_with_flow_that_cant_be_deserialized(patch_post, monkeyp
     ):
         client = Client()
 
-    task = prefect.Task()
+    task = prefectlegacy.Task()
     # we add a max_retries value to the task without a corresponding retry_delay;
     # this will fail at deserialization
     task.max_retries = 3
-    flow = prefect.Flow(name="test", tasks=[task])
+    flow = prefectlegacy.Flow(name="test", tasks=[task])
     flow.result = Result()
 
     with pytest.raises(
@@ -974,7 +974,7 @@ def test_client_register_flow_id_output(
     patch_post(response)
 
     monkeypatch.setattr(
-        "prefect.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
+        "prefectlegacy.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
     )
 
     with set_temporary_config(
@@ -988,7 +988,7 @@ def test_client_register_flow_id_output(
 
     labels = ["test1", "test2"]
     storage = Local(tmpdir)
-    flow = prefect.Flow(
+    flow = prefectlegacy.Flow(
         name="test", storage=storage, run_config=LocalRun(labels=labels)
     )
     flow.result = flow.storage.result
@@ -1002,7 +1002,7 @@ def test_client_register_flow_id_output(
     assert flow_id == "long-id"
 
     captured = capsys.readouterr()
-    assert "Flow URL: https://cloud.prefect.io/tslug/flow/fg-id\n" in captured.out
+    assert "Flow URL: https://cloud.prefectlegacy.io/tslug/flow/fg-id\n" in captured.out
     assert f"Labels: {labels}" in captured.out
 
 
@@ -1024,7 +1024,7 @@ def test_client_register_flow_id_no_output(
     patch_post(response)
 
     monkeypatch.setattr(
-        "prefect.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
+        "prefectlegacy.client.Client.get_default_tenant_slug", MagicMock(return_value="tslug")
     )
 
     with set_temporary_config(
@@ -1035,7 +1035,7 @@ def test_client_register_flow_id_no_output(
         }
     ):
         client = Client()
-    flow = prefect.Flow(name="test", storage=prefect.storage.Local(tmpdir))
+    flow = prefectlegacy.Flow(name="test", storage=prefectlegacy.storage.Local(tmpdir))
     flow.result = flow.storage.result
 
     flow_id = client.register(
@@ -1332,7 +1332,7 @@ def test_set_flow_run_state_uses_config_queue_interval(
         # Mocking the concept of "now" so we can have consistent assertions
         now = pendulum.now("UTC")
         mock_now = MagicMock(return_value=now)
-        monkeypatch.setattr("prefect.client.client.pendulum.now", mock_now)
+        monkeypatch.setattr("prefectlegacy.client.client.pendulum.now", mock_now)
 
         result = client.set_flow_run_state(
             flow_run_id="74-salt", version=0, state=Running()
@@ -1649,7 +1649,7 @@ def test_get_cloud_url(patch_post, cloud_api):
 
     with set_temporary_config(
         {
-            "cloud.api": "http://api.prefect.io",
+            "cloud.api": "http://api.prefectlegacy.io",
             "cloud.tenant_id": TEST_TENANT_ID,
             "backend": "cloud",
         }
@@ -1657,10 +1657,10 @@ def test_get_cloud_url(patch_post, cloud_api):
         client = Client()
 
         url = client.get_cloud_url(subdirectory="flow", id="id")
-        assert url == "http://cloud.prefect.io/tslug/flow/id"
+        assert url == "http://cloud.prefectlegacy.io/tslug/flow/id"
 
         url = client.get_cloud_url(subdirectory="flow-run", id="id2")
-        assert url == "http://cloud.prefect.io/tslug/flow-run/id2"
+        assert url == "http://cloud.prefectlegacy.io/tslug/flow-run/id2"
 
 
 def test_get_cloud_url_different_regex(patch_post, cloud_api):
@@ -1677,7 +1677,7 @@ def test_get_cloud_url_different_regex(patch_post, cloud_api):
 
     with set_temporary_config(
         {
-            "cloud.api": "http://api-hello.prefect.io",
+            "cloud.api": "http://api-hello.prefectlegacy.io",
             "cloud.api_key": "key",
             "cloud.tenant_id": TEST_TENANT_ID,
             "backend": "cloud",
@@ -1686,10 +1686,10 @@ def test_get_cloud_url_different_regex(patch_post, cloud_api):
         client = Client()
 
         url = client.get_cloud_url(subdirectory="flow", id="id")
-        assert url == "http://hello.prefect.io/tslug/flow/id"
+        assert url == "http://hello.prefectlegacy.io/tslug/flow/id"
 
         url = client.get_cloud_url(subdirectory="flow-run", id="id2")
-        assert url == "http://hello.prefect.io/tslug/flow-run/id2"
+        assert url == "http://hello.prefectlegacy.io/tslug/flow-run/id2"
 
 
 def test_register_agent(cloud_api):

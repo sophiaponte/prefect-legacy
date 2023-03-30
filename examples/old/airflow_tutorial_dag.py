@@ -2,11 +2,11 @@
 
 from datetime import datetime, timedelta
 
-import prefect
-from prefect import Flow, Parameter, task
-from prefect.schedules import IntervalSchedule
-from prefect.tasks.shell import ShellTask
-from prefect.tasks.templates.jinja2 import JinjaTemplate
+import prefectlegacy
+from prefectlegacy import Flow, Parameter, task
+from prefectlegacy.schedules import IntervalSchedule
+from prefectlegacy.tasks.shell import ShellTask
+from prefectlegacy.tasks.templates.jinja2 import JinjaTemplate
 
 ## default config settings such as this can generally be set in your
 ## user config file
@@ -21,11 +21,11 @@ t2 = ShellTask(name="sleep", command="sleep 5", max_retries=3, retry_delay=retry
 
 @task(max_retries=1, retry_delay=retry_delay)
 def add_7():
-    date = prefect.context.get("scheduled_start_time", datetime.utcnow())
+    date = prefectlegacy.context.get("scheduled_start_time", datetime.utcnow())
     return date + timedelta(days=7)
 
 
-## templated command; template vars will be read from both prefect.context as well as
+## templated command; template vars will be read from both prefectlegacy.context as well as
 ## any passed kwargs to the task
 command = """
     {% for i in range(5) %}

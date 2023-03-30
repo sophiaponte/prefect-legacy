@@ -4,7 +4,7 @@ sidebarDepth: 0
 
 # ETL with Prefect
 
-In this tutorial, we'll use Prefect to improve the overall structure of the ETL workflow from the [previous tutorial](/core/tutorial/01-etl-before-prefect.html).
+In this tutorial, we'll use Prefect to improve the overall structure of the ETL workflow from the [previous tutorial](/core/tutorial/01-etl-before-prefectlegacy.html).
 
 ::: tip Follow along in the Terminal
 
@@ -70,14 +70,14 @@ def load_live_data(transformed_data):
 
 ## Leveraging Prefect
 
-Now that we have appropriately sized functions and an idea of how these functions relate to one another, let's encapsulate our workflow with Prefect.
+Now that we have appropriately sized functions and an idea of how these functions relate to one another, let's encapsulate our workflow with prefectlegacy.
 
 ### **First step**
 
-**Decorate any function that Prefect should run with `prefect.task`:**
+**Decorate any function that Prefect should run with `prefectlegacy.task`:**
 
 ```python{1-3,9,15,21,26}
-from prefect import task, Flow
+from prefectlegacy import task, Flow
 
 @task
 def extract_reference_data(...):
@@ -110,7 +110,7 @@ def load_live_data(transformed_data):
 
 ### Second step
 
-**Specify data and task dependencies within a `prefect.Flow` context:**
+**Specify data and task dependencies within a `prefectlegacy.Flow` context:**
 
 ```python
 # ...task definitions above

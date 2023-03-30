@@ -2,8 +2,8 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from prefect import context, Flow
-from prefect.storage import GitHub
+from prefectlegacy import context, Flow
+from prefectlegacy.storage import GitHub
 
 github = pytest.importorskip("github")
 
@@ -16,7 +16,7 @@ def github_client(monkeypatch):
     repo.default_branch = "main"
     repo.get_commit.return_value.sha = "mycommitsha"
     repo.get_contents.return_value.decoded_content = (
-        b"from prefect import Flow\nflow=Flow('extra')\nflow=Flow('test')"
+        b"from prefectlegacy import Flow\nflow=Flow('extra')\nflow=Flow('test')"
     )
     return client
 

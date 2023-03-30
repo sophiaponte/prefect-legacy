@@ -99,7 +99,7 @@ The container dictionary above will be changed during setup:
 [
     "/bin/sh",
     "-c",
-    "python -c 'import prefect; prefect.environments.execution.load_and_run_flow()'",
+    "python -c 'import prefectlegacy; prefectlegacy.environments.execution.load_and_run_flow()'",
 ]
 ```
 
@@ -131,9 +131,9 @@ PREFECT__CONTEXT__FLOW_FILE_PATH
 The following example will execute your Flow using the Fargate Task Environment with the provided Task specification taking advantage of resource requests. This example also makes use of an `aws_session_token` and [IAM Role for task execution](https://docs.aws.amazon.com/AmazonECS/latest/userguide/task-iam-roles.html).
 
 ```python
-from prefect import task, Flow
-from prefect.environments import FargateTaskEnvironment
-from prefect.storage import Docker
+from prefectlegacy import task, Flow
+from prefectlegacy.environments import FargateTaskEnvironment
+from prefectlegacy.storage import Docker
 
 
 @task

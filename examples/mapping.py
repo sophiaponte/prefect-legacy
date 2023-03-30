@@ -6,7 +6,7 @@ task (or tasks) to multiple inputs. To map a task, use its `.map` method
 instead of calling the task itself.
 
 ```python
-from prefect import task
+from prefectlegacy import task
 
 @task
 def add(x, y):
@@ -22,7 +22,7 @@ mapped task, you can wrap that argument in `unmapped`
 ([docs](/core/concepts/mapping.md#unmapped-inputs)).
 
 ```python
-from prefect import unmapped
+from prefectlegacy import unmapped
 
 add.map([1, 10], unmapped(2))  # [3, 12]
 ```
@@ -52,7 +52,7 @@ execution.
 See the [mapping docs](/core/concepts/mapping.md) for more information.
 """
 
-from prefect import Flow, Parameter, task, unmapped
+from prefectlegacy import Flow, Parameter, task, unmapped
 
 
 @task

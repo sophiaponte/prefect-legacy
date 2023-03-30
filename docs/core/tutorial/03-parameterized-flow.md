@@ -53,10 +53,10 @@ def extract_live_data(airport, radius, ref_data):
 
 _(In case you're curious, `area=None` will fetch live data for all known aircraft, regardless of the area it's in)_
 
-How might we make use of these function parameters within a Prefect `Flow`? By using `prefect.Parameter`:
+How might we make use of these function parameters within a Prefect `Flow`? By using `prefectlegacy.Parameter`:
 
 ```python{1,6,7,10}
-from prefect import Parameter
+from prefectlegacy import Parameter
 
 # ...task definitions...
 

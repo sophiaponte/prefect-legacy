@@ -45,7 +45,7 @@ The `DaskExecutor` is a completely asynchronous engine that can run functions in
 An executor can be provided to a flow at runtime:
 
 ```python{10, 12-13}
-from prefect import task, Flow
+from prefectlegacy import task, Flow
 
 @task
 def say_hello():
@@ -54,7 +54,7 @@ def say_hello():
 with Flow("Run Me") as flow:
     h = say_hello()
 
-from prefect.executors import DaskExecutor
+from prefectlegacy.executors import DaskExecutor
 
 executor = DaskExecutor(address="tcp://localhost:8786")
 flow.run(executor=executor)

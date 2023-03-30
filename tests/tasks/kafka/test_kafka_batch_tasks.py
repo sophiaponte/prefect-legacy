@@ -1,6 +1,6 @@
 import pytest
 from unittest import mock
-from prefect.tasks.kafka.kafka import KafkaBatchConsume, KafkaBatchProduce
+from prefectlegacy.tasks.kafka.kafka import KafkaBatchConsume, KafkaBatchProduce
 
 
 class TestKafkaBatchConsume:
@@ -14,7 +14,7 @@ class TestKafkaBatchConsume:
         with pytest.raises(TypeError):
             task.run()
 
-    @mock.patch("prefect.tasks.kafka.kafka.confluent_kafka")
+    @mock.patch("prefectlegacy.tasks.kafka.kafka.confluent_kafka")
     def test_no_messages_received(self, mock_confluent_kafka):
         mock_consumer = mock.MagicMock()
         mock_confluent_kafka.Consumer.return_value = mock_consumer
@@ -22,7 +22,7 @@ class TestKafkaBatchConsume:
         task = KafkaBatchConsume("localhost:9092", "1")
         assert task.run(topics=["topic"]) == []
 
-    @mock.patch("prefect.tasks.kafka.kafka.confluent_kafka")
+    @mock.patch("prefectlegacy.tasks.kafka.kafka.confluent_kafka")
     def test_consumer_finally_closes(self, mock_confluent_kafka):
         mock_consumer = mock.MagicMock()
         mock_confluent_kafka.Consumer.return_value = mock_consumer
@@ -31,7 +31,7 @@ class TestKafkaBatchConsume:
         task.run(topics=["topic"])
         assert mock_consumer.close.called
 
-    @mock.patch("prefect.tasks.kafka.kafka.confluent_kafka")
+    @mock.patch("prefectlegacy.tasks.kafka.kafka.confluent_kafka")
     def test_consumer_consumes_until_no_messages(self, mock_confluent_kafka):
         mock_consumer = mock.MagicMock()
         mock_message = mock.MagicMock()
@@ -65,7 +65,7 @@ class TestKafkaBatchProduce:
         task = KafkaBatchProduce("localhost:9092")
         task.run(topic="mytopic", messages=[])
 
-    @mock.patch("prefect.tasks.kafka.kafka.confluent_kafka")
+    @mock.patch("prefectlegacy.tasks.kafka.kafka.confluent_kafka")
     def test_run_with_messages(self, mock_confluent_kafka):
         task = KafkaBatchProduce("localhost:9092")
         mock_producer = mock.MagicMock()

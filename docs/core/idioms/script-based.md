@@ -39,8 +39,8 @@ First, compose your flow file and give the flow `GitHub` storage:
 ```python
 # flows/my_flow.py
 
-from prefect import task, Flow
-from prefect.storage import GitHub
+from prefectlegacy import task, Flow
+from prefectlegacy.storage import GitHub
 
 @task
 def get_data():
@@ -111,8 +111,8 @@ pip install 'prefect[gitlab]'
 You can replace `GitHub` instances in the example above with `GitLab`, use the `"GITLAB_ACCESS_TOKEN"` secret rather than `"GITHUB_ACCESS_TOKEN"`, and then you may run the example as written.
 
 ```python
-from prefect import task, Flow
-from prefect.storage import GitLab
+from prefectlegacy import task, Flow
+from prefectlegacy.storage import GitLab
 
 ...
 
@@ -135,8 +135,8 @@ pip install 'prefect[bitbucket]'
 Bitbucket storage also operates largely the same way. Replace `GitHub` with `Bitbucket` and use the `BITBUCKET_ACCESS_TOKEN` secret.  However, Bitbucket requires an additional argument: `project`.  The `flow.storage` in the above example would be declared as follows for Bitbucket storage:
 
 ```python
-from prefect import task, Flow
-from prefect.storage import Bitbucket
+from prefectlegacy import task, Flow
+from prefectlegacy.storage import Bitbucket
 
 ...
 

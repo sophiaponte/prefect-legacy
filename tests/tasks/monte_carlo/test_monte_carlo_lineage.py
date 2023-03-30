@@ -1,7 +1,7 @@
 import pytest
 import requests
 import responses
-from prefect.tasks.monte_carlo.monte_carlo_lineage import (
+from prefectlegacy.tasks.monte_carlo.monte_carlo_lineage import (
     MonteCarloCreateOrUpdateNodeWithTags,
     MonteCarloGetResources,
     MonteCarloCreateOrUpdateLineage,
@@ -44,7 +44,7 @@ def test_monte_carlo_works_with_valid_api_key():
         json={
             "data": {
                 "getUser": {
-                    "email": "marvin@prefect.io",
+                    "email": "marvin@prefectlegacy.io",
                     "firstName": "Marvin",
                     "lastName": "the Paranoid Android",
                 }
@@ -63,7 +63,7 @@ def test_monte_carlo_works_with_valid_api_key():
     assert response.json() == {
         "data": {
             "getUser": {
-                "email": "marvin@prefect.io",
+                "email": "marvin@prefectlegacy.io",
                 "firstName": "Marvin",
                 "lastName": "the Paranoid Android",
             }

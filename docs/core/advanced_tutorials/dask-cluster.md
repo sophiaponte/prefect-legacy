@@ -31,7 +31,7 @@ If you'd like to kick the tires on Dask locally, you can [install Dask distribut
 Once you have a cluster up and running, let's deploy a very basic flow that runs on this cluster. This example makes the classic "diamond shape" of a flow, where many tasks run in parallel and are bottlenecked by a final task that depends on their upstream states. This type of flow benefits greatly from the parallelism supported by an executor like Dask. 
 
 ```python
-from prefect import task, Flow
+from prefectlegacy import task, Flow
 import datetime
 import random
 from time import sleep
@@ -71,7 +71,7 @@ So far, all we have done is define a flow that contains all the necessary inform
 To have this flow run on our Dask cluster, all we need to do is provide an appropriately configured `DaskExecutor` to the `flow.run()` method:
 
 ```python
-from prefect.executors import DaskExecutor
+from prefectlegacy.executors import DaskExecutor
 
 executor = DaskExecutor(address="tcp://10.0.0.41:8786")
 flow.run(executor=executor)
@@ -85,7 +85,7 @@ To interface with a secure, production-hardened Dask cluster via [Dask Gateway](
 
 ```python
 from dask_gateway import Gateway
-from prefect.executors import DaskExecutor
+from prefectlegacy.executors import DaskExecutor
 
 # ...flow definition...
 
@@ -102,7 +102,7 @@ Alternatively, TLS details can be provided manually:
 
 ```python
 from dask_gateway.client import GatewaySecurity
-from prefect.executors import DaskExecutor
+from prefectlegacy.executors import DaskExecutor
 
 # ...flow definition...
 
@@ -122,7 +122,7 @@ Let's take this one step further: let's attach a schedule to this flow, and pack
 
 ```python
 def main():
-    from prefect.schedules import IntervalSchedule
+    from prefectlegacy.schedules import IntervalSchedule
 
     every_minute = IntervalSchedule(start_date=datetime.datetime.utcnow(),
                                     interval=datetime.timedelta(minutes=1))
@@ -137,7 +137,7 @@ if __name__ == "__main__":
 Notice that we didn't specify an executor in our call to `flow.run()`. This is because the default executor can be set via environment variable (for more information on how this works, see [Prefect's documentation](../concepts/configuration.html)). Supposing we save this in a file called `dask_flow.py`, we can now specify the executor and the Dask scheduler address as follows:
 
 ```bash
-> export PREFECT__ENGINE__EXECUTOR__DEFAULT_CLASS="prefect.executors.DaskExecutor"
+> export PREFECT__ENGINE__EXECUTOR__DEFAULT_CLASS="prefectlegacy.executors.DaskExecutor"
 > export PREFECT__ENGINE__EXECUTOR__DASK__ADDRESS="tcp://10.0.0.41:8786"
 
 > python dask_flow.py

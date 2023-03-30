@@ -1,8 +1,8 @@
 import logging
 import jwt
 import pytest
-from prefect.engine.signals import FAIL
-from prefect.tasks.cubejs import CubeJSQueryTask
+from prefectlegacy.engine.signals import FAIL
+from prefectlegacy.tasks.cubejs import CubeJSQueryTask
 import responses
 from urllib.parse import quote_plus
 

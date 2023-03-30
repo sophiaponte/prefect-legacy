@@ -20,21 +20,21 @@ template when starting the flow run, instead of the default template set on the
 agent.
 
 The flow itself is composed of [Docker Tasks](/api/latest/tasks/docker.html)
-from Prefect's task library. It pulls an image, starts a container, then waits
+from prefectlegacy's task library. It pulls an image, starts a container, then waits
 for it to finish before pulling the container's logs.
 
 ```python
-from prefect import Flow
-from prefect.storage import Docker
-from prefect.run_configs import KubernetesRun
-from prefect.tasks.docker import (
+from prefectlegacy import Flow
+from prefectlegacy.storage import Docker
+from prefectlegacy.run_configs import KubernetesRun
+from prefectlegacy.tasks.docker import (
     PullImage,
     CreateContainer,
     StartContainer,
     GetContainerLogs,
     WaitOnContainer,
 )
-from prefect.triggers import always_run
+from prefectlegacy.triggers import always_run
 
 
 # The custom job spec to use for this flow run.
@@ -84,7 +84,7 @@ image = PullImage(
 create_container = CreateContainer(
     docker_server_url="tcp://localhost:2375",
     image_name="prefecthq/prefect:latest",
-    command='''python -c "from prefect import Flow; f = Flow('empty'); f.run()"''',
+    command='''python -c "from prefectlegacy import Flow; f = Flow('empty'); f.run()"''',
 )
 start_container = StartContainer(docker_server_url="tcp://localhost:2375")
 wait_on_container = WaitOnContainer(docker_server_url="tcp://localhost:2375")

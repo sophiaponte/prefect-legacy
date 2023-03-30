@@ -29,7 +29,7 @@ The functionality here is experimental, and may change between versions without 
 ---
 
  ## TenantView
- <div class='class-sig' id='prefect-backend-tenant-tenantview'><p class="prefect-sig">class </p><p class="prefect-class">prefect.backend.tenant.TenantView</p>(tenant_id, name, slug)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/backend/tenant.py#L9">[source]</a></span></div>
+ <div class='class-sig' id='prefect-backend-tenant-tenantview'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.backend.tenant.TenantView</p>(tenant_id, name, slug)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/backend/tenant.py#L9">[source]</a></span></div>
 
 A view of tenant data stored in the Prefect API.
 
@@ -41,9 +41,9 @@ EXPERIMENTAL: This interface is experimental and subject to change
 
 |methods: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |:----|
- | <div class='method-sig' id='prefect-backend-tenant-tenantview-from-current-tenant'><p class="prefect-class">prefect.backend.tenant.TenantView.from_current_tenant</p>()<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/backend/tenant.py#L132">[source]</a></span></div>
+ | <div class='method-sig' id='prefect-backend-tenant-tenantview-from-current-tenant'><p class="prefect-class">prefectlegacy.backend.tenant.TenantView.from_current_tenant</p>()<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/backend/tenant.py#L132">[source]</a></span></div>
 <p class="methods">Get an instance of this class filled with information by querying for the tenant id set in the Prefect Client<br><br>**Returns**:     A populated `TenantView` instance</p>|
- | <div class='method-sig' id='prefect-backend-tenant-tenantview-from-tenant-id'><p class="prefect-class">prefect.backend.tenant.TenantView.from_tenant_id</p>(tenant_id)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/backend/tenant.py#L116">[source]</a></span></div>
+ | <div class='method-sig' id='prefect-backend-tenant-tenantview-from-tenant-id'><p class="prefect-class">prefectlegacy.backend.tenant.TenantView.from_tenant_id</p>(tenant_id)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/backend/tenant.py#L116">[source]</a></span></div>
 <p class="methods">Get an instance of this class filled with information by querying for the given tenant id<br><br>**Args**:     <ul class="args"><li class="args">`tenant_id`: the tenant to lookup</li></ul> **Returns**:     A populated `TenantView` instance</p>|
 
 ---

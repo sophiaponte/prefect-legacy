@@ -23,13 +23,13 @@ This document is the first **Prefect Improvement Notice**: a proposed change to 
 
 ### Why "PIN" and not "ADR"?
 
-"PIN" - Prefect Improvement Notice - follows the example set by Python's PEP. It's quick and easy to say, requiring just one syllable, and while it is a common word, its all-caps variant is not commonly used for anything else in Prefect. It has a nice verb form as well: "PINNED".
+"PIN" - Prefect Improvement Notice - follows the example set by Python's PEP. It's quick and easy to say, requiring just one syllable, and while it is a common word, its all-caps variant is not commonly used for anything else in prefectlegacy. It has a nice verb form as well: "PINNED".
 
 "ADR" is an acronym only an engineer could love. It combines three non-harmonious syllables, making it difficult and time-consuming to remember and pronounce: ("Aiy. Dee. Are."). Furthermore, the acronym ADR is already far more widely known as an "American Depository Receipt".
 
 ## Proposal
 
-We will adopt PINs for proposing, debating, and ultimately accepting or rejecting modifications to Prefect. PINs will be sequentially numbered and not reuse numbers. They will be published as part of Prefect's documentation, providing an architectural narrative of the project's history.
+We will adopt PINs for proposing, debating, and ultimately accepting or rejecting modifications to prefectlegacy. PINs will be sequentially numbered and not reuse numbers. They will be published as part of Prefect's documentation, providing an architectural narrative of the project's history.
 
 ### Format
 

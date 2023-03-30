@@ -1,7 +1,7 @@
 import pytest
 
-from prefect import Flow, Task, task
-from prefect.utilities import edges, tasks
+from prefectlegacy import Flow, Task, task
+from prefectlegacy.utilities import edges, tasks
 
 ALL_ANNOTATIONS = [edges.unmapped, edges.mapped, edges.flatten]
 

@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 import pytest
 from pyspark.sql import SparkSession
 
-from prefect.tasks.sodaspark import SodaSparkScan
+from prefectlegacy.tasks.sodaspark import SodaSparkScan
 
 
 class TestSodaSparkScan:

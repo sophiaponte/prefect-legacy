@@ -4,22 +4,22 @@ import pytest
 
 dulwich = pytest.importorskip("dulwich")
 
-from prefect import context, Flow
-from prefect.storage import Git
+from prefectlegacy import context, Flow
+from prefectlegacy.storage import Git
 
 
 @pytest.fixture
 def fake_temp_repo(monkeypatch):
     temp_repo = MagicMock()
     temp_repo.return_value.__enter__.return_value.temp_dir.name = "/tmp/test/"
-    monkeypatch.setattr("prefect.storage.git.TemporaryGitRepo", temp_repo)
+    monkeypatch.setattr("prefectlegacy.storage.git.TemporaryGitRepo", temp_repo)
     return temp_repo
 
 
 @pytest.fixture
 def fake_extract_flow_from_file(monkeypatch):
     fake_extract_flow = MagicMock()
-    monkeypatch.setattr("prefect.storage.git.extract_flow_from_file", fake_extract_flow)
+    monkeypatch.setattr("prefectlegacy.storage.git.extract_flow_from_file", fake_extract_flow)
     return fake_extract_flow
 
 

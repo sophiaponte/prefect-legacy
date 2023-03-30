@@ -4,18 +4,18 @@ import time
 
 import pytest
 
-import prefect
-import prefect.executors.dask
-from prefect.exceptions import PrefectSignal
-from prefect.core import Edge, Flow, Parameter, Task
-from prefect.engine.flow_runner import FlowRunner
-from prefect.engine.result import Result, NoResult
-from prefect.engine.state import Mapped, Pending, Retrying, Success
-from prefect.utilities.debug import raise_on_exception
-from prefect.utilities.tasks import task
-from prefect.utilities.edges import unmapped, flatten, mapped
-from prefect.tasks.core.constants import Constant
-from prefect.engine.signals import SKIP, TRIGGERFAIL
+import prefectlegacy
+import prefectlegacy.executors.dask
+from prefectlegacy.exceptions import prefectlegacySignal
+from prefectlegacy.core import Edge, Flow, Parameter, Task
+from prefectlegacy.engine.flow_runner import FlowRunner
+from prefectlegacy.engine.result import Result, NoResult
+from prefectlegacy.engine.state import Mapped, Pending, Retrying, Success
+from prefectlegacy.utilities.debug import raise_on_exception
+from prefectlegacy.utilities.tasks import task
+from prefectlegacy.utilities.edges import unmapped, flatten, mapped
+from prefectlegacy.tasks.core.constants import Constant
+from prefectlegacy.engine.signals import SKIP, TRIGGERFAIL
 
 
 class AddTask(Task):
@@ -232,8 +232,8 @@ def test_map_failures_dont_leak_out(executor):
     assert isinstance(m.map_states, list)
     assert len(m.result) == 3
     assert m.result[1:] == [1, 0.5]
-    assert isinstance(m.result[0], prefect.engine.signals.TRIGGERFAIL)
-    assert isinstance(m.map_states[0], prefect.engine.state.TriggerFailed)
+    assert isinstance(m.result[0], prefectlegacy.engine.signals.TRIGGERFAIL)
+    assert isinstance(m.map_states[0], prefectlegacy.engine.state.TriggerFailed)
 
 
 @pytest.mark.parametrize(
@@ -245,7 +245,7 @@ def test_map_skips_return_exception_as_result(executor):
     @task
     def add(x):
         if x == 1:
-            raise prefect.engine.signals.SKIP("One is no good")
+            raise prefectlegacy.engine.signals.SKIP("One is no good")
         else:
             return x + 1
 
@@ -259,8 +259,8 @@ def test_map_skips_return_exception_as_result(executor):
     assert len(m.result) == 3
     assert m.result[1:] == [3, 4]
     assert isinstance(m.result[0], BaseException)
-    assert isinstance(m.result[0], prefect.engine.signals.SKIP)
-    assert isinstance(m.map_states[0], prefect.engine.state.Skipped)
+    assert isinstance(m.result[0], prefectlegacy.engine.signals.SKIP)
+    assert isinstance(m.map_states[0], prefectlegacy.engine.state.Skipped)
 
 
 @pytest.mark.parametrize(
@@ -269,7 +269,7 @@ def test_map_skips_return_exception_as_result(executor):
 def test_upstream_skip_signals_are_handled_properly(executor):
     @task
     def skip_task():
-        raise prefect.engine.signals.SKIP("Not going to run.")
+        raise prefectlegacy.engine.signals.SKIP("Not going to run.")
 
     @task
     def add(x):
@@ -300,7 +300,7 @@ def test_upstream_skipped_states_are_handled_properly(executor):
         res = add.map(skip_task)
 
     s = f.run(
-        executor=executor, task_states={skip_task: prefect.engine.state.Skipped()}
+        executor=executor, task_states={skip_task: prefectlegacy.engine.state.Skipped()}
     )
     m = s.result[res]
     assert s.is_successful()
@@ -316,7 +316,7 @@ def test_map_skips_dont_leak_out(executor):
     @task
     def add(x):
         if x == 1:
-            raise prefect.engine.signals.SKIP("One is no good")
+            raise prefectlegacy.engine.signals.SKIP("One is no good")
         else:
             return x + 1
 
@@ -331,7 +331,7 @@ def test_map_skips_dont_leak_out(executor):
     assert m.result == [None, 4, 5]
     assert m.map_states[0].result is None
     assert m.map_states[0]._result == NoResult
-    assert isinstance(m.map_states[0], prefect.engine.state.Skipped)
+    assert isinstance(m.map_states[0], prefectlegacy.engine.state.Skipped)
 
 
 @pytest.mark.parametrize(
@@ -482,7 +482,7 @@ def test_map_tracks_non_mapped_upstream_tasks(executor):
     def zeros():
         return [0, 0, 0]
 
-    @task(trigger=prefect.triggers.all_failed)
+    @task(trigger=prefectlegacy.triggers.all_failed)
     def register(x):
         return True
 
@@ -494,7 +494,7 @@ def test_map_tracks_non_mapped_upstream_tasks(executor):
     assert all(sub.is_failed() for sub in s.result[res].map_states)
     assert all(
         [
-            isinstance(sub, prefect.engine.state.TriggerFailed)
+            isinstance(sub, prefectlegacy.engine.state.TriggerFailed)
             for sub in s.result[res].map_states
         ]
     )
@@ -506,12 +506,12 @@ def test_map_tracks_non_mapped_upstream_tasks(executor):
 def test_map_preserves_flowrunners_run_context(executor):
     @task
     def whats_id():
-        return prefect.context.get("special_id")
+        return prefectlegacy.context.get("special_id")
 
     with Flow(name="test-context-preservation") as flow:
         result = whats_id.map(upstream_tasks=[list(range(10))])
 
-    with prefect.context(special_id="FOOBAR"):
+    with prefectlegacy.context(special_id="FOOBAR"):
         runner = FlowRunner(flow=flow)
         flow_state = runner.run(return_tasks=[result])
 
@@ -575,7 +575,7 @@ def test_map_can_handle_nonkeyed_mapped_upstreams_and_mapped_args(executor):
 def test_map_behaves_like_zip_with_differing_length_results(executor):
     "Tests that map stops combining elements after the smallest list is exhausted."
 
-    @prefect.task
+    @prefectlegacy.task
     def ll(n):
         return list(range(n))
 
@@ -601,7 +601,7 @@ def test_map_allows_retries_2(executor):
     Another test of mapping and retries
     """
 
-    @prefect.task
+    @prefectlegacy.task
     def ll():
         return [0, 1, 2]
 
@@ -635,15 +635,15 @@ def test_reduce_task_honors_trigger_across_all_mapped_states(executor):
     and one Failure. The `take_sum` should fail its trigger check.
     """
 
-    @prefect.task
+    @prefectlegacy.task
     def ll():
         return [0, 1]
 
-    @prefect.task
+    @prefectlegacy.task
     def div(x):
         return 1 / x
 
-    @prefect.task
+    @prefectlegacy.task
     def take_sum(x):
         return sum(x)
 
@@ -654,7 +654,7 @@ def test_reduce_task_honors_trigger_across_all_mapped_states(executor):
     state = f.run(executor=executor)
     assert state.is_failed()
     assert state.result[s].is_failed()
-    assert isinstance(state.result[s], prefect.engine.state.TriggerFailed)
+    assert isinstance(state.result[s], prefectlegacy.engine.state.TriggerFailed)
 
 
 @pytest.mark.parametrize(
@@ -666,15 +666,15 @@ def test_reduce_task_properly_applies_trigger_across_all_mapped_states(executor)
     and one Retrying. The `take_sum` should fail its upstream finished check.
     """
 
-    @prefect.task
+    @prefectlegacy.task
     def ll():
         return [0, 1]
 
-    @prefect.task(max_retries=5, retry_delay=datetime.timedelta(hours=1))
+    @prefectlegacy.task(max_retries=5, retry_delay=datetime.timedelta(hours=1))
     def div(x):
         return 1 / x
 
-    @prefect.task
+    @prefectlegacy.task
     def take_sum(x):
         return sum(x)
 
@@ -697,15 +697,15 @@ def test_reduce_task_properly_applies_trigger_across_all_mapped_states(executor)
 def test_reduce_task_properly_applies_trigger_across_all_mapped_states_for_deep_pipelines(
     executor,
 ):
-    @prefect.task
+    @prefectlegacy.task
     def ll():
         return [0, 1]
 
-    @prefect.task(max_retries=5, retry_delay=datetime.timedelta(hours=1))
+    @prefectlegacy.task(max_retries=5, retry_delay=datetime.timedelta(hours=1))
     def div(x):
         return 1 / x
 
-    @prefect.task
+    @prefectlegacy.task
     def take_sum(x):
         return sum(x)
 
@@ -722,15 +722,15 @@ def test_reduce_task_properly_applies_trigger_across_all_mapped_states_for_deep_
     "executor", ["local", "sync", "mproc", "mthread"], indirect=True
 )
 def test_task_map_downstreams_handle_single_failures(executor):
-    @prefect.task
+    @prefectlegacy.task
     def ll():
         return [1, 0, 3]
 
-    @prefect.task
+    @prefectlegacy.task
     def div(x):
         return 1 / x
 
-    @prefect.task
+    @prefectlegacy.task
     def append_four(l):
         return l + [4]
 
@@ -742,10 +742,10 @@ def test_task_map_downstreams_handle_single_failures(executor):
     state = f.run(executor=executor)
     assert state.is_failed()
     assert len(state.result[dived].result) == 3
-    assert isinstance(state.result[big_list], prefect.engine.state.TriggerFailed)
+    assert isinstance(state.result[big_list], prefectlegacy.engine.state.TriggerFailed)
     assert state.result[again].result[0::2] == [1, 3]
     assert isinstance(
-        state.result[again].map_states[1], prefect.engine.state.TriggerFailed
+        state.result[again].map_states[1], prefectlegacy.engine.state.TriggerFailed
     )
 
 
@@ -753,15 +753,15 @@ def test_task_map_downstreams_handle_single_failures(executor):
     "executor", ["local", "sync", "mproc", "mthread"], indirect=True
 )
 def test_task_map_can_be_passed_to_upstream_with_and_without_map(executor):
-    @prefect.task
+    @prefectlegacy.task
     def ll():
         return [1, 2, 3]
 
-    @prefect.task
+    @prefectlegacy.task
     def add(x):
         return x + 1
 
-    @prefect.task
+    @prefectlegacy.task
     def append_four(l):
         return l + [4]
 
@@ -782,11 +782,11 @@ def test_task_map_can_be_passed_to_upstream_with_and_without_map(executor):
     "executor", ["local", "sync", "mproc", "mthread"], indirect=True
 )
 def test_task_map_doesnt_assume_purity_of_functions(executor):
-    @prefect.task
+    @prefectlegacy.task
     def ll():
         return [1, 1, 1]
 
-    @prefect.task
+    @prefectlegacy.task
     def zz(s):
         return round(random.random(), 6)
 
@@ -802,15 +802,15 @@ def test_task_map_doesnt_assume_purity_of_functions(executor):
     "executor", ["local", "sync", "mproc", "mthread"], indirect=True
 )
 def test_map_reduce(executor):
-    @prefect.task
+    @prefectlegacy.task
     def numbers():
         return [1, 2, 3]
 
-    @prefect.task
+    @prefectlegacy.task
     def add(x):
         return x + 1
 
-    @prefect.task
+    @prefectlegacy.task
     def reduce_sum(x):
         return sum(x)
 
@@ -826,15 +826,15 @@ def test_map_reduce(executor):
     "executor", ["local", "sync", "mproc", "mthread"], indirect=True
 )
 def test_map_over_map_and_unmapped(executor):
-    @prefect.task
+    @prefectlegacy.task
     def numbers():
         return [1, 2, 3]
 
-    @prefect.task
+    @prefectlegacy.task
     def add(x):
         return x + 1
 
-    @prefect.task
+    @prefectlegacy.task
     def add_two(x, y):
         return x + y
 
@@ -849,7 +849,7 @@ def test_map_over_map_and_unmapped(executor):
 
 @pytest.mark.parametrize("x,y,out", [(1, 2, 3), ([0, 2], [1, 7], [0, 2, 1, 7])])
 def test_task_map_with_all_inputs_unmapped(x, y, out):
-    @prefect.task
+    @prefectlegacy.task
     def add(x, y):
         return x + y
 
@@ -875,11 +875,11 @@ def test_task_map_with_no_upstream_results_and_a_mapped_state(executor):
     Note that upstream results will be hydrated from remote locations when running with a Cloud TaskRunner.
     """
 
-    @prefect.task
+    @prefectlegacy.task
     def numbers():
         return [1, 2, 3]
 
-    @prefect.task
+    @prefectlegacy.task
     def identity(x):
         return x
 
@@ -905,7 +905,7 @@ def test_task_map_with_no_upstream_results_and_a_mapped_state(executor):
     "executor", ["local", "sync", "mproc", "mthread"], indirect=True
 )
 def test_unmapped_on_mapped(executor):
-    @prefect.task
+    @prefectlegacy.task
     def add_one(x):
         if isinstance(x, list):
             return x + x
@@ -928,11 +928,11 @@ def test_all_tasks_only_called_once(capsys, executor):
     See https://github.com/PrefectHQ/prefect/issues/556
     """
 
-    @prefect.task
+    @prefectlegacy.task
     def my_list():
         return list(range(5))
 
-    @prefect.task
+    @prefectlegacy.task
     def add_one(x):
         print("adding one to {}".format(x))
         return x + 1
@@ -951,7 +951,7 @@ def test_all_tasks_only_called_once(capsys, executor):
 
 
 def test_mapping_over_constants():
-    @prefect.task
+    @prefectlegacy.task
     def add_one(x):
         return x + 1
 
@@ -966,13 +966,13 @@ def test_mapping_over_constants():
 
 class TestLooping:
     def test_looping_works_with_mapping(self):
-        @prefect.task
+        @prefectlegacy.task
         def my_task(i):
-            if prefect.context.get("task_loop_count", 1) < 3:
-                raise prefect.engine.signals.LOOP(
-                    result=prefect.context.get("task_loop_result", i) + 3
+            if prefectlegacy.context.get("task_loop_count", 1) < 3:
+                raise prefectlegacy.engine.signals.LOOP(
+                    result=prefectlegacy.context.get("task_loop_result", i) + 3
                 )
-            return prefect.context.get("task_loop_result")
+            return prefectlegacy.context.get("task_loop_result")
 
         with Flow("looping-mapping") as flow:
             output = my_task.map(i=[1, 20])
@@ -991,22 +991,22 @@ class TestLooping:
         def handler(task, old, new):
             state_history.append(new)
 
-        @prefect.task(
+        @prefectlegacy.task(
             max_retries=1,
             retry_delay=datetime.timedelta(seconds=0),
             state_handlers=[handler],
         )
         def my_task(i):
-            if prefect.context.get("task_loop_count", 1) < 3:
-                raise prefect.engine.signals.LOOP(
-                    result=prefect.context.get("task_loop_result", i) + 3
+            if prefectlegacy.context.get("task_loop_count", 1) < 3:
+                raise prefectlegacy.engine.signals.LOOP(
+                    result=prefectlegacy.context.get("task_loop_result", i) + 3
                 )
             if (
-                prefect.context.get("task_loop_count", 1) == 3
-                and prefect.context.get("task_run_count", 0) <= 1
+                prefectlegacy.context.get("task_loop_count", 1) == 3
+                and prefectlegacy.context.get("task_run_count", 0) <= 1
             ):
                 raise ValueError("Can't do it")
-            return prefect.context.get("task_loop_result")
+            return prefectlegacy.context.get("task_loop_result")
 
         with Flow("looping-mapping") as flow:
             output = my_task.map(i=[1, 20])
@@ -1114,7 +1114,7 @@ class TestFlatMap:
             nested2 = nest(flatten(nested))
             x = a.map(flatten(nested2))
 
-        from prefect.utilities.debug import raise_on_exception
+        from prefectlegacy.utilities.debug import raise_on_exception
 
         with raise_on_exception():
             s = f.run(executor=executor)
@@ -1221,7 +1221,7 @@ class TestFlatMap:
             z = a.map(flatten(nested))
 
         state = flow.run(executor=executor)
-        if not isinstance(executor, prefect.executors.dask.DaskExecutor):
+        if not isinstance(executor, prefectlegacy.executors.dask.DaskExecutor):
             # When multiprocessing with Dask, caplog fails
             assert any(
                 [

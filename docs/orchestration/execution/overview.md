@@ -19,7 +19,7 @@ Executing flows using the Prefect API is accomplished through two powerful abstr
 To attach storage to your Flows, provide your storage object at initialization:
 
 ```python
-from prefect.storage import Docker
+from prefectlegacy.storage import Docker
 
 f = Flow("example-storage", storage=Docker(registry_url="prefecthq/storage-example"))
 ```
@@ -27,7 +27,7 @@ f = Flow("example-storage", storage=Docker(registry_url="prefecthq/storage-examp
 Or assign it directly:
 
 ```python
-from prefect.storage import Docker
+from prefectlegacy.storage import Docker
 
 f = Flow("example-storage")
 f.storage = Docker(registry_url="prefecthq/storage-example")
@@ -36,8 +36,8 @@ f.storage = Docker(registry_url="prefecthq/storage-example")
 When you register your flow with the Prefect API the storage object attached to the flow will be built. At this step the flow is serialized to byte code and placed inside of the storage. For added convenience, `flow.register` will accept arbitrary keyword arguments which will then be passed to the initialization method of your configured default storage class (which is `Local` by default). The following code will actually pass the `registry_url` to the `Docker` Storage object for you at registration-time and push that image to your specified registry:
 
 ```python
-from prefect import Flow
-from prefect.storage import Docker
+from prefectlegacy import Flow
+from prefectlegacy.storage import Docker
 
 f = Flow("example-easy-storage")
 f.storage = Docker()
@@ -50,7 +50,7 @@ f.register("My First Project", registry_url="prefecthq/storage-example")
 You are also able to optionally build your storage separate from the `register` command and specify that you do not want to build it again at registration-time:
 
 ```python
-from prefect.storage import Docker
+from prefectlegacy.storage import Docker
 
 f = Flow("example-storage")
 f.storage = Docker(registry_url="prefecthq/storage-example")
@@ -75,8 +75,8 @@ executor to every Flow you create. To specify a different environment, provide
 it to your Flow at initialization:
 
 ```python
-from prefect.executors import DaskExecutor
-from prefect.environments import LocalEnvironment
+from prefectlegacy.executors import DaskExecutor
+from prefectlegacy.environments import LocalEnvironment
 
 f = Flow("example-env", environment=LocalEnvironment(executor=DaskExecutor()))
 ```
@@ -84,8 +84,8 @@ f = Flow("example-env", environment=LocalEnvironment(executor=DaskExecutor()))
 or assign it directly:
 
 ```python
-from prefect.executors import DaskExecutor
-from prefect.environments import LocalEnvironment
+from prefectlegacy.executors import DaskExecutor
+from prefectlegacy.environments import LocalEnvironment
 
 f = Flow("example-env")
 f.environment = LocalEnvironment(executor=DaskExecutor())
@@ -108,8 +108,8 @@ run on a Kubernetes cluster, gathers information about current resource usage.
 We can use this to track resource usage both before and after a Flow run.
 
 ```python
-from prefect import Flow, task
-from prefect.environments import LocalEnvironment
+from prefectlegacy import Flow, task
+from prefectlegacy.environments import LocalEnvironment
 
 
 # Report cluster metrics that we will use before and after Flow run
@@ -157,14 +157,14 @@ Environments expose a configurable list of `labels`, allowing you to label your 
 An Agent's labels must be a superset of the labels specified on a Flow's environment. This means that if a Flow's environment labels are specified as `["dev"]` and an Agent is running with labels set to `["dev", "staging"]`, the agent will run that Flow because the _dev_ label is a subset of the labels provided to the Agent.
 
 ```python
-from prefect.environments import LocalEnvironment
+from prefectlegacy.environments import LocalEnvironment
 
 f = Flow("example-label")
 f.environment = LocalEnvironment(labels=["dev"])
 ```
 
 ```python
-from prefect.agent.local import LocalAgent
+from prefectlegacy.agent.local import LocalAgent
 
 LocalAgent(labels=["dev", "staging"]).start()
 
@@ -174,14 +174,14 @@ LocalAgent(labels=["dev", "staging"]).start()
 On the other hand if you register a flow that has environment labels set to `["dev", "staging"]` and run an Agent with the labels `["dev"]` then it will not pick up the flow because there exists labels in the environment which were not provided to the agent.
 
 ```python
-from prefect.environments import LocalEnvironment
+from prefectlegacy.environments import LocalEnvironment
 
 f = Flow("example-label")
 f.environment = LocalEnvironment(labels=["dev", "staging"])
 ```
 
 ```python
-from prefect.agent.local import LocalAgent
+from prefectlegacy.agent.local import LocalAgent
 
 LocalAgent(labels=["dev"]).start()
 

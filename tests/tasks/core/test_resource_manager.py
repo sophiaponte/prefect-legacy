@@ -1,12 +1,12 @@
 import pytest
 from unittest.mock import MagicMock
 
-import prefect
-from prefect import Flow, task, Task
-from prefect.core import Edge
-from prefect.engine.state import Success, Failed, Skipped, Pending
-from prefect.engine import signals
-from prefect.tasks.core.resource_manager import (
+import prefectlegacy
+from prefectlegacy import Flow, task, Task
+from prefectlegacy.core import Edge
+from prefectlegacy.engine.state import Success, Failed, Skipped, Pending
+from prefectlegacy.engine import signals
+from prefectlegacy.tasks.core.resource_manager import (
     ResourceManager,
     resource_manager,
     resource_cleanup_trigger,
@@ -100,13 +100,13 @@ def test_resource_manager_sets_and_clears_context():
     with Flow("test"):
         m1 = manager(1)
         m2 = manager(2)
-        assert "resource" not in prefect.context
+        assert "resource" not in prefectlegacy.context
         with m1:
-            assert prefect.context["resource"] is m1
+            assert prefectlegacy.context["resource"] is m1
             with m2:
-                assert prefect.context["resource"] is m2
-            assert prefect.context["resource"] is m1
-        assert "resource" not in prefect.context
+                assert prefectlegacy.context["resource"] is m2
+            assert prefectlegacy.context["resource"] is m1
+        assert "resource" not in prefectlegacy.context
 
 
 def test_resource_manager_errors_no_flow_in_context():

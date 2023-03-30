@@ -4,9 +4,9 @@ import textwrap
 
 import pytest
 
-from prefect import Flow
-from prefect.engine.results import LocalResult
-from prefect.storage import Local
+from prefectlegacy import Flow
+from prefectlegacy.engine.results import LocalResult
+from prefectlegacy.storage import Local
 
 
 def test_create_local_storage():
@@ -57,7 +57,7 @@ def test_add_flow_to_storage(tmpdir):
 
 
 def test_add_flow_file_to_storage(tmpdir):
-    contents = """from prefect import Flow\nf=Flow('test-flow')"""
+    contents = """from prefectlegacy import Flow\nf=Flow('test-flow')"""
 
     full_path = os.path.join(tmpdir, "flow.py")
 
@@ -103,7 +103,7 @@ def test_get_flow_returns_flow(tmpdir):
 def test_get_flow_from_file_returns_flow(tmpdir):
     contents = textwrap.dedent(
         """
-        from prefect import Flow
+        from prefectlegacy import Flow
         f1 = Flow('flow-1')
         f2 = Flow('flow-2')
         """

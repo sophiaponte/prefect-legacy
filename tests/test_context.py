@@ -6,10 +6,10 @@ from typing import Any
 
 import pytest
 
-import prefect
-from prefect import context
-from prefect.configuration import Config
-from prefect.utilities.context import Context
+import prefectlegacy
+from prefectlegacy import context
+from prefectlegacy.configuration import Config
+from prefectlegacy.utilities.context import Context
 
 
 def test_context_sets_variables_inside_context_manager():
@@ -121,7 +121,7 @@ def test_modify_context_by_calling_update_inside_contextmanager():
 def test_context_loads_values_from_config(monkeypatch):
     subsection = Config(password="1234")
     config = Config(context=Config(subsection=subsection, key1="val1", key2="val2"))
-    monkeypatch.setattr(prefect.utilities.context, "config", config)
+    monkeypatch.setattr(prefectlegacy.utilities.context, "config", config)
 
     fresh_context = Context(key2="new")
     assert "subsection" in fresh_context
@@ -133,7 +133,7 @@ def test_context_loads_values_from_config(monkeypatch):
 def test_context_loads_secrets_from_config(monkeypatch):
     secrets_dict = Config(password="1234")
     config = Config(context=Config(secrets=secrets_dict))
-    monkeypatch.setattr(prefect.utilities.context, "config", config)
+    monkeypatch.setattr(prefectlegacy.utilities.context, "config", config)
     fresh_context = Context()
     assert "secrets" in fresh_context
     assert fresh_context.secrets == secrets_dict
@@ -146,7 +146,7 @@ def test_context_contextmanager_prioritizes_new_keys_even_on_context_exit(monkey
     context, and the constructor prioritizing `config.context` over explicit
     values."""
     config = Config(context=Config(my_key="fizz"))
-    monkeypatch.setattr(prefect.utilities.context, "config", config)
+    monkeypatch.setattr(prefectlegacy.utilities.context, "config", config)
 
     context = Context()
     assert context.my_key == "fizz"
@@ -161,8 +161,8 @@ def test_context_contextmanager_prioritizes_new_keys_even_on_context_exit(monkey
 
 
 def test_context_contextmanager_prioritizes_new_config_keys():
-    with prefect.context({"config": {"cloud": {"send_flow_run_logs": "FOO"}}}):
-        assert prefect.context.config.cloud.send_flow_run_logs == "FOO"
+    with prefectlegacy.context({"config": {"cloud": {"send_flow_run_logs": "FOO"}}}):
+        assert prefectlegacy.context.config.cloud.send_flow_run_logs == "FOO"
 
 
 def test_context_init_prioritizes_new_config_keys():
@@ -182,9 +182,9 @@ def test_contexts_are_thread_safe():
 
     def get_context_in_thread(q, id, delay=0):
         time.sleep(delay)
-        with prefect.context(x=id):
+        with prefectlegacy.context(x=id):
             time.sleep(delay)
-            q.put(prefect.context.x)
+            q.put(prefectlegacy.context.x)
             time.sleep(delay)
 
     threads = []
@@ -210,5 +210,5 @@ def test_contexts_are_thread_safe():
 def test_context_raises_informative_error_if_pickled():
     c = Context()
 
-    with pytest.raises(TypeError, match="prefect.context"):
+    with pytest.raises(TypeError, match="prefectlegacy.context"):
         cloudpickle.dumps(c)

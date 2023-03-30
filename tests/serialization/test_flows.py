@@ -2,10 +2,10 @@ import datetime
 
 import pytest
 
-import prefect
-from prefect.core import Edge, Flow, Parameter, Task
-from prefect.serialization.flow import FlowSchema
-from prefect.serialization.task import ParameterSchema
+import prefectlegacy
+from prefectlegacy.core import Edge, Flow, Parameter, Task
+from prefectlegacy.serialization.flow import FlowSchema
+from prefectlegacy.serialization.task import ParameterSchema
 
 
 def test_serialize_empty_dict():
@@ -42,7 +42,7 @@ def test_serialize_flow_sorts_nested_schemas():
 
 
 def test_serialize_flow_sorts_by_key():
-    @prefect.task()
+    @prefectlegacy.task()
     def task1(p1, p2, p3, p4):
         return p1, p2
 
@@ -74,7 +74,7 @@ def test_deserialize_flow_subclass_is_flow_but_not_flow_subclass():
 
 
 def test_deserialize_schedule():
-    schedule = prefect.schedules.CronSchedule("0 0 * * *")
+    schedule = prefectlegacy.schedules.CronSchedule("0 0 * * *")
     f = Flow(name="test", schedule=schedule)
     serialized = FlowSchema().dump(f)
     deserialized = FlowSchema().load(serialized)
@@ -82,10 +82,10 @@ def test_deserialize_schedule():
 
 
 def test_deserialize_schedule_doesnt_mutate_original():
-    schedule = prefect.schedules.Schedule(
+    schedule = prefectlegacy.schedules.Schedule(
         clocks=[],
         filters=[
-            prefect.schedules.filters.between_times(datetime.time(1), datetime.time(2))
+            prefectlegacy.schedules.filters.between_times(datetime.time(1), datetime.time(2))
         ],
     )
     f = Flow(name="test", schedule=schedule)
@@ -175,18 +175,18 @@ def test_reference_tasks():
 
 
 def test_serialize_container_environment():
-    storage = prefect.storage.Docker(
+    storage = prefectlegacy.storage.Docker(
         base_image="a", python_dependencies=["b", "c"], registry_url="f"
     )
     deserialized = FlowSchema().load(
         FlowSchema().dump(Flow(name="test", storage=storage))
     )
-    assert isinstance(deserialized.storage, prefect.storage.Docker)
+    assert isinstance(deserialized.storage, prefectlegacy.storage.Docker)
     assert deserialized.storage.registry_url == storage.registry_url
 
 
 def test_deserialize_serialized_flow_after_build(tmpdir):
-    flow = Flow(name="test", storage=prefect.storage.Local(tmpdir))
+    flow = Flow(name="test", storage=prefectlegacy.storage.Local(tmpdir))
     serialized_flow = flow.serialize(build=True)
     deserialized = FlowSchema().load(serialized_flow)
     assert isinstance(deserialized, Flow)
@@ -194,6 +194,6 @@ def test_deserialize_serialized_flow_after_build(tmpdir):
 
 def test_serialize_empty_dict_contains_only_basic_fields():
     assert FlowSchema().dump({}) == {
-        "__version__": prefect.__version__,
+        "__version__": prefectlegacy.__version__,
         "type": "builtins.dict",
     }

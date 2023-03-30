@@ -3,8 +3,8 @@ import pytest
 import responses
 from unittest.mock import patch
 
-from prefect.tasks.hightouch import HightouchRunSync
-from prefect.engine.signals import FAIL
+from prefectlegacy.tasks.hightouch import HightouchRunSync
+from prefectlegacy.engine.signals import FAIL
 
 
 class TestHightouchRunSyncTask:

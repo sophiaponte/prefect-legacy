@@ -6,8 +6,8 @@ passed either at initialization or when building the flow.
 """
 import json
 
-from prefect import Flow
-from prefect.tasks.gcp.storage import GCSCopy, GCSDownload, GCSUpload
+from prefectlegacy import Flow
+from prefectlegacy.tasks.gcp.storage import GCSCopy, GCSDownload, GCSUpload
 
 BUCKET = "gcs-bucket"
 BLOB = "path/to/blob"

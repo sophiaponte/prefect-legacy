@@ -7,21 +7,21 @@ from typing import Union
 import cloudpickle
 import pytest
 
-import prefect
-from prefect import config
-from prefect.engine.results import (
+import prefectlegacy
+from prefectlegacy import config
+from prefectlegacy.engine.results import (
     ConstantResult,
     LocalResult,
     PrefectResult,
     SecretResult,
 )
-from prefect.engine.serializers import (
+from prefectlegacy.engine.serializers import (
     JSONSerializer,
     PickleSerializer,
     DateTimeSerializer,
 )
-from prefect.tasks.core.constants import Constant
-from prefect.tasks.secrets import PrefectSecret
+from prefectlegacy.tasks.core.constants import Constant
+from prefectlegacy.tasks.secrets import prefectlegacySecret
 
 
 class TestSecretResult:
@@ -45,7 +45,7 @@ class TestSecretResult:
         task = PrefectSecret("foo")
         result = SecretResult(task)
 
-        with prefect.context(secrets=dict(x=99, foo="bar")):
+        with prefectlegacy.context(secrets=dict(x=99, foo="bar")):
             res1 = result.read("x")
             res2 = result.read("foo")
 

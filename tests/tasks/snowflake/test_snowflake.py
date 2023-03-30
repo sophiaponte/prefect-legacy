@@ -6,7 +6,7 @@ import pytest
 import snowflake.connector as sf
 from snowflake.connector.cursor import DictCursor, SnowflakeCursor
 
-from prefect.tasks.snowflake import SnowflakeQueriesFromFile, SnowflakeQuery
+from prefectlegacy.tasks.snowflake import SnowflakeQueriesFromFile, SnowflakeQuery
 
 
 @pytest.fixture
@@ -41,7 +41,7 @@ class TestSnowflakeQuery:
         ]
 
         monkeypatch.setattr(
-            "prefect.tasks.snowflake.snowflake.sf", snowflake_connector_module
+            "prefectlegacy.tasks.snowflake.snowflake.sf", snowflake_connector_module
         )
 
         # task needs to allow for purely runtime arguments
@@ -96,7 +96,7 @@ class TestSnowflakeQuery:
         snowflake_connector_module = MagicMock(connect=snowflake_module_connect_method)
 
         monkeypatch.setattr(
-            "prefect.tasks.snowflake.snowflake.sf", snowflake_connector_module
+            "prefectlegacy.tasks.snowflake.snowflake.sf", snowflake_connector_module
         )
 
         task = SnowflakeQuery(
@@ -127,7 +127,7 @@ class TestSnowflakeQuery:
         snowflake_connector_module = MagicMock(connect=snowflake_module_connect_method)
 
         monkeypatch.setattr(
-            "prefect.tasks.snowflake.snowflake.sf", snowflake_connector_module
+            "prefectlegacy.tasks.snowflake.snowflake.sf", snowflake_connector_module
         )
 
         query = "SHOW DATABASES"
@@ -174,7 +174,7 @@ class TestSnowflakeQuery:
         connection.cursor = mock_cursor
 
         monkeypatch.setattr(
-            "prefect.tasks.snowflake.snowflake.sf", snowflake_connector_module
+            "prefectlegacy.tasks.snowflake.snowflake.sf", snowflake_connector_module
         )
 
         query = "select * from numbers"
@@ -207,7 +207,7 @@ class TestSnowflakeQueriesFromFile:
         cursor.fetchall.return_value = "TESTDB"
 
         monkeypatch.setattr(
-            "prefect.tasks.snowflake.snowflake.sf", snowflake_connector_module
+            "prefectlegacy.tasks.snowflake.snowflake.sf", snowflake_connector_module
         )
 
         # task needs to allow for runtime arguments
@@ -256,7 +256,7 @@ class TestSnowflakeQueriesFromFile:
         connection.execute_string.side_effect = sf.DatabaseError("Invalid query")
 
         monkeypatch.setattr(
-            "prefect.tasks.snowflake.snowflake.sf", snowflake_connector_module
+            "prefectlegacy.tasks.snowflake.snowflake.sf", snowflake_connector_module
         )
 
         task = SnowflakeQueriesFromFile(
@@ -284,7 +284,7 @@ class TestSnowflakeQueriesFromFile:
         cursor.fetchall.return_value = "TESTDB"
 
         monkeypatch.setattr(
-            "prefect.tasks.snowflake.snowflake.sf", snowflake_connector_module
+            "prefectlegacy.tasks.snowflake.snowflake.sf", snowflake_connector_module
         )
 
         output = SnowflakeQueriesFromFile(
@@ -331,7 +331,7 @@ class TestSnowflakeQueriesFromFile:
         connection.execute_string = mock_execute_string
 
         monkeypatch.setattr(
-            "prefect.tasks.snowflake.snowflake.sf", snowflake_connector_module
+            "prefectlegacy.tasks.snowflake.snowflake.sf", snowflake_connector_module
         )
 
         task = SnowflakeQueriesFromFile(

@@ -19,7 +19,7 @@ continue to run fine, giving you time to figure out a good transition plan.*
 
 ## LocalEnvironment
 
-`LocalEnvironment` was the default environment in previous versions of Prefect.
+`LocalEnvironment` was the default environment in previous versions of prefectlegacy.
 It would execute flow runs in the same process started by the agent.
 
 The name was confusing to many users, since `LocalEnvironment` didn't require
@@ -42,12 +42,12 @@ the `Flow` itself. See [Executor](./executors.md) for more information.
 
   ```python
   # Replace this
-  from prefect.executors import DaskExecutor
-  from prefect.environments.execution import LocalEnvironment
+  from prefectlegacy.executors import DaskExecutor
+  from prefectlegacy.environments.execution import LocalEnvironment
   flow.environment = LocalEnvironment(executor=DaskExecutor())
 
   # With this
-  from prefect.executors import DaskExecutor
+  from prefectlegacy.executors import DaskExecutor
   flow.executor = DaskExecutor()
   ```
 
@@ -56,11 +56,11 @@ the `Flow` itself. See [Executor](./executors.md) for more information.
 
   ```python
   # Replace this
-  from prefect.environments.execution import LocalEnvironment
+  from prefectlegacy.environments.execution import LocalEnvironment
   flow.environment = LocalEnvironment(labels=["label-1", "label-2"])
 
   # With this
-  from prefect.run_configs import UniversalRun
+  from prefectlegacy.run_configs import UniversalRun
   flow.run_config = UniversalRun(labels=["label-1", "label-2"])
   ```
 
@@ -71,11 +71,11 @@ the `Flow` itself. See [Executor](./executors.md) for more information.
 
   ```python
   # Replace this
-  from prefect.environments.execution import LocalEnvironment
+  from prefectlegacy.environments.execution import LocalEnvironment
   flow.environment = LocalEnvironment(metadata={"image": "my-image"})
 
   # With this
-  from prefect.run_configs import KubernetesRun
+  from prefectlegacy.run_configs import KubernetesRun
   flow.run_config = KubernetesRun(image="my-image")
   ```
 
@@ -102,12 +102,12 @@ information.
 
   ```python
   # Replace this
-  from prefect.executors import DaskExecutor
-  from prefect.environments.execution import KubernetesJobEnvironment
+  from prefectlegacy.executors import DaskExecutor
+  from prefectlegacy.environments.execution import KubernetesJobEnvironment
   flow.environment = KubernetesJobEnvironment(executor=DaskExecutor())
 
   # With this
-  from prefect.executors import DaskExecutor
+  from prefectlegacy.executors import DaskExecutor
   flow.executor = DaskExecutor()
   ```
 
@@ -119,11 +119,11 @@ information.
 
   ```python
   # Replace this
-  from prefect.environments.execution import KubernetesJobEnvironment
+  from prefectlegacy.environments.execution import KubernetesJobEnvironment
   flow.environment = KubernetesJobEnvironment(job_spec_file="path/to/file.yaml")
 
   # With this
-  from prefect.run_configs import KubernetesRun
+  from prefectlegacy.run_configs import KubernetesRun
   flow.run_config = KubernetesRun(job_spec_file="path/to/file.yaml")
   ```
 
@@ -151,11 +151,11 @@ Agent](/orchestration/agents/fargate.md).
 
   ```python
   # Replace this
-  from prefect.executors import DaskExecutor
+  from prefectlegacy.executors import DaskExecutor
   flow.environment = FargateTaskEnvironment(executor=DaskExecutor())
 
   # With this
-  from prefect.executors import DaskExecutor
+  from prefectlegacy.executors import DaskExecutor
   flow.executor = DaskExecutor()
   ```
 
@@ -184,15 +184,15 @@ bit more verbose, but hopefully still relatively straightforward.
 
 ```python
 # Replace this
-from prefect.environments.execution import DaskKubernetesEnvironment
+from prefectlegacy.environments.execution import DaskKubernetesEnvironment
 flow.environment = DaskKubernetesEnvironment(
     min_workers=5, max_workers=10,
 )
 
 # With this
-import prefect
-from prefect.executors import DaskExecutor
-from prefect.run_configs import KubernetesRun
+import prefectlegacy
+from prefectlegacy.executors import DaskExecutor
+from prefectlegacy.run_configs import KubernetesRun
 from dask_kubernetes import KubeCluster, make_pod_spec
 # Configuration for the flow-runner pod goes here
 flow.run_config = KubernetesRun()
@@ -203,7 +203,7 @@ flow.run_config = KubernetesRun()
 # - `adapt_kwargs` takes a dict of kwargs to pass to `cluster.adapt`. Here
 #    we enable adaptive scaling between 5 and 10 workers.
 flow.executor = DaskExecutor(
-    cluster_class=lambda: KubeCluster(make_pod_spec(image=prefect.context.image)),
+    cluster_class=lambda: KubeCluster(make_pod_spec(image=prefectlegacy.context.image)),
     adapt_kwargs={"minimum": 5, "maximum": 10},
 )
 ```
@@ -235,15 +235,15 @@ bit more verbose, but hopefully still relatively straightforward.
 
 ```python
 # Replace this
-from prefect.environments.execution import DaskCloudProviderEnvironment
+from prefectlegacy.environments.execution import DaskCloudProviderEnvironment
 flow.environment = DaskCloudProviderEnvironment(
     adaptive_min_workers=5, adaptive_max_workers=10,
 )
 
 # With this
-import prefect
-from prefect.executors import DaskExecutor
-from prefect.run_configs import ECSRun
+import prefectlegacy
+from prefectlegacy.executors import DaskExecutor
+from prefectlegacy.run_configs import ECSRun
 from dask_cloudprovider.aws import FargateCluster
 # Configuration for the flow-runner task goes here
 flow.run_config = ECSRun()
@@ -258,7 +258,7 @@ flow.run_config = ECSRun()
 # - `adapt_kwargs` takes a dict of kwargs to pass to `cluster.adapt`. Here
 #    we enable adaptive scaling between 5 and 10 workers.
 flow.executor = DaskExecutor(
-    cluster_class=lambda: FargateCluster(image=prefect.context.image),
+    cluster_class=lambda: FargateCluster(image=prefectlegacy.context.image),
     adapt_kwargs={"minimum": 5, "maximum": 10},
 )
 ```

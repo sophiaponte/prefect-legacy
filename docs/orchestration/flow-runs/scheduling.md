@@ -67,7 +67,7 @@ Prefect cannot auto-schedule flows that have required parameters, because the sc
 To resolve this, provide a default value for your parameters in your flow code or the schedule clock:
 
 ```python
-from prefect import Parameter
+from prefectlegacy import Parameter
 
 x = Parameter('x', default=1)
 ```

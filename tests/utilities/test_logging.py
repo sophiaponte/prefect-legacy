@@ -8,9 +8,9 @@ from unittest.mock import MagicMock
 import click
 import pytest
 
-import prefect
-from prefect import context, utilities
-from prefect.utilities.logging import (
+import prefectlegacy
+from prefectlegacy import context, utilities
+from prefectlegacy.utilities.logging import (
     CloudHandler,
     LogManager,
     temporary_logger_config,
@@ -45,7 +45,7 @@ def logger(log_manager):
     ):
         logger = utilities.logging.configure_logging(testing=True)
         # Enable logs to the backend by pretending this is during a run
-        with prefect.context(running_with_backend=True):
+        with prefectlegacy.context(running_with_backend=True):
             yield logger
         logger.handlers.clear()
 
@@ -129,7 +129,7 @@ def test_cloud_handler_emit_warns_and_truncates_long_messages(
     monkeypatch, logger, log_manager
 ):
     # Smaller value for testing
-    monkeypatch.setattr(prefect.utilities.logging, "MAX_LOG_SIZE", 1000)
+    monkeypatch.setattr(prefectlegacy.utilities.logging, "MAX_LOG_SIZE", 1000)
 
     with pytest.warns(
         UserWarning,
@@ -148,7 +148,7 @@ def test_cloud_handler_emit_warns_and_truncates_long_messages(
     [("flow-run-id", "task-run-id"), ("flow-run-id", None), (None, None)],
 )
 def test_cloud_handler_emit_json_spec(logger, log_manager, flow_run_id, task_run_id):
-    with prefect.context(flow_run_id=flow_run_id, task_run_id=task_run_id):
+    with prefectlegacy.context(flow_run_id=flow_run_id, task_run_id=task_run_id):
         logger.info("testing %d %s", 1, "hello")
 
     log = log_manager.enqueue.call_args[0][0]
@@ -174,7 +174,7 @@ def test_cloud_handler_emit_json_spec(logger, log_manager, flow_run_id, task_run
 def test_cloud_handler_emit_json_spec_exception(
     logger, log_manager, flow_run_id, task_run_id
 ):
-    with prefect.context(flow_run_id=flow_run_id, task_run_id=task_run_id):
+    with prefectlegacy.context(flow_run_id=flow_run_id, task_run_id=task_run_id):
         try:
             1 / 0
         except Exception:
@@ -232,8 +232,8 @@ def test_log_manager_startup_and_shutdown(logger, log_manager):
 
 
 def test_log_manager_batches_logs(logger, log_manager, monkeypatch):
-    monkeypatch.setattr(prefect.utilities.logging, "MAX_BATCH_LOG_SIZE", 1000)
-    monkeypatch.setattr(prefect.utilities.logging, "MAX_LOG_SIZE", 500)
+    monkeypatch.setattr(prefectlegacy.utilities.logging, "MAX_BATCH_LOG_SIZE", 1000)
+    monkeypatch.setattr(prefectlegacy.utilities.logging, "MAX_LOG_SIZE", 500)
 
     # Fill up log queue with multiple logs exceeding the total batch length
     for i in range(10):
@@ -288,7 +288,7 @@ def test_get_logger_returns_root_logger():
 
 
 def test_get_logger_with_name_returns_child_logger():
-    child_logger = logging.getLogger("prefect.test")
+    child_logger = logging.getLogger("prefectlegacy.test")
     prefect_logger = utilities.logging.get_logger("test")
 
     assert prefect_logger is child_logger

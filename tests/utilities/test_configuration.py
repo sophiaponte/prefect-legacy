@@ -2,9 +2,9 @@ from datetime import timedelta
 
 import pytest
 
-import prefect
-from prefect.core import Task
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy.core import Task
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 def test_set_temporary_config_is_temporary():
@@ -23,13 +23,13 @@ def test_set_temporary_config_is_temporary():
 
 def test_set_temporary_config_can_invent_new_settings():
     with set_temporary_config({"flows.nested.nested_again.val": "5"}):
-        assert prefect.config.flows.nested.nested_again.val == "5"
+        assert prefectlegacy.config.flows.nested.nested_again.val == "5"
 
     with pytest.raises(AttributeError):
-        assert prefect.config.flows.nested.nested_again.val == "5"
+        assert prefectlegacy.config.flows.nested.nested_again.val == "5"
 
 
 def test_set_temporary_config_with_multiple_keys():
     with set_temporary_config({"x.y.z": 1, "a.b.c": 2}):
-        assert prefect.config.x.y.z == 1
-        assert prefect.config.a.b.c == 2
+        assert prefectlegacy.config.x.y.z == 1
+        assert prefectlegacy.config.a.b.c == 2

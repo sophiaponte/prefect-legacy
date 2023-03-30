@@ -5,10 +5,10 @@ import tempfile
 
 import pytest
 
-import prefect
-from prefect import configuration
-from prefect.configuration import Config, to_environment_variables
-from prefect.utilities.collections import dict_to_flatdict
+import prefectlegacy
+from prefectlegacy import configuration
+from prefectlegacy.configuration import Config, to_environment_variables
+from prefectlegacy.utilities.collections import dict_to_flatdict
 
 template = b"""
     debug = false
@@ -257,7 +257,7 @@ class TestUserConfig:
 class TestProcessTaskDefaults:
     def test_process_task_defaults_called_on_prefect_config(self):
         "If task defaults was called, the max_retry default should be 0 instead of False"
-        assert prefect.config.tasks.defaults.max_retries == 0
+        assert prefectlegacy.config.tasks.defaults.max_retries == 0
 
     def test_max_retries_is_0_if_not_set(self):
         config = configuration.process_task_defaults(Config())

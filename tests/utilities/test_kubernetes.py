@@ -7,15 +7,15 @@ pytest.importorskip("kubernetes")
 from kubernetes import client
 from kubernetes.config.config_exception import ConfigException
 
-import prefect
-from prefect.utilities.kubernetes import get_kubernetes_client
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy.utilities.kubernetes import get_kubernetes_client
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 @pytest.fixture
 def kube_secret():
     with set_temporary_config({"cloud.use_local_secrets": True}):
-        with prefect.context(secrets=dict(KUBERNETES_API_KEY="test_key")):
+        with prefectlegacy.context(secrets=dict(KUBERNETES_API_KEY="test_key")):
             yield
 
 
@@ -37,24 +37,24 @@ class TestGetKubernetesClient:
 
     def test_api_key_pulled_from_secret(self, monkeypatch, kube_secret):
         client = MagicMock()
-        monkeypatch.setattr("prefect.utilities.kubernetes.client", client)
+        monkeypatch.setattr("prefectlegacy.utilities.kubernetes.client", client)
 
         api_key = {}
         conf_call = MagicMock()
         conf_call.return_value.api_key = api_key
         monkeypatch.setattr(
-            "prefect.utilities.kubernetes.client.Configuration", conf_call
+            "prefectlegacy.utilities.kubernetes.client.Configuration", conf_call
         )
         get_kubernetes_client("job")
         assert api_key == {"authorization": "test_key"}
 
     def test_kube_config_in_cluster(self, monkeypatch):
         config = MagicMock()
-        monkeypatch.setattr("prefect.utilities.kubernetes.kube_config", config)
+        monkeypatch.setattr("prefectlegacy.utilities.kubernetes.kube_config", config)
 
         batchapi = MagicMock()
         monkeypatch.setattr(
-            "prefect.utilities.kubernetes.client",
+            "prefectlegacy.utilities.kubernetes.client",
             MagicMock(BatchV1Api=MagicMock(return_value=batchapi)),
         )
 
@@ -64,11 +64,11 @@ class TestGetKubernetesClient:
     def test_kube_config_out_of_cluster(self, monkeypatch):
         config = MagicMock()
         config.load_incluster_config.side_effect = ConfigException()
-        monkeypatch.setattr("prefect.utilities.kubernetes.kube_config", config)
+        monkeypatch.setattr("prefectlegacy.utilities.kubernetes.kube_config", config)
 
         batchapi = MagicMock()
         monkeypatch.setattr(
-            "prefect.utilities.kubernetes.client",
+            "prefectlegacy.utilities.kubernetes.client",
             MagicMock(BatchV1Api=MagicMock(return_value=batchapi)),
         )
 

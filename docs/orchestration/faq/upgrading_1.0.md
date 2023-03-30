@@ -30,7 +30,7 @@ $ prefect agent [agent-type] install --key [api-key] --tenant-id [tenant-id]
 $ prefect agent [agent-type] start --key [api-key] --tenant-id [tenant-id]
 ```
 
-See "API keys for simple authentication" in the blog post [Prefect 0.15.0: A New Flow Run Experience](https://www.prefect.io/blog/prefect-0-15-0-a-new-flow-run-experience/) for additional details.
+See "API keys for simple authentication" in the blog post [Prefect 0.15.0: A New Flow Run Experience](https://www.prefectlegacy.io/blog/prefect-0-15-0-a-new-flow-run-experience/) for additional details.
 
 ## Support for environments
 
@@ -100,7 +100,7 @@ $ prefect run -p hello-world.py
 Run a flow with a non-default parameter locally:
 
 ```bash
-$ prefect run -m prefect.hello_world --param name=Marvin
+$ prefect run -m prefectlegacy.hello_world --param name=Marvin
 ```
 
 Run a registered flow with the backend with custom labels:
@@ -109,7 +109,7 @@ Run a registered flow with the backend with custom labels:
 $ prefect run -n "hello-world" --label example --label hello
 ```
 
-Run a registered flow and execute locally without an agent (for more information, see "Agentless execution" in the blog post [Prefect 0.15.0: A New Flow Run Experience](https://www.prefect.io/blog/prefect-0-15-0-a-new-flow-run-experience/)):
+Run a registered flow and execute locally without an agent (for more information, see "Agentless execution" in the blog post [Prefect 0.15.0: A New Flow Run Experience](https://www.prefectlegacy.io/blog/prefect-0-15-0-a-new-flow-run-experience/)):
 
 ```bash
 $ prefect run -n "hello-world" --execute
@@ -119,20 +119,20 @@ $ prefect run -n "hello-world" --execute
 
 Introduced in 0.15.0, Prefect includes new tasks that give you more flexibility around working with sub-flow execution &mdash; also known as "flow-of-flows" &mdash; and result passing:
 
-- [`create_flow_run`](/api/latest/tasks/prefect.html#create-flow-run) lets you programmatically create a flow run in the backend for a registered flow.
-- [`wait_for_flow_run`](h/api/latest/tasks/prefect.html#wait-for-flow-run) lets you wait for a flow run to finish executing while receiving state and log information regarding the flow run.
-- [`get_task_run_result`](/api/latest/tasks/prefect.html#get-task-run-result) waits for a task run to complete and returns the result.
+- [`create_flow_run`](/api/latest/tasks/prefectlegacy.html#create-flow-run) lets you programmatically create a flow run in the backend for a registered flow.
+- [`wait_for_flow_run`](h/api/latest/tasks/prefectlegacy.html#wait-for-flow-run) lets you wait for a flow run to finish executing while receiving state and log information regarding the flow run.
+- [`get_task_run_result`](/api/latest/tasks/prefectlegacy.html#get-task-run-result) waits for a task run to complete and returns the result.
 
-See [Scheduling a flow-of-flows](/core/idioms/flow-to-flow.html#scheduling-a-flow-of-flows) and the "Sub-flow result passing" section in the blog post [Prefect 0.15.0: A New Flow Run Experience](https://www.prefect.io/blog/prefect-0-15-0-a-new-flow-run-experience/) for details.
+See [Scheduling a flow-of-flows](/core/idioms/flow-to-flow.html#scheduling-a-flow-of-flows) and the "Sub-flow result passing" section in the blog post [Prefect 0.15.0: A New Flow Run Experience](https://www.prefectlegacy.io/blog/prefect-0-15-0-a-new-flow-run-experience/) for details.
 
 ## Imports have moved
 
 Imports for some Prefect modules have moved:
 
-- Artifacts functions now imported from `prefect.backend.artifacts`.
-- `Parameter` now imported from `prefect.Parameter` instead of `prefect.core.tasks`.
-- Exceptions now imported from `prefect.exceptions` instead of `prefect.utilities.exceptions`.
-- Executors now imported from `prefect.executors` instead of `prefect.engine.executors`. 
+- Artifacts functions now imported from `prefectlegacy.backend.artifacts`.
+- `Parameter` now imported from `prefectlegacy.Parameter` instead of `prefectlegacy.core.tasks`.
+- Exceptions now imported from `prefectlegacy.exceptions` instead of `prefectlegacy.utilities.exceptions`.
+- Executors now imported from `prefectlegacy.executors` instead of `prefectlegacy.engine.executors`. 
 
 These imports were available at both paths previously, but will only be available at the new path now.
 

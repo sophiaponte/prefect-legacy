@@ -50,9 +50,9 @@ Note that this is the same as the default behavior - if you don't specify an
 `environment` on a `Flow` the same configuration will be created for you.
 
 ```python
-from prefect import Flow
-from prefect.environments import LocalEnvironment
-from prefect.executors import LocalExecutor
+from prefectlegacy import Flow
+from prefectlegacy.environments import LocalEnvironment
+from prefectlegacy.executors import LocalExecutor
 
 flow = Flow(
     "Local Executor Example",
@@ -68,9 +68,9 @@ local temporary [Dask](https://dask.org") cluster. When the flow run starts, a
 temporary local Dask cluster will be created just for that flow run.
 
 ```python
-from prefect import Flow
-from prefect.environments import LocalEnvironment
-from prefect.executors import DaskExecutor
+from prefectlegacy import Flow
+from prefectlegacy.environments import LocalEnvironment
+from prefectlegacy.executors import DaskExecutor
 
 flow = Flow(
     "Dask Executor Example",
@@ -84,9 +84,9 @@ Here we configure a `LocalEnvironment` to run a flow using a `DaskExecutor`,
 connected to an existing Dask cluster.
 
 ```python
-from prefect import Flow
-from prefect.environments import LocalEnvironment
-from prefect.executors import DaskExecutor
+from prefectlegacy import Flow
+from prefectlegacy.environments import LocalEnvironment
+from prefectlegacy.executors import DaskExecutor
 
 flow = Flow(
     "Dask Executor Example",

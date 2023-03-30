@@ -3,10 +3,10 @@ from unittest.mock import MagicMock, patch
 import cloudpickle
 import pytest
 
-import prefect
-from prefect.client import Client
-from prefect.utilities.configuration import set_temporary_config
-from prefect.engine.results import GCSResult
+import prefectlegacy
+from prefectlegacy.client import Client
+from prefectlegacy.utilities.configuration import set_temporary_config
+from prefectlegacy.engine.results import GCSResult
 
 
 pytest.importorskip("google.cloud")
@@ -15,10 +15,10 @@ pytest.importorskip("google.cloud")
 class TestGCSResult:
     @pytest.fixture
     def google_client(self, monkeypatch):
-        from prefect.utilities.gcp import get_storage_client
+        from prefectlegacy.utilities.gcp import get_storage_client
 
         client_util = MagicMock()
-        monkeypatch.setattr("prefect.utilities.gcp.get_storage_client", client_util)
+        monkeypatch.setattr("prefectlegacy.utilities.gcp.get_storage_client", client_util)
         yield client_util
 
     def test_gcs_init(self, google_client):

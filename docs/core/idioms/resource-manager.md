@@ -20,7 +20,7 @@ decorator wraps a class with the following methods:
 - `cleanup`: Cleans up the resource. Takes the result of `setup` as an argument.
 
 ```python
-from prefect import resource_manager
+from prefectlegacy import resource_manager
 
 @resource_manager
 class MyResource:
@@ -73,7 +73,7 @@ cleanup a temporary [Dask](https://dask.org) cluster.
 :::: tabs
 ::: tab Functional API
 ```python
-from prefect import Flow, task, resource_manager, Parameter
+from prefectlegacy import Flow, task, resource_manager, Parameter
 import dask
 from dask.distributed import Client
 
@@ -129,7 +129,7 @@ with Flow("dask-example") as flow:
 
 ::: tab Imperative API
 ```python
-from prefect import Flow, Task, resource_manager, Parameter
+from prefectlegacy import Flow, Task, resource_manager, Parameter
 import dask
 from dask.distributed import Client
 

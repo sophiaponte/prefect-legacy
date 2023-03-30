@@ -19,7 +19,7 @@ The most convenient way to build a Prefect pipeline is with the **functional API
 For example:
 
 ```python
-from prefect import task, Task, Flow
+from prefectlegacy import task, Task, Flow
 import random
 
 @task
@@ -57,7 +57,7 @@ Instantiation is when properties including the task's `retry_delay`, `trigger`, 
 Prefect's **imperative API** allows more fine-grained control. Its main advantage over the functional API is that it allows tasks to be set as upstream or downstream dependencies without passing their results. This allows you to create a strict ordering of tasks through **state dependencies** without also creating **data dependencies**.
 
 ```python
-from prefect import Task, Flow
+from prefectlegacy import Task, Flow
 
 class RunMeFirst(Task):
     def run(self):
@@ -88,7 +88,7 @@ flow.visualize()
 To run a flow, call `flow.run()`:
 
 ```python
-from prefect import task, Flow
+from prefectlegacy import task, Flow
 
 @task
 def say_hello():

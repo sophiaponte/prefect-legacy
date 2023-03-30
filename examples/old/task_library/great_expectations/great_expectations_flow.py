@@ -1,5 +1,5 @@
-from prefect import Flow, Parameter
-from prefect.tasks.great_expectations import RunGreatExpectationsValidation
+from prefectlegacy import Flow, Parameter
+from prefectlegacy.tasks.great_expectations import RunGreatExpectationsValidation
 
 ge_task = RunGreatExpectationsValidation()
 

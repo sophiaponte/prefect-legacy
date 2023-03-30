@@ -1,13 +1,13 @@
 import functools
 import pytest
 
-from prefect import Flow, Task, case, Parameter, resource_manager, task
-from prefect.engine.flow_runner import FlowRunner
-from prefect.engine.state import Paused, Resume
-from prefect.utilities import tasks, edges
-from prefect.utilities.tasks import apply_map
-from prefect.tasks.control_flow import merge
-from prefect.tasks.core.constants import Constant
+from prefectlegacy import Flow, Task, case, Parameter, resource_manager, task
+from prefectlegacy.engine.flow_runner import FlowRunner
+from prefectlegacy.engine.state import Paused, Resume
+from prefectlegacy.utilities import tasks, edges
+from prefectlegacy.utilities.tasks import apply_map
+from prefectlegacy.tasks.control_flow import merge
+from prefectlegacy.tasks.core.constants import Constant
 
 
 class TestTaskDecorator:

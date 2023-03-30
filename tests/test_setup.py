@@ -1,14 +1,14 @@
 import os
 import subprocess
 
-import prefect
+import prefectlegacy
 
 
 def test_prefect_version_is_updated_everywhere():
     """
-    Tests that prefect.__version__ matches the version defined in setup.py
+    Tests that prefectlegacy.__version__ matches the version defined in setup.py
     """
-    current_version = prefect.__version__
+    current_version = prefectlegacy.__version__
 
     cwd = os.path.dirname(os.path.dirname(__file__))
     cmd = ["python", "setup.py", "--version"]

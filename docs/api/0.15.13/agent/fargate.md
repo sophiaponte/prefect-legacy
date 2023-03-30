@@ -5,13 +5,13 @@ editLink: false
 # Fargate Agent
 ---
  ## FargateAgent
- <div class='class-sig' id='prefect-agent-fargate-agent-fargateagent'><p class="prefect-sig">class </p><p class="prefect-class">prefect.agent.fargate.agent.FargateAgent</p>(agent_config_id=None, name=None, labels=None, env_vars=None, max_polls=None, agent_address=None, no_cloud_logs=None, launch_type=&quot;FARGATE&quot;, aws_access_key_id=None, aws_secret_access_key=None, aws_session_token=None, region_name=None, botocore_config=None, enable_task_revisions=False, use_external_kwargs=False, external_kwargs_s3_bucket=None, external_kwargs_s3_key=None, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/agent/fargate/agent.py#L17">[source]</a></span></div>
+ <div class='class-sig' id='prefect-agent-fargate-agent-fargateagent'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.agent.fargate.agent.FargateAgent</p>(agent_config_id=None, name=None, labels=None, env_vars=None, max_polls=None, agent_address=None, no_cloud_logs=None, launch_type=&quot;FARGATE&quot;, aws_access_key_id=None, aws_secret_access_key=None, aws_session_token=None, region_name=None, botocore_config=None, enable_task_revisions=False, use_external_kwargs=False, external_kwargs_s3_bucket=None, external_kwargs_s3_key=None, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/agent/fargate/agent.py#L17">[source]</a></span></div>
 
 Agent which deploys flow runs as tasks using Fargate.
 
 DEPRECATED: The Fargate agent is deprecated, please transition to using the ECS agent instead.
 
-This agent can run anywhere as long as the proper access configuration variables are set.  Information on using the Fargate Agent can be found at https://docs.prefect.io/orchestration/agents/fargate.html
+This agent can run anywhere as long as the proper access configuration variables are set.  Information on using the Fargate Agent can be found at https://docs.prefectlegacy.io/orchestration/agents/fargate.html
 
 All `kwargs` are accepted that one would normally pass to boto3 for `register_task_definition` and `run_task`. For information on the kwargs supported visit the following links:
 
@@ -50,7 +50,7 @@ FargateAgent(botocore_config={"retries": {"max_attempts": 10}})
 
 |methods: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |:----|
- | <div class='method-sig' id='prefect-agent-agent-agent-start'><p class="prefect-class">prefect.agent.agent.Agent.start</p>()<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/agent/agent.py#L180">[source]</a></span></div>
+ | <div class='method-sig' id='prefect-agent-agent-agent-start'><p class="prefect-class">prefectlegacy.agent.agent.Agent.start</p>()<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/agent/agent.py#L180">[source]</a></span></div>
 <p class="methods">The main entrypoint to the agent process. Sets up the agent then continuously polls for work to submit.<br><br>This is the only method that should need to be called externally.</p>|
 
 ---

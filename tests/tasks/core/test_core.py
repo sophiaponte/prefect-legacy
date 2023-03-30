@@ -1,9 +1,9 @@
 import pytest
 
-from prefect.core import Edge, Flow, Parameter, Task
-from prefect.tasks.core import collections
-from prefect.tasks.core.constants import Constant
-from prefect.tasks.core.function import FunctionTask
+from prefectlegacy.core import Edge, Flow, Parameter, Task
+from prefectlegacy.tasks.core import collections
+from prefectlegacy.tasks.core.constants import Constant
+from prefectlegacy.tasks.core.function import FunctionTask
 
 
 class IdentityTask(Task):

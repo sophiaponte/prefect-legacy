@@ -4,10 +4,10 @@ import types
 import pytest
 from box import Box
 
-from prefect.engine.state import Pending
-from prefect.utilities import collections
-from prefect.utilities.collections import DotDict, as_nested_dict, merge_dicts
-from prefect.utilities.graphql import GraphQLResult
+from prefectlegacy.engine.state import Pending
+from prefectlegacy.utilities import collections
+from prefectlegacy.utilities.collections import DotDict, as_nested_dict, merge_dicts
+from prefectlegacy.utilities.graphql import GraphQLResult
 
 
 class TestFlattenSeq:

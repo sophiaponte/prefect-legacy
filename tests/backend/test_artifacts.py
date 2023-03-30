@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import MagicMock
 
-from prefect.backend import artifacts
-from prefect import context
+from prefectlegacy.backend import artifacts
+from prefectlegacy import context
 
 
 @pytest.fixture()
@@ -12,7 +12,7 @@ def client(monkeypatch):
         update_task_run_artifact=MagicMock(return_value=True),
         delete_task_run_artifact=MagicMock(return_value=True),
     )
-    monkeypatch.setattr("prefect.Client", MagicMock(return_value=c))
+    monkeypatch.setattr("prefectlegacy.Client", MagicMock(return_value=c))
     yield c
 
 

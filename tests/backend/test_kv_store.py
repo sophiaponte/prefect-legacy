@@ -1,9 +1,9 @@
 import pytest
 from unittest.mock import MagicMock, call
 
-from prefect.backend.kv_store import set_key_value, get_key_value, delete_key, list_keys
-from prefect.exceptions import ClientError
-from prefect.utilities.graphql import GraphQLResult
+from prefectlegacy.backend.kv_store import set_key_value, get_key_value, delete_key, list_keys
+from prefectlegacy.exceptions import ClientError
+from prefectlegacy.utilities.graphql import GraphQLResult
 
 
 class TestSetKeyValue:
@@ -23,7 +23,7 @@ class TestSetKeyValue:
                 set_key_value=GraphQLResult({"id": "123"}),
             )
         )
-        monkeypatch.setattr("prefect.backend.kv_store.Client", Client)
+        monkeypatch.setattr("prefectlegacy.backend.kv_store.Client", Client)
 
         key_value_id = set_key_value(key="foo", value=value)
         Client.return_value.graphql.assert_called_with(
@@ -38,7 +38,7 @@ class TestSetKeyValue:
 
     def test_set_key_value_raises_if_value_too_large(self, monkeypatch, cloud_api):
         Client = MagicMock()
-        monkeypatch.setattr("prefect.backend.kv_store.Client", Client)
+        monkeypatch.setattr("prefectlegacy.backend.kv_store.Client", Client)
 
         # value over the 10 KB limit
         large_value = "1" * 10001
@@ -60,7 +60,7 @@ class TestGetKeyValue:
                 key_value=[GraphQLResult({"value": "bar"})],
             )
         )
-        monkeypatch.setattr("prefect.backend.kv_store.Client", Client)
+        monkeypatch.setattr("prefectlegacy.backend.kv_store.Client", Client)
 
         value = get_key_value(key="foo")
         Client.return_value.graphql.assert_called_with(
@@ -71,7 +71,7 @@ class TestGetKeyValue:
     def test_get_key_value_raises_if_key_not_found(self, monkeypatch, cloud_api):
         client = MagicMock()
         client().graphql.return_value = GraphQLResult(data=dict(key_value=[]))
-        monkeypatch.setattr("prefect.backend.kv_store.Client", client)
+        monkeypatch.setattr("prefectlegacy.backend.kv_store.Client", client)
 
         with pytest.raises(ValueError):
             get_key_value(key="foo")
@@ -107,7 +107,7 @@ class TestDeleteKeyValue:
 
         Client = MagicMock()
         Client.return_value.graphql.side_effect = fake_graphql_responses
-        monkeypatch.setattr("prefect.backend.kv_store.Client", Client)
+        monkeypatch.setattr("prefectlegacy.backend.kv_store.Client", Client)
 
         success = delete_key(key="foo")
 
@@ -134,7 +134,7 @@ class TestDeleteKeyValue:
                 key_value=[],
             )
         )
-        monkeypatch.setattr("prefect.backend.kv_store.Client", Client)
+        monkeypatch.setattr("prefectlegacy.backend.kv_store.Client", Client)
 
         with pytest.raises(ValueError):
             delete_key(key="foo")
@@ -161,7 +161,7 @@ class TestListKeyValue:
                 ],
             )
         )
-        monkeypatch.setattr("prefect.backend.kv_store.Client", Client)
+        monkeypatch.setattr("prefectlegacy.backend.kv_store.Client", Client)
 
         keys = list_keys()
         Client.return_value.graphql.assert_called_with(

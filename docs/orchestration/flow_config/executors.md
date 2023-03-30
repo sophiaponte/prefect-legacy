@@ -9,8 +9,8 @@ constructor, or set it as the `executor` attribute later before calling
 `flow.register`. For example, to configure a flow to use a `LocalDaskExecutor`:
 
 ```python
-from prefect import Flow
-from prefect.executors import LocalDaskExecutor
+from prefectlegacy import Flow
+from prefectlegacy.executors import LocalDaskExecutor
 
 # Set executor as part of the constructor
 with Flow("example", executor=LocalDaskExecutor()) as flow:
@@ -51,7 +51,7 @@ performance. Here's some general recommendations:
 ## LocalExecutor
 
 The [LocalExecutor](/api/latest/executors.md#localexecutor) executes all tasks
-locally in a single thread. It's the default executor in Prefect. It's a good
+locally in a single thread. It's the default executor in prefectlegacy. It's a good
 option for quick running flows, or ones that don't expose lots of opportunities
 for parallelism.
 
@@ -59,7 +59,7 @@ No extra configuration is required to specify the `LocalExecutor`, as it's the
 default option. If needed though, you can still specify it explicitly:
 
 ```python
-from prefect.executors import LocalExecutor
+from prefectlegacy.executors import LocalExecutor
 
 flow.executor = LocalExecutor()
 ```
@@ -73,7 +73,7 @@ parallel using either threads (default) or local processes using one of [Dask's
 local schedulers](https://docs.dask.org/en/latest/scheduling.html).
 
 ```python
-from prefect.executors import LocalDaskExecutor
+from prefectlegacy.executors import LocalDaskExecutor
 
 # Uses the default scheduler (threads)
 flow.executor = LocalDaskExecutor()
@@ -135,7 +135,7 @@ By default, when you use a `DaskExecutor` it creates a temporary local Dask
 cluster.
 
 ```python
-from prefect.executors import DaskExecutor
+from prefectlegacy.executors import DaskExecutor
 
 # By default this will use a temporary local Dask cluster
 flow.executor = DaskExecutor()
@@ -197,18 +197,18 @@ run your flow. You have a few options here:
 
 - If your flow is running on an agent that also uses images (e.g. Kubernetes,
   Docker, ECS, ...), you can also access the main image used for your Flow Run
-  at runtime at `prefect.context.image`. Note that you *can't* put this
+  at runtime at `prefectlegacy.context.image`. Note that you *can't* put this
   directly into `cluster_kwargs` (since that will resolve at *registration*
   time not *run* time) - instead you'll need to define a custom function for
   creating your cluster. For example:
 
   ```python
-  import prefect
+  import prefectlegacy
   from dask_cloudprovider.aws import FargateCluster
 
   def fargate_cluster(n_workers=4):
       """Start a fargate cluster using the same image as the flow run"""
-      return FargateCluster(n_workers=n_workers, image=prefect.context.image)
+      return FargateCluster(n_workers=n_workers, image=prefectlegacy.context.image)
 
   flow.executor = DaskExecutor(
       cluster_class=fargate_cluster,
@@ -288,8 +288,8 @@ For local execution or flows executed using a Local Agent, the file will be acce
 ```python
 # performance_report_flow.py
 import os
-from prefect.executors import DaskExecutor
-from prefect import Flow, task
+from prefectlegacy.executors import DaskExecutor
+from prefectlegacy import Flow, task
 
 # define a simple task and flow
 @task
@@ -326,10 +326,10 @@ by accessing `flow.executor.performance_report`.
 # performance_report_flow.py
 import io
 import os
-from prefect.executors import DaskExecutor
-from prefect import Flow, task
-from prefect.engine.state import State
-from prefect.utilities.aws import get_boto_client
+from prefectlegacy.executors import DaskExecutor
+from prefectlegacy import Flow, task
+from prefectlegacy.engine.state import State
+from prefectlegacy.utilities.aws import get_boto_client
 from typing import Set, Optional
 
 def custom_terminal_state_handler(

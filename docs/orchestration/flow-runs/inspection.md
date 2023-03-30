@@ -4,14 +4,14 @@ For monitoring flow runs from the UI, see the [UI documentation on flow runs](..
 
 ## Python
 
-The Prefect Core library provides an object for inspecting flow runs without writing queries at `prefect.backend.FlowRunView`.
+The Prefect Core library provides an object for inspecting flow runs without writing queries at `prefectlegacy.backend.FlowRunView`.
 
 ### Creating a `FlowRunView`
 
 A `FlowRunView` can be created using the `from_flow_run_id` class method. This methods will query for flow run information and populate a `FlowRunView` instance.
 
 ```python
-from prefect.backend import FlowRunView
+from prefectlegacy.backend import FlowRunView
 
 flow_run = FlowRunView.from_flow_run_id("4c0101af-c6bb-4b96-8661-63a5bbfb5596")
 ```

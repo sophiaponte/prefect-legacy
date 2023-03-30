@@ -6,16 +6,16 @@ import pendulum
 import pytest
 from dask.base import tokenize
 
-import prefect
-from prefect.client import Client
-from prefect.core import Edge, Task
-from prefect.engine.cache_validators import all_inputs, duration_only
-from prefect.engine.cloud import CloudTaskRunner
-from prefect.engine.result import Result
-from prefect.engine.results import LocalResult, PrefectResult, SecretResult
-from prefect.engine.runner import ENDRUN
-from prefect.engine.signals import LOOP
-from prefect.engine.state import (
+import prefectlegacy
+from prefectlegacy.client import Client
+from prefectlegacy.core import Edge, Task
+from prefectlegacy.engine.cache_validators import all_inputs, duration_only
+from prefectlegacy.engine.cloud import CloudTaskRunner
+from prefectlegacy.engine.result import Result
+from prefectlegacy.engine.results import LocalResult, PrefectResult, SecretResult
+from prefectlegacy.engine.runner import ENDRUN
+from prefectlegacy.engine.signals import LOOP
+from prefectlegacy.engine.state import (
     Cached,
     Cancelled,
     ClientFailed,
@@ -33,16 +33,16 @@ from prefect.engine.state import (
     TimedOut,
     TriggerFailed,
 )
-from prefect.utilities.configuration import set_temporary_config
-from prefect.exceptions import VersionLockMismatchSignal
+from prefectlegacy.utilities.configuration import set_temporary_config
+from prefectlegacy.exceptions import VersionLockMismatchSignal
 
 
 @pytest.fixture(autouse=True)
 def cloud_settings():
     with set_temporary_config(
         {
-            "engine.flow_runner.default_class": "prefect.engine.cloud.CloudFlowRunner",
-            "engine.task_runner.default_class": "prefect.engine.cloud.CloudTaskRunner",
+            "engine.flow_runner.default_class": "prefectlegacy.engine.cloud.CloudFlowRunner",
+            "engine.task_runner.default_class": "prefectlegacy.engine.cloud.CloudTaskRunner",
             "cloud.api_key": "api-key",
         }
     ):
@@ -64,10 +64,10 @@ def client(monkeypatch):
         set_task_run_name=MagicMock(),
     )
     monkeypatch.setattr(
-        "prefect.engine.cloud.task_runner.Client", MagicMock(return_value=cloud_client)
+        "prefectlegacy.engine.cloud.task_runner.Client", MagicMock(return_value=cloud_client)
     )
     monkeypatch.setattr(
-        "prefect.engine.cloud.flow_runner.Client", MagicMock(return_value=cloud_client)
+        "prefectlegacy.engine.cloud.flow_runner.Client", MagicMock(return_value=cloud_client)
     )
     yield cloud_client
 
@@ -88,18 +88,18 @@ def vclient(monkeypatch):
         ),
     )
     monkeypatch.setattr(
-        "prefect.engine.cloud.task_runner.Client", MagicMock(return_value=cloud_client)
+        "prefectlegacy.engine.cloud.task_runner.Client", MagicMock(return_value=cloud_client)
     )
     monkeypatch.setattr(
-        "prefect.engine.cloud.flow_runner.Client", MagicMock(return_value=cloud_client)
+        "prefectlegacy.engine.cloud.flow_runner.Client", MagicMock(return_value=cloud_client)
     )
     yield cloud_client
 
 
 def test_task_runner_puts_cloud_in_context(client):
-    @prefect.task(result=Result())
+    @prefectlegacy.task(result=Result())
     def whats_in_ctx():
-        return prefect.context.get("checkpointing")
+        return prefectlegacy.context.get("checkpointing")
 
     res = CloudTaskRunner(task=whats_in_ctx).run()
 
@@ -172,7 +172,7 @@ def test_task_runner_sets_mapped_state_prior_to_executor_mapping(client):
 def test_task_runner_raises_endrun_if_client_cant_communicate_during_state_updates(
     monkeypatch,
 ):
-    @prefect.task(name="test")
+    @prefectlegacy.task(name="test")
     def raise_error():
         raise NameError("I don't exist")
 
@@ -182,7 +182,7 @@ def test_task_runner_raises_endrun_if_client_cant_communicate_during_state_updat
         get_task_run_info=get_task_run_info, set_task_run_state=set_task_run_state
     )
     monkeypatch.setattr(
-        "prefect.engine.cloud.task_runner.Client", MagicMock(return_value=client)
+        "prefectlegacy.engine.cloud.task_runner.Client", MagicMock(return_value=client)
     )
 
     ## an ENDRUN will cause the TaskRunner to return the most recently computed state
@@ -193,7 +193,7 @@ def test_task_runner_raises_endrun_if_client_cant_communicate_during_state_updat
 
 
 def test_task_runner_queries_for_cached_states_if_task_has_caching(client):
-    @prefect.task(cache_for=datetime.timedelta(minutes=1), result=PrefectResult())
+    @prefectlegacy.task(cache_for=datetime.timedelta(minutes=1), result=PrefectResult())
     def cached_task():
         return 42
 
@@ -217,7 +217,7 @@ def test_task_runner_queries_for_cached_states_if_task_has_caching(client):
 
 
 def test_task_runner_validates_cached_states_if_task_has_caching(client):
-    @prefect.task(cache_for=datetime.timedelta(minutes=1), result=PrefectResult())
+    @prefectlegacy.task(cache_for=datetime.timedelta(minutes=1), result=PrefectResult())
     def cached_task():
         return 42
 
@@ -241,7 +241,7 @@ def test_task_runner_validates_cached_states_if_task_has_caching(client):
 
 
 def test_task_runner_treats_unfound_files_as_invalid_caches(client, tmpdir):
-    @prefect.task(cache_for=datetime.timedelta(minutes=1), result=PrefectResult())
+    @prefectlegacy.task(cache_for=datetime.timedelta(minutes=1), result=PrefectResult())
     def cached_task():
         return 42
 
@@ -352,7 +352,7 @@ class TestCheckTaskCached:
     def test_task_runner_validates_cached_state_inputs_if_task_has_caching(
         self, client
     ):
-        @prefect.task(
+        @prefectlegacy.task(
             cache_for=datetime.timedelta(minutes=1),
             cache_validator=all_inputs,
             result=PrefectResult(),
@@ -390,7 +390,7 @@ def test_task_runner_raises_endrun_if_client_cant_receive_state_updates(monkeypa
         get_task_run_info=get_task_run_info, set_task_run_state=set_task_run_state
     )
     monkeypatch.setattr(
-        "prefect.engine.cloud.task_runner.Client", MagicMock(return_value=client)
+        "prefectlegacy.engine.cloud.task_runner.Client", MagicMock(return_value=client)
     )
 
     ## an ENDRUN will cause the TaskRunner to return the most recently computed state
@@ -410,7 +410,7 @@ def test_task_runner_raises_endrun_with_correct_state_if_client_cant_receive_sta
         get_task_run_info=get_task_run_info, set_task_run_state=set_task_run_state
     )
     monkeypatch.setattr(
-        "prefect.engine.cloud.task_runner.Client", MagicMock(return_value=client)
+        "prefectlegacy.engine.cloud.task_runner.Client", MagicMock(return_value=client)
     )
 
     ## an ENDRUN will cause the TaskRunner to return the most recently computed state
@@ -432,7 +432,7 @@ def test_task_runner_respects_the_db_state(monkeypatch, state):
         get_task_run_info=get_task_run_info, set_task_run_state=set_task_run_state
     )
     monkeypatch.setattr(
-        "prefect.engine.cloud.task_runner.Client", MagicMock(return_value=client)
+        "prefectlegacy.engine.cloud.task_runner.Client", MagicMock(return_value=client)
     )
     res = CloudTaskRunner(task=task).run(context={"map_index": 1})
 
@@ -456,7 +456,7 @@ def test_task_runner_prioritizes_kwarg_states_over_db_states(monkeypatch, state)
         get_task_run_info=get_task_run_info, set_task_run_state=set_task_run_state
     )
     monkeypatch.setattr(
-        "prefect.engine.cloud.task_runner.Client", MagicMock(return_value=client)
+        "prefectlegacy.engine.cloud.task_runner.Client", MagicMock(return_value=client)
     )
     res = CloudTaskRunner(task=task).run(
         state=Pending("let's do this"), context={"map_index": 1}
@@ -472,7 +472,7 @@ def test_task_runner_prioritizes_kwarg_states_over_db_states(monkeypatch, state)
 
 class TestStateResultHandling:
     def test_task_runner_handles_outputs_prior_to_setting_state(self, client):
-        @prefect.task(cache_for=datetime.timedelta(days=1), result=PrefectResult())
+        @prefectlegacy.task(cache_for=datetime.timedelta(days=1), result=PrefectResult())
         def add(x, y):
             return x + y
 
@@ -501,11 +501,11 @@ class TestStateResultHandling:
         assert states[2].result == 2
 
     def test_task_runner_errors_if_no_result_provided_as_input(self, client):
-        @prefect.task
+        @prefectlegacy.task
         def add(x, y):
             return x + y
 
-        base_state = prefect.serialization.state.StateSchema().load({"type": "Success"})
+        base_state = prefectlegacy.serialization.state.StateSchema().load({"type": "Success"})
         x_state, y_state = base_state, base_state
 
         upstream_states = {
@@ -530,7 +530,7 @@ class TestStateResultHandling:
     def test_task_runner_sends_checkpointed_success_states_to_cloud(
         self, client, checkpoint
     ):
-        @prefect.task(checkpoint=checkpoint, result=PrefectResult())
+        @prefectlegacy.task(checkpoint=checkpoint, result=PrefectResult())
         def add(x, y):
             return x + y
 
@@ -561,11 +561,11 @@ class TestStateResultHandling:
 def test_task_handlers_handle_retry_signals(client):
     def state_handler(t, o, n):
         if n.is_failed():
-            raise prefect.engine.signals.RETRY(
+            raise prefectlegacy.engine.signals.RETRY(
                 "Will retry.", start_time=pendulum.now("utc").add(days=1)
             )
 
-    @prefect.task(state_handlers=[state_handler])
+    @prefectlegacy.task(state_handlers=[state_handler])
     def fn():
         1 / 0
 
@@ -588,7 +588,7 @@ def test_state_handler_failures_are_handled_appropriately(client, caplog):
     def bad(*args, **kwargs):
         raise SyntaxError("Syntax Errors are nice because they're so unique")
 
-    @prefect.task(on_failure=bad)
+    @prefectlegacy.task(on_failure=bad)
     def do_nothing():
         raise ValueError("This task failed somehow")
 
@@ -617,7 +617,7 @@ def test_state_handler_failures_are_handled_appropriately(client, caplog):
 def test_task_runner_performs_retries_for_short_delays(client):
     global_list = []
 
-    @prefect.task(max_retries=1, retry_delay=datetime.timedelta(seconds=0))
+    @prefectlegacy.task(max_retries=1, retry_delay=datetime.timedelta(seconds=0))
     def noop():
         if global_list:
             return
@@ -649,11 +649,11 @@ def test_task_runner_performs_retries_for_short_delays(client):
 
 
 def test_task_runner_handles_looping(client):
-    @prefect.task(result=PrefectResult())
+    @prefectlegacy.task(result=PrefectResult())
     def looper():
-        if prefect.context.get("task_loop_count", 1) < 3:
-            raise LOOP(result=prefect.context.get("task_loop_result", 0) + 10)
-        return prefect.context.get("task_loop_result")
+        if prefectlegacy.context.get("task_loop_count", 1) < 3:
+            raise LOOP(result=prefectlegacy.context.get("task_loop_result", 0) + 10)
+        return prefectlegacy.context.get("task_loop_result")
 
     client.get_task_run_info.side_effect = [
         MagicMock(version=i, state=Pending()) for i in range(1, 4)
@@ -678,9 +678,9 @@ def test_task_runner_handles_looping(client):
 
 
 def test_task_runner_handles_looping_with_no_result(client):
-    @prefect.task(result=Result())
+    @prefectlegacy.task(result=Result())
     def looper():
-        if prefect.context.get("task_loop_count", 1) < 3:
+        if prefectlegacy.context.get("task_loop_count", 1) < 3:
             raise LOOP()
         return 42
 
@@ -707,18 +707,18 @@ def test_task_runner_handles_looping_with_no_result(client):
 
 def test_task_runner_handles_looping_with_retries_with_no_result(client):
     # note that looping with retries _requires_ a result handler in Cloud
-    @prefect.task(
+    @prefectlegacy.task(
         max_retries=1,
         retry_delay=datetime.timedelta(seconds=0),
         result=PrefectResult(),
     )
     def looper():
         if (
-            prefect.context.get("task_loop_count") == 2
-            and prefect.context.get("task_run_count", 1) == 1
+            prefectlegacy.context.get("task_loop_count") == 2
+            and prefectlegacy.context.get("task_run_count", 1) == 1
         ):
             raise ValueError("Stop")
-        if prefect.context.get("task_loop_count", 1) < 3:
+        if prefectlegacy.context.get("task_loop_count", 1) < 3:
             raise LOOP()
         return 42
 
@@ -746,20 +746,20 @@ def test_task_runner_handles_looping_with_retries_with_no_result(client):
 
 def test_task_runner_handles_looping_with_retries(client):
     # note that looping _requires_ a result handler in Cloud
-    @prefect.task(
+    @prefectlegacy.task(
         max_retries=1,
         retry_delay=datetime.timedelta(seconds=0),
         result=PrefectResult(),
     )
     def looper():
         if (
-            prefect.context.get("task_loop_count") == 2
-            and prefect.context.get("task_run_count", 1) == 1
+            prefectlegacy.context.get("task_loop_count") == 2
+            and prefectlegacy.context.get("task_run_count", 1) == 1
         ):
             raise ValueError("Stop")
-        if prefect.context.get("task_loop_count", 1) < 3:
-            raise LOOP(result=prefect.context.get("task_loop_result", 0) + 10)
-        return prefect.context.get("task_loop_result")
+        if prefectlegacy.context.get("task_loop_count", 1) < 3:
+            raise LOOP(result=prefectlegacy.context.get("task_loop_result", 0) + 10)
+        return prefectlegacy.context.get("task_loop_result")
 
     client.get_task_run_info.side_effect = [
         MagicMock(version=i, state=Pending() if i == 0 else Looped(loop_count=i))
@@ -795,7 +795,7 @@ def test_cloud_task_runner_respects_queued_states_from_cloud(client):
 
     client.set_task_run_state = queued_mock
 
-    @prefect.task
+    @prefectlegacy.task
     def tagged_task():
         pass
 
@@ -825,11 +825,11 @@ def test_cloud_task_runner_handles_retries_with_queued_states_from_cloud(client)
 
     client.set_task_run_state = queued_mock
 
-    @prefect.task(
+    @prefectlegacy.task(
         max_retries=2, retry_delay=datetime.timedelta(seconds=0), result=PrefectResult()
     )
     def tagged_task(x):
-        if prefect.context.get("task_run_count", 1) == 1:
+        if prefectlegacy.context.get("task_run_count", 1) == 1:
             raise ValueError("gimme a sec")
         return x
 
@@ -886,11 +886,11 @@ class TestLoadResults:
         assert upstreams[edge].result == ["foo", "bar", "baz"]
 
     def test_load_results_from_upstream_reads_secret_results(self, cloud_api):
-        secret_result = SecretResult(prefect.tasks.secrets.PrefectSecret(name="foo"))
+        secret_result = SecretResult(prefectlegacy.tasks.secrets.PrefectSecret(name="foo"))
 
         state = Success(result=PrefectResult(location="foo"))
 
-        with prefect.context(secrets=dict(foo=42)):
+        with prefectlegacy.context(secrets=dict(foo=42)):
             edge = Edge(Task(result=secret_result), 2, key="x")
             new_state, upstreams = CloudTaskRunner(task=Task()).load_results(
                 state=Pending(), upstream_states={edge: state}
@@ -908,7 +908,7 @@ def test_task_runner_uses_upstream_result_handlers(client):
         def write(self, *args, **kwargs):
             return self
 
-    @prefect.task(result=PrefectResult())
+    @prefectlegacy.task(result=PrefectResult())
     def t(x):
         return x
 
@@ -928,7 +928,7 @@ def test_task_runner_doesnt_use_upstream_result_handlers_if_value_present(client
         def write(self, *args, **kwargs):
             return self
 
-    @prefect.task(result=PrefectResult())
+    @prefectlegacy.task(result=PrefectResult())
     def t(x):
         return x
 
@@ -944,7 +944,7 @@ def test_task_runner_gracefully_handles_load_results_failures(client):
         def read(self, *args, **kwargs):
             raise TypeError("something is wrong!")
 
-    @prefect.task(result=PrefectResult())
+    @prefectlegacy.task(result=PrefectResult())
     def t(x):
         return x
 
@@ -963,7 +963,7 @@ def test_task_runner_gracefully_handles_load_results_failures(client):
 def test_task_runner_handles_version_lock_error(monkeypatch):
     client = MagicMock()
     monkeypatch.setattr(
-        "prefect.engine.cloud.task_runner.Client", MagicMock(return_value=client)
+        "prefectlegacy.engine.cloud.task_runner.Client", MagicMock(return_value=client)
     )
     client.set_task_run_state.side_effect = VersionLockMismatchSignal()
 
@@ -991,7 +991,7 @@ def test_task_runner_handles_version_lock_error(monkeypatch):
 def test_task_runner_sets_task_name(monkeypatch, cloud_settings):
     client = MagicMock()
     monkeypatch.setattr(
-        "prefect.engine.cloud.task_runner.Client", MagicMock(return_value=client)
+        "prefectlegacy.engine.cloud.task_runner.Client", MagicMock(return_value=client)
     )
     client.set_task_run_name = MagicMock()
 
@@ -999,15 +999,15 @@ def test_task_runner_sets_task_name(monkeypatch, cloud_settings):
     runner = CloudTaskRunner(task=task)
     runner.task_run_id = "id"
 
-    with prefect.context():
-        assert prefect.context.get("task_run_name") is None
+    with prefectlegacy.context():
+        assert prefectlegacy.context.get("task_run_name") is None
 
         runner.set_task_run_name(task_inputs={})
 
         assert client.set_task_run_name.called
         assert client.set_task_run_name.call_args[1]["name"] == "asdf"
         assert client.set_task_run_name.call_args[1]["task_run_id"] == "id"
-        assert prefect.context.get("task_run_name") == "asdf"
+        assert prefectlegacy.context.get("task_run_name") == "asdf"
 
     task = Task(name="test", task_run_name="{map_index}")
     runner = CloudTaskRunner(task=task)
@@ -1016,33 +1016,33 @@ def test_task_runner_sets_task_name(monkeypatch, cloud_settings):
     class Temp:
         value = 100
 
-    with prefect.context():
-        assert prefect.context.get("task_run_name") is None
+    with prefectlegacy.context():
+        assert prefectlegacy.context.get("task_run_name") is None
 
         runner.set_task_run_name(task_inputs={"map_index": Temp()})
 
         assert client.set_task_run_name.called
         assert client.set_task_run_name.call_args[1]["name"] == "100"
         assert client.set_task_run_name.call_args[1]["task_run_id"] == "id"
-        assert prefect.context.get("task_run_name") == "100"
+        assert prefectlegacy.context.get("task_run_name") == "100"
 
     task = Task(name="test", task_run_name=lambda **kwargs: "name")
     runner = CloudTaskRunner(task=task)
     runner.task_run_id = "id"
 
-    with prefect.context():
-        assert prefect.context.get("task_run_name") is None
+    with prefectlegacy.context():
+        assert prefectlegacy.context.get("task_run_name") is None
 
         runner.set_task_run_name(task_inputs={})
 
         assert client.set_task_run_name.called
         assert client.set_task_run_name.call_args[1]["name"] == "name"
         assert client.set_task_run_name.call_args[1]["task_run_id"] == "id"
-        assert prefect.context.get("task_run_name") == "name"
+        assert prefectlegacy.context.get("task_run_name") == "name"
 
 
 def test_task_runner_set_task_name_same_as_prefect_context(client):
-    @prefect.task(name="hey", task_run_name=lambda **kwargs: kwargs["config"])
+    @prefectlegacy.task(name="hey", task_run_name=lambda **kwargs: kwargs["config"])
     def test_task(config):
         return
 

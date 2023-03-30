@@ -10,9 +10,9 @@ import cloudpickle
 import pendulum
 import pytest
 
-import prefect
-from prefect import Flow
-from prefect.storage import Docker
+import prefectlegacy
+from prefectlegacy import Flow
+from prefectlegacy.storage import Docker
 
 
 @pytest.fixture
@@ -73,7 +73,7 @@ def test_add_flow_to_docker_custom_prefect_dir():
     ],
 )
 def test_empty_docker_storage(monkeypatch, platform, url, no_docker_host_var):
-    monkeypatch.setattr("prefect.storage.docker.sys.platform", platform)
+    monkeypatch.setattr("prefectlegacy.storage.docker.sys.platform", platform)
     monkeypatch.setattr(sys, "version_info", MagicMock(major=3, minor=7))
     monkeypatch.setattr(prefect, "__version__", "0.9.2+c2394823")
 
@@ -104,7 +104,7 @@ def test_empty_docker_storage(monkeypatch, platform, url, no_docker_host_var):
 def test_empty_docker_storage_on_tagged_commit(
     monkeypatch, platform, url, no_docker_host_var
 ):
-    monkeypatch.setattr("prefect.storage.docker.sys.platform", platform)
+    monkeypatch.setattr("prefectlegacy.storage.docker.sys.platform", platform)
     monkeypatch.setattr(sys, "version_info", MagicMock(major=3, minor=7))
     monkeypatch.setattr(prefect, "__version__", "0.9.2")
 
@@ -232,7 +232,7 @@ def test_files_not_absolute_path():
 def test_build_base_image(monkeypatch):
     storage = Docker(registry_url="reg", base_image="test")
 
-    monkeypatch.setattr("prefect.storage.Docker._build_image", MagicMock())
+    monkeypatch.setattr("prefectlegacy.storage.Docker._build_image", MagicMock())
 
     output = storage.build()
     assert output.registry_url == storage.registry_url
@@ -243,7 +243,7 @@ def test_build_base_image(monkeypatch):
 def test_build_no_default(monkeypatch):
     storage = Docker(registry_url="reg")
 
-    monkeypatch.setattr("prefect.storage.Docker._build_image", MagicMock())
+    monkeypatch.setattr("prefectlegacy.storage.Docker._build_image", MagicMock())
 
     output = storage.build()
     assert output.registry_url == storage.registry_url
@@ -255,7 +255,7 @@ def test_build_sets_informative_image_name(monkeypatch):
     storage = Docker(registry_url="reg")
     storage.add_flow(Flow("test"))
 
-    monkeypatch.setattr("prefect.storage.Docker._build_image", MagicMock())
+    monkeypatch.setattr("prefectlegacy.storage.Docker._build_image", MagicMock())
 
     output = storage.build()
     assert output.registry_url == storage.registry_url
@@ -268,7 +268,7 @@ def test_build_sets_image_name_for_multiple_flows(monkeypatch):
     storage.add_flow(Flow("test"))
     storage.add_flow(Flow("test2"))
 
-    monkeypatch.setattr("prefect.storage.Docker._build_image", MagicMock())
+    monkeypatch.setattr("prefectlegacy.storage.Docker._build_image", MagicMock())
 
     output = storage.build()
     assert output.registry_url == storage.registry_url
@@ -280,7 +280,7 @@ def test_build_respects_user_provided_image_name_and_tag(monkeypatch):
     storage = Docker(registry_url="reg", image_name="CUSTOM", image_tag="TAG")
     storage.add_flow(Flow("test"))
 
-    monkeypatch.setattr("prefect.storage.Docker._build_image", MagicMock())
+    monkeypatch.setattr("prefectlegacy.storage.Docker._build_image", MagicMock())
 
     output = storage.build()
     assert output.registry_url == storage.registry_url
@@ -295,7 +295,7 @@ def test_build_respects_user_provided_image_name_and_tag_for_multiple_flows(
     storage.add_flow(Flow("test"))
     storage.add_flow(Flow("test2"))
 
-    monkeypatch.setattr("prefect.storage.Docker._build_image", MagicMock())
+    monkeypatch.setattr("prefectlegacy.storage.Docker._build_image", MagicMock())
 
     output = storage.build()
     assert output.registry_url == storage.registry_url
@@ -307,7 +307,7 @@ def test_build_sets_informative_image_name_for_weird_name_flows(monkeypatch):
     storage = Docker(registry_url="reg")
     storage.add_flow(Flow("!&& ~~ cool flow :shades:"))
 
-    monkeypatch.setattr("prefect.storage.Docker._build_image", MagicMock())
+    monkeypatch.setattr("prefectlegacy.storage.Docker._build_image", MagicMock())
 
     output = storage.build()
     assert output.registry_url == storage.registry_url
@@ -352,7 +352,7 @@ def test_build_image_passes(monkeypatch):
     )
 
     pull_image = MagicMock()
-    monkeypatch.setattr("prefect.storage.Docker.pull_image", pull_image)
+    monkeypatch.setattr("prefectlegacy.storage.Docker.pull_image", pull_image)
 
     build = MagicMock()
     monkeypatch.setattr("docker.APIClient.build", build)
@@ -372,10 +372,10 @@ def test_build_image_passes_and_pushes(monkeypatch):
     storage = Docker(registry_url="reg", base_image="python:3.7")
 
     pull_image = MagicMock()
-    monkeypatch.setattr("prefect.storage.Docker.pull_image", pull_image)
+    monkeypatch.setattr("prefectlegacy.storage.Docker.pull_image", pull_image)
 
     push_image = MagicMock()
-    monkeypatch.setattr("prefect.storage.Docker.push_image", push_image)
+    monkeypatch.setattr("prefectlegacy.storage.Docker.push_image", push_image)
 
     build = MagicMock()
     monkeypatch.setattr("docker.APIClient.build", build)
@@ -404,7 +404,7 @@ def test_build_with_default_rm_true(monkeypatch):
     )
 
     pull_image = MagicMock()
-    monkeypatch.setattr("prefect.storage.Docker.pull_image", pull_image)
+    monkeypatch.setattr("prefectlegacy.storage.Docker.pull_image", pull_image)
 
     mock_docker_client = MagicMock()
     mock_docker_client.images.return_value = ["test"]
@@ -638,12 +638,12 @@ def test_create_dockerfile_from_dockerfile_uses_tempdir_path():
 @pytest.mark.parametrize(
     "prefect_version",
     [
-        ("0.5.3", ("FROM prefecthq/prefect:0.5.3-python3.7",)),
+        ("0.5.3", ("from prefectlegacyhq/prefect:0.5.3-python3.7",)),
         (
             "master",
             (
                 "FROM python:3.7-slim",
-                "pip show prefect || pip install git+https://github.com/PrefectHQ/prefect.git@master",
+                "pip show prefect || pip install git+https://github.com/PrefectHQ/prefectlegacy.git@master",
             ),
         ),
         (
@@ -651,7 +651,7 @@ def test_create_dockerfile_from_dockerfile_uses_tempdir_path():
             (
                 "FROM python:3.7-slim",
                 "apt update && apt install -y gcc git make && rm -rf /var/lib/apt/lists/*",
-                "pip show prefect || pip install git+https://github.com/PrefectHQ/prefect.git@424be6b5ed8d3be85064de4b95b5c3d7cb665510#egg=prefect[all_orchestration_extras]",
+                "pip show prefect || pip install git+https://github.com/PrefectHQ/prefectlegacy.git@424be6b5ed8d3be85064de4b95b5c3d7cb665510#egg=prefect[all_orchestration_extras]",
             ),
         ),
     ],
@@ -776,7 +776,7 @@ def test_create_dockerfile_from_everything(no_docker_host_var):
 
 def test_create_dockerfile_with_flow_file(no_docker_host_var, tmpdir):
 
-    contents = """from prefect import Flow\nf=Flow('test-flow')"""
+    contents = """from prefectlegacy import Flow\nf=Flow('test-flow')"""
 
     full_path = os.path.join(tmpdir, "flow.py")
 
@@ -986,7 +986,7 @@ def test_docker_storage_get_flow_method(tmpdir):
 
 def test_add_similar_flows_fails():
     storage = Docker()
-    flow = prefect.Flow("test")
+    flow = prefectlegacy.Flow("test")
     storage.add_flow(flow)
     with pytest.raises(ValueError):
         storage.add_flow(flow)
@@ -994,7 +994,7 @@ def test_add_similar_flows_fails():
 
 def test_add_flow_with_weird_name_is_cleaned():
     storage = Docker()
-    flow = prefect.Flow("WELL what do you know?!~? looks like a test!!!!")
+    flow = prefectlegacy.Flow("WELL what do you know?!~? looks like a test!!!!")
     loc = storage.add_flow(flow)
     assert "?" not in loc
     assert "!" not in loc

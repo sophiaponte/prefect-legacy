@@ -5,10 +5,10 @@ from click.testing import CliRunner
 import pytest
 import sys
 
-import prefect
-from prefect.cli import cli
-from prefect.cli.agent import agent
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy.cli import cli
+from prefectlegacy.cli.agent import agent
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 @pytest.mark.parametrize(
@@ -38,7 +38,7 @@ def test_help(cmd):
     [
         (
             "local",
-            "prefect.agent.local.LocalAgent",
+            "prefectlegacy.agent.local.LocalAgent",
             "-p path1 -p path2 -f --no-hostname-label",
             {
                 "import_paths": ["path1", "path2"],
@@ -48,7 +48,7 @@ def test_help(cmd):
         ),
         (
             "docker",
-            "prefect.agent.docker.DockerAgent",
+            "prefectlegacy.agent.docker.DockerAgent",
             (
                 "--base-url testurl --no-pull --show-flow-logs --volume volume1 "
                 "--volume volume2 --network testnetwork1 --network testnetwork2 "
@@ -65,7 +65,7 @@ def test_help(cmd):
         ),
         (
             "kubernetes",
-            "prefect.agent.kubernetes.KubernetesAgent",
+            "prefectlegacy.agent.kubernetes.KubernetesAgent",
             (
                 "--namespace TESTNAMESPACE --job-template testtemplate.yaml",
                 "--service-account-name TESTACCT --image-pull-secrets VAL1,VAL2",
@@ -85,7 +85,7 @@ def test_help(cmd):
         ),
         (
             "ecs",
-            "prefect.agent.ecs.ECSAgent",
+            "prefectlegacy.agent.ecs.ECSAgent",
             (
                 "--cluster TEST-CLUSTER --launch-type EC2 --task-role-arn TEST-TASK-ROLE-ARN "
                 "--task-definition task-definition-path.yaml --run-task-kwargs "
@@ -101,7 +101,7 @@ def test_help(cmd):
         ),
         (
             "ecs",
-            "prefect.agent.ecs.ECSAgent",
+            "prefectlegacy.agent.ecs.ECSAgent",
             (
                 "--cluster TEST-CLUSTER --launch-type FARGATE --execution-role-arn TEST-EXECUTION-ROLE-ARN "
                 "--task-definition task-definition-path.yaml --run-task-kwargs "
@@ -149,9 +149,9 @@ def test_agent_start(name, import_path, extra_cmd, extra_kwargs, monkeypatch):
     agent_obj = MagicMock()
 
     def check_config(*args, **kwargs):
-        assert prefect.config.cloud.api_key == "TEST-KEY"
-        assert prefect.config.cloud.agent.level.upper() == "DEBUG"
-        assert prefect.config.cloud.api == "TEST-API"
+        assert prefectlegacy.config.cloud.api_key == "TEST-KEY"
+        assert prefectlegacy.config.cloud.agent.level.upper() == "DEBUG"
+        assert prefectlegacy.config.cloud.api == "TEST-API"
         return agent_obj
 
     module, cls_name = import_path.rsplit(".", 1)
@@ -171,7 +171,7 @@ def test_agent_start(name, import_path, extra_cmd, extra_kwargs, monkeypatch):
 
 
 def test_agent_local_install(monkeypatch):
-    from prefect.agent.local import LocalAgent
+    from prefectlegacy.agent.local import LocalAgent
 
     command = ["local", "install"]
     command.extend(("--key TEST-KEY --tenant-id TENANT").split())
@@ -197,7 +197,7 @@ def test_agent_local_install(monkeypatch):
 
     generate = MagicMock(wraps=LocalAgent.generate_supervisor_conf)
     monkeypatch.setattr(
-        "prefect.agent.local.LocalAgent.generate_supervisor_conf", generate
+        "prefectlegacy.agent.local.LocalAgent.generate_supervisor_conf", generate
     )
 
     result = CliRunner().invoke(agent, command)
@@ -208,7 +208,7 @@ def test_agent_local_install(monkeypatch):
 
 
 def test_agent_kubernetes_install(monkeypatch):
-    from prefect.agent.kubernetes import KubernetesAgent
+    from prefectlegacy.agent.kubernetes import KubernetesAgent
 
     command = ["kubernetes", "install"]
     command.extend("--key TEST-KEY --tenant-id TENANT".split())
@@ -248,7 +248,7 @@ def test_agent_kubernetes_install(monkeypatch):
 
     generate = MagicMock(wraps=KubernetesAgent.generate_deployment_yaml)
     monkeypatch.setattr(
-        "prefect.agent.kubernetes.KubernetesAgent.generate_deployment_yaml", generate
+        "prefectlegacy.agent.kubernetes.KubernetesAgent.generate_deployment_yaml", generate
     )
 
     result = CliRunner().invoke(agent, command)
@@ -265,11 +265,11 @@ def test_agent_start_sets_or_uses_existing_api_key(use_existing, monkeypatch):
         command.extend(["--key", "BAR"])
 
     def assert_correct_api_key(*args, **kwargs):
-        assert prefect.config.cloud.api_key == "FOO" if use_existing else "BAR"
+        assert prefectlegacy.config.cloud.api_key == "FOO" if use_existing else "BAR"
         return MagicMock()
 
     monkeypatch.setattr(
-        "prefect.agent.local.LocalAgent", MagicMock(side_effect=assert_correct_api_key)
+        "prefectlegacy.agent.local.LocalAgent", MagicMock(side_effect=assert_correct_api_key)
     )
 
     with set_temporary_config({"cloud.api_key": "FOO"}):

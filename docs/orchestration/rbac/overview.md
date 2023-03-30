@@ -38,7 +38,7 @@ To manage permissions more granularly, you can create new roles with custom sets
 
 When creating or updating a role, users cannot grant the role more permissions than they possess.
 
-Custom roles can be created, edited, and deleted on the [Roles page](https://cloud.prefect.io/team/roles).
+Custom roles can be created, edited, and deleted on the [Roles page](https://cloud.prefectlegacy.io/team/roles).
 
 Custom roles can also be created, edited, and deleted via the GraphQL API.
 
@@ -74,7 +74,7 @@ mutation {
 
 ### Assigning Roles
 
-Basic and custom roles can be assigned in the Prefect UI to [users](https://cloud.prefect.io/team/members) and [service accounts](https://cloud.prefect.io/team/service-accounts). When inviting a new user to your team, you can specify a role to assign them.
+Basic and custom roles can be assigned in the Prefect UI to [users](https://cloud.prefectlegacy.io/team/members) and [service accounts](https://cloud.prefectlegacy.io/team/service-accounts). When inviting a new user to your team, you can specify a role to assign them.
 
 Roles can also be assigned programmatically via the GraphQL API.
 

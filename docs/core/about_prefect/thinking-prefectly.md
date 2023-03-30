@@ -4,7 +4,7 @@ sidebarDepth: 0
 
 # Thinking Prefectly
 
-This page will give you a gentle introduction to Prefect's core concepts. If you are keen to get started we have a [Getting Started guide](/core/getting_started/quick-start.html) and [ETL tutorial](/core/tutorial/01-etl-before-prefect.html) on building real-world data applications with Prefect.
+This page will give you a gentle introduction to Prefect's core concepts. If you are keen to get started we have a [Getting Started guide](/core/getting_started/quick-start.html) and [ETL tutorial](/core/tutorial/01-etl-before-prefectlegacy.html) on building real-world data applications with prefectlegacy.
 
 Prefect is a tool for building **data workflows**. A workflow is a series of steps that are performed in a certain order.
 
@@ -19,7 +19,7 @@ In this introduction, we'll cover the basics of defining **tasks** and combining
 Prefect refers to each step as a **task**. In a simple sense, a task is nothing more than a Python function. In fact, the easiest way to create a new task is just by decorating an existing function. Let's make a simple task that prints `"Hello, world!"`:
 
 ```python
-from prefect import task
+from prefectlegacy import task
 
 @task
 def say_hello():
@@ -55,7 +55,7 @@ Notice how we used Python 3 annotations to tell Prefect our input and output typ
 Sometimes, you'll need to design classes that are more complex than a single function. For this, you can subclass the Prefect `Task` class and implement its `__init__()` and `run()` methods. Here's how our `add` task might look if we wanted it to have a customizable default:
 
 ```python
-from prefect import Task
+from prefectlegacy import Task
 
 class AddTask(Task):
 
@@ -85,7 +85,7 @@ The easiest way to build a flow is with Prefect's **functional API**. Create a f
 Here is a flow that uses the add task we wrote earlier to add a few numbers together. Notice how tasks can accept numbers or even other tasks as inputs; Prefect automatically creates the appropriate connections (or "edges") in the flow graph. In addition, notice that we call `add` twice, generating two distinct copies of our task in the flow:
 
 ```python
-from prefect import Flow
+from prefectlegacy import Flow
 
 with Flow("My first flow!") as flow:
     first_result = add(1, y=2)
@@ -121,7 +121,7 @@ When you build a flow in Prefect, you're defining a _computational graph_ that c
 Sometimes, it's useful to provide information to a flow at runtime. Prefect provides a special task called a `Parameter` for this purpose. Let's use a parameter to write a flow that says hello to someone:
 
 ```python
-from prefect import Parameter
+from prefectlegacy import Parameter
 
 with Flow("Say hi!") as flow:
     name = Parameter("name")

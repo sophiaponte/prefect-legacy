@@ -1,9 +1,9 @@
 import pydantic
 import pytest
 
-from prefect.exceptions import PrefectException
-from prefect.tasks.databricks import DatabricksSubmitMultitaskRun
-from prefect.tasks.databricks.models import (
+from prefectlegacy.exceptions import prefectlegacyException
+from prefectlegacy.tasks.databricks import DatabricksSubmitMultitaskRun
+from prefectlegacy.tasks.databricks.models import (
     AccessControlRequestForGroup,
     AccessControlRequestForUser,
     AutoScale,

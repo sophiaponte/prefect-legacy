@@ -11,7 +11,7 @@ Whether you're running Prefect locally with `Flow.run()` or experimenting with y
 If your problem is related to retries, or if you want to run your flow off-schedule, you might first consider rerunning your flow with `run_on_schedule=False`. This can be accomplished via environment variable (`PREFECT__FLOWS__RUN_ON_SCHEDULE=false`) or keyword (`flow.run(run_on_schedule=False)`). If you instead want to implement a single Flow run yourself consider using a `FlowRunner` directly:
 
 ```python
-from prefect.engine.flow_runner import FlowRunner
+from prefectlegacy.engine.flow_runner import FlowRunner
 
 # ... your flow construction
 
@@ -30,7 +30,7 @@ Your choice of executor is very important for how easily it will be to debug you
 To swap out executors, follow the schematic:
 
 ```python
-from prefect.executors import LocalExecutor
+from prefectlegacy.executors import LocalExecutor
 
 # ... your flow construction
 
@@ -47,7 +47,7 @@ If you want to upgrade to a more powerful executor but still maintain an easily 
 You can set the `LocalDaskExecutor` to be the default executor on your local machine. To change your Prefect settings (including the default executor), you can either:
 
 - modify your `~/.prefect/config.toml` file
-- update your OS environment variables; every value in the config file can be overridden by setting `PREFECT__SECTION__SUBSECTION__KEY`. For example, to change the default executor, you can set `PREFECT__ENGINE__EXECUTOR__DEFAULT_CLASS="prefect.executors.LocalExecutor"`
+- update your OS environment variables; every value in the config file can be overridden by setting `PREFECT__SECTION__SUBSECTION__KEY`. For example, to change the default executor, you can set `PREFECT__ENGINE__EXECUTOR__DEFAULT_CLASS="prefectlegacy.executors.LocalExecutor"`
   :::
 
 #### `DaskExecutor`
@@ -61,8 +61,8 @@ them, pass `debug=True`.
 Sometimes, you don't want Prefect's robust error-handling mechanisms to trap exceptions -- you'd rather they were raised so you could immediately debug them yourself! Use the `raise_on_exception` context manager to raise errors the _moment_ they happen:
 
 ```python
-from prefect import Flow, task
-from prefect.utilities.debug import raise_on_exception
+from prefectlegacy import Flow, task
+from prefectlegacy.utilities.debug import raise_on_exception
 
 
 @task
@@ -110,7 +110,7 @@ Suppose you want to let the full pipeline run and don't want to raise the trappe
 To demonstrate:
 
 ```python
-from prefect import Flow, task
+from prefectlegacy import Flow, task
 
 
 @task
@@ -149,21 +149,21 @@ AssertionError                            Traceback (most recent call last)
      23 failed_state = state.result[gotcha]
 ---> 24 raise failed_state.result
 
-~/Developer/prefect/src/prefect/engine/runner.py in inner(self, state, *args, **kwargs)
+~/Developer/prefect/src/prefectlegacy/engine/runner.py in inner(self, state, *args, **kwargs)
      58
      59         try:
 ---> 60             new_state = method(self, state, *args, **kwargs)
      61         except ENDRUN as exc:
      62             raise_end_run = True
 
-~/Developer/prefect/src/prefect/engine/task_runner.py in get_task_run_state(self, state, inputs, timeout_handler)
+~/Developer/prefect/src/prefectlegacy/engine/task_runner.py in get_task_run_state(self, state, inputs, timeout_handler)
     697             self.logger.info("Running task...")
     698             timeout_handler = timeout_handler or main_thread_timeout
 --> 699             result = timeout_handler(self.task.run, timeout=self.task.timeout, **inputs)
     700
     701         # inform user of timeout
 
-~/Developer/prefect/src/prefect/utilities/executors.py in multiprocessing_timeout(fn, timeout, *args, **kwargs)
+~/Developer/prefect/src/prefectlegacy/utilities/executors.py in multiprocessing_timeout(fn, timeout, *args, **kwargs)
      68
      69     if timeout is None:
 ---> 70         return fn(*args, **kwargs)
@@ -233,9 +233,9 @@ The following Flow fails at run-time due to a `ZeroDivisionError` in the `failur
 ```python
 from time import sleep
 
-import prefect
-from prefect import Flow, task
-from prefect.engine import FlowRunner
+import prefectlegacy
+from prefectlegacy import Flow, task
+from prefectlegacy.engine import FlowRunner
 
 @task
 def i_will_take_forever() -> int:
@@ -266,7 +266,7 @@ Swapping out `1/0` with `1/1` in the task `failure()` using `flow.replace` would
 Every time a Prefect flow is run, the `state` of the flow after it is run is returned.  The flow run `state` result is a dictionary whose keys are `Task` objects and whose values are the states of those tasks after the run is complete.  
 
 ```python
-from prefect.engine.state import Success
+from prefectlegacy.engine.state import Success
 
 long_task = flow.get_tasks(name="i_will_take_forever")[0]
 task_states =  {long_task : Success("Mocked success", result=42)}
@@ -282,8 +282,8 @@ We can access our long-running task using the convenient `get_tasks` method, and
 Another reason a flow might unexpectedly break in production (or fail to run at all) is if its storage is broken (e.g., if you forget a Python dependency in defining your `Docker` storage for the flow). Luckily, checking your flow's storage locally is easy! Let's walk through an example:
 
 ```python
-from prefect import task, Flow
-from prefect.storage import Docker
+from prefectlegacy import task, Flow
+from prefectlegacy.storage import Docker
 
 
 # import a non-prefect package used for scraping reddit

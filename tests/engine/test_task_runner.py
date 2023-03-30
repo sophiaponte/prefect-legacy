@@ -9,12 +9,12 @@ from datetime import datetime, timedelta
 from time import sleep, time
 from unittest.mock import MagicMock
 
-import prefect
-from prefect.client import Secret
-from prefect.core.edge import Edge
-from prefect.core.task import Task
-from prefect.engine import cache_validators, signals
-from prefect.engine.cache_validators import (
+import prefectlegacy
+from prefectlegacy.client import Secret
+from prefectlegacy.core.edge import Edge
+from prefectlegacy.core.task import Task
+from prefectlegacy.engine import cache_validators, signals
+from prefectlegacy.engine.cache_validators import (
     all_inputs,
     all_parameters,
     duration_only,
@@ -22,9 +22,9 @@ from prefect.engine.cache_validators import (
     partial_inputs_only,
     partial_parameters_only,
 )
-from prefect.engine.result import Result, NoResult
-from prefect.engine.results import LocalResult, PrefectResult
-from prefect.engine.state import (
+from prefectlegacy.engine.result import Result, NoResult
+from prefectlegacy.engine.results import LocalResult, PrefectResult
+from prefectlegacy.engine.state import (
     Cached,
     Failed,
     Finished,
@@ -43,12 +43,12 @@ from prefect.engine.state import (
     TimedOut,
     TriggerFailed,
 )
-from prefect.engine.task_runner import ENDRUN, TaskRunner
-from prefect.utilities.configuration import set_temporary_config
-from prefect.utilities.debug import raise_on_exception
-from prefect.exceptions import TaskTimeoutSignal
-from prefect.utilities.edges import flatten, mapped, unmapped
-from prefect.utilities.tasks import pause_task
+from prefectlegacy.engine.task_runner import ENDRUN, TaskRunner
+from prefectlegacy.utilities.configuration import set_temporary_config
+from prefectlegacy.utilities.debug import raise_on_exception
+from prefectlegacy.exceptions import TaskTimeoutSignal
+from prefectlegacy.utilities.edges import flatten, mapped, unmapped
+from prefectlegacy.utilities.tasks import pause_task
 
 
 class SuccessTask(Task):
@@ -63,25 +63,25 @@ class ErrorTask(Task):
 
 class RaiseFailTask(Task):
     def run(self):
-        raise prefect.engine.signals.FAIL("custom-fail-message")
+        raise prefectlegacy.engine.signals.FAIL("custom-fail-message")
         raise ValueError("custom-error-message")  # pylint: disable=W0101
 
 
 class RaiseSkipTask(Task):
     def run(self):
-        raise prefect.engine.signals.SKIP()
+        raise prefectlegacy.engine.signals.SKIP()
         raise ValueError()  # pylint: disable=W0101
 
 
 class RaiseSuccessTask(Task):
     def run(self):
-        raise prefect.engine.signals.SUCCESS()
+        raise prefectlegacy.engine.signals.SUCCESS()
         raise ValueError()  # pylint: disable=W0101
 
 
 class RaiseRetryTask(Task):
     def run(self):
-        raise prefect.engine.signals.RETRY()
+        raise prefectlegacy.engine.signals.RETRY()
         raise ValueError()  # pylint: disable=W0101
 
 
@@ -97,7 +97,7 @@ class ListTask(Task):
 
 class MapTask(Task):
     def run(self):
-        return prefect.context.get("map_index")
+        return prefectlegacy.context.get("map_index")
 
 
 class SlowTask(Task):
@@ -113,7 +113,7 @@ class SecretTask(Task):
 
 def test_task_runner_has_logger():
     r = TaskRunner(Task())
-    assert r.logger.name == "prefect.TaskRunner"
+    assert r.logger.name == "prefectlegacy.TaskRunner"
 
 
 def test_task_that_succeeds_is_marked_success():
@@ -272,14 +272,14 @@ def test_task_that_raises_retry_gets_retried_even_if_max_retries_is_set():
     task_runner = TaskRunner(task=retry_task)
 
     # first run should be retrying
-    with prefect.context(task_run_count=1):
+    with prefectlegacy.context(task_run_count=1):
         state = task_runner.run()
     assert state.is_retrying()
     assert isinstance(state.start_time, datetime)
 
     # second run should also be retry because the task raises it explicitly
 
-    with prefect.context(task_run_count=2):
+    with prefectlegacy.context(task_run_count=2):
         state = task_runner.run(state=state)
     assert state.is_retrying()
 
@@ -390,7 +390,7 @@ def test_timeout_actually_stops_execution():
         # Note: a real file must be used in the case of "mthread"
         FILE = os.path.join(call_dir, "test.txt")
 
-        @prefect.task(timeout=1)
+        @prefectlegacy.task(timeout=1)
         def slow_fn():
             with open(FILE, "w") as f:
                 f.write("called!")
@@ -456,11 +456,11 @@ class TestContext:
         assert isinstance(runner.context, dict)
         assert "chris" not in runner.context
 
-        with prefect.context(chris="foo"):
+        with prefectlegacy.context(chris="foo"):
             runner2 = TaskRunner(Task())
             assert "chris" in runner2.context
 
-        assert "chris" not in prefect.context
+        assert "chris" not in prefectlegacy.context
         assert runner2.context["chris"] == "foo"
 
 
@@ -469,7 +469,7 @@ class TestInitializeRun:
         "state", [Success(), Failed(), Pending(), Scheduled(), Skipped(), Cached()]
     )
     def test_states_without_run_count(self, state):
-        with prefect.context() as ctx:
+        with prefectlegacy.context() as ctx:
             assert "task_run_count" not in ctx
             result = TaskRunner(Task()).initialize_run(state=state, context=ctx)
             assert ctx.task_run_count == 1
@@ -485,20 +485,20 @@ class TestInitializeRun:
         ],
     )
     def test_states_with_run_count(self, state):
-        with prefect.context() as ctx:
+        with prefectlegacy.context() as ctx:
             assert "task_run_count" not in ctx
             result = TaskRunner(Task()).initialize_run(state=state, context=ctx)
             assert ctx.task_run_count == state.run_count + 1
             assert result.state is state
 
     def test_task_runner_puts_resume_in_context_if_state_is_resume(self):
-        with prefect.context() as ctx:
+        with prefectlegacy.context() as ctx:
             assert "resume" not in ctx
             result = TaskRunner(Task()).initialize_run(state=Resume(), context=ctx)
             assert result.context.resume is True
 
     def test_task_runner_puts_resume_in_context_if_paused_start_time_elapsed(self):
-        with prefect.context() as ctx:
+        with prefectlegacy.context() as ctx:
             assert "resume" not in ctx
             result = TaskRunner(Task()).initialize_run(
                 state=Paused(start_time=pendulum.now("utc")), context=ctx
@@ -506,7 +506,7 @@ class TestInitializeRun:
             assert result.context.resume is True
 
     def test_task_runner_ignores_resume_in_context_if_paused_start_time_in_future(self):
-        with prefect.context() as ctx:
+        with prefectlegacy.context() as ctx:
             assert "resume" not in ctx
             result = TaskRunner(Task()).initialize_run(
                 state=Paused(start_time=pendulum.now("utc").add(seconds=10)),
@@ -515,26 +515,26 @@ class TestInitializeRun:
             assert "resume" not in ctx
 
     def test_task_runner_puts_checkpointing_in_context(self):
-        with prefect.context() as ctx:
+        with prefectlegacy.context() as ctx:
             assert "checkpointing" not in ctx
             with set_temporary_config({"flows.checkpointing": "FOO"}):
                 # Pull from context.config if present
-                prefect.config.flows.checkpointing = False
+                prefectlegacy.config.flows.checkpointing = False
                 result = TaskRunner(Task()).initialize_run(state=None, context=ctx)
                 assert result.context.checkpointing == "FOO"
                 # Otherwise fallback to local config
-                prefect.config.flows.checkpointing = "FOO"
-                del prefect.context.config.flows.checkpointing
+                prefectlegacy.config.flows.checkpointing = "FOO"
+                del prefectlegacy.context.config.flows.checkpointing
                 result = TaskRunner(Task()).initialize_run(state=None, context=ctx)
                 assert result.context.checkpointing == "FOO"
 
     def test_task_runner_puts_tags_in_context(self):
-        with prefect.context() as ctx:
+        with prefectlegacy.context() as ctx:
             assert "task_tags" not in ctx
             result = TaskRunner(Task()).initialize_run(state=None, context=ctx)
             assert result.context.task_tags == set()
 
-        with prefect.context() as ctx:
+        with prefectlegacy.context() as ctx:
             assert "task_tags" not in ctx
             result = TaskRunner(Task(tags=["foo", "bar"])).initialize_run(
                 state=None, context=ctx
@@ -547,7 +547,7 @@ class TestInitializeRun:
     def test_task_runner_doesnt_put_resume_in_context_if_state_is_not_resume(
         self, state
     ):
-        with prefect.context() as ctx:
+        with prefectlegacy.context() as ctx:
             assert "resume" not in ctx
             result = TaskRunner(Task()).initialize_run(state=state, context=ctx)
             assert "resume" not in result.context
@@ -672,7 +672,7 @@ class TestCheckUpstreamSkipped:
 
 class TestCheckTaskTrigger:
     def test_all_successful_pass(self):
-        task = Task(trigger=prefect.triggers.all_successful)
+        task = Task(trigger=prefectlegacy.triggers.all_successful)
         state = Pending()
         new_state = TaskRunner(task).check_task_trigger(
             state=state, upstream_states={1: Success(), 2: Success()}
@@ -680,7 +680,7 @@ class TestCheckTaskTrigger:
         assert new_state is state
 
     def test_all_successful_fail(self):
-        task = Task(trigger=prefect.triggers.all_successful)
+        task = Task(trigger=prefectlegacy.triggers.all_successful)
         state = Pending()
         with pytest.raises(ENDRUN) as exc:
             TaskRunner(task).check_task_trigger(
@@ -690,13 +690,13 @@ class TestCheckTaskTrigger:
         assert 'Trigger was "all_successful"' in str(exc.value.state)
 
     def test_all_successful_empty(self):
-        task = Task(trigger=prefect.triggers.all_successful)
+        task = Task(trigger=prefectlegacy.triggers.all_successful)
         state = Pending()
         new_state = TaskRunner(task).check_task_trigger(state=state, upstream_states={})
         assert new_state is state
 
     def test_all_failed_pass(self):
-        task = Task(trigger=prefect.triggers.all_failed)
+        task = Task(trigger=prefectlegacy.triggers.all_failed)
         state = Pending()
         new_state = TaskRunner(task).check_task_trigger(
             state=state, upstream_states={1: Failed(), 2: Failed()}
@@ -704,7 +704,7 @@ class TestCheckTaskTrigger:
         assert new_state is state
 
     def test_all_failed_fail(self):
-        task = Task(trigger=prefect.triggers.all_failed)
+        task = Task(trigger=prefectlegacy.triggers.all_failed)
         state = Pending()
         with pytest.raises(ENDRUN) as exc:
             TaskRunner(task).check_task_trigger(
@@ -714,13 +714,13 @@ class TestCheckTaskTrigger:
         assert 'Trigger was "all_failed"' in str(exc.value.state)
 
     def test_all_failed_empty(self):
-        task = Task(trigger=prefect.triggers.all_failed)
+        task = Task(trigger=prefectlegacy.triggers.all_failed)
         state = Pending()
         new_state = TaskRunner(task).check_task_trigger(state=state, upstream_states={})
         assert new_state is state
 
     def test_any_successful_pass(self):
-        task = Task(trigger=prefect.triggers.any_successful)
+        task = Task(trigger=prefectlegacy.triggers.any_successful)
         state = Pending()
         new_state = TaskRunner(task).check_task_trigger(
             state=state, upstream_states={1: Success(), 2: Failed()}
@@ -728,7 +728,7 @@ class TestCheckTaskTrigger:
         assert new_state is state
 
     def test_any_successful_fail(self):
-        task = Task(trigger=prefect.triggers.any_successful)
+        task = Task(trigger=prefectlegacy.triggers.any_successful)
         state = Pending()
         with pytest.raises(ENDRUN) as exc:
             TaskRunner(task).check_task_trigger(
@@ -738,13 +738,13 @@ class TestCheckTaskTrigger:
         assert 'Trigger was "any_successful"' in str(exc.value.state)
 
     def test_any_successful_empty(self):
-        task = Task(trigger=prefect.triggers.any_successful)
+        task = Task(trigger=prefectlegacy.triggers.any_successful)
         state = Pending()
         new_state = TaskRunner(task).check_task_trigger(state=state, upstream_states={})
         assert new_state is state
 
     def test_any_failed_pass(self):
-        task = Task(trigger=prefect.triggers.any_failed)
+        task = Task(trigger=prefectlegacy.triggers.any_failed)
         state = Pending()
         new_state = TaskRunner(task).check_task_trigger(
             state=state, upstream_states={1: Success(), 2: Failed()}
@@ -752,7 +752,7 @@ class TestCheckTaskTrigger:
         assert new_state is state
 
     def test_any_failed_fail(self):
-        task = Task(trigger=prefect.triggers.any_failed)
+        task = Task(trigger=prefectlegacy.triggers.any_failed)
         state = Pending()
         with pytest.raises(ENDRUN) as exc:
             TaskRunner(task).check_task_trigger(
@@ -762,13 +762,13 @@ class TestCheckTaskTrigger:
         assert 'Trigger was "any_failed"' in str(exc.value.state)
 
     def test_any_failed_empty(self):
-        task = Task(trigger=prefect.triggers.any_failed)
+        task = Task(trigger=prefectlegacy.triggers.any_failed)
         state = Pending()
         new_state = TaskRunner(task).check_task_trigger(state=state, upstream_states={})
         assert new_state is state
 
     def test_all_finished_pass(self):
-        task = Task(trigger=prefect.triggers.all_finished)
+        task = Task(trigger=prefectlegacy.triggers.all_finished)
         state = Pending()
         new_state = TaskRunner(task).check_task_trigger(
             state=state, upstream_states={1: Success(), 2: Failed()}
@@ -776,7 +776,7 @@ class TestCheckTaskTrigger:
         assert new_state is state
 
     def test_all_finished_fail(self):
-        task = Task(trigger=prefect.triggers.all_finished)
+        task = Task(trigger=prefectlegacy.triggers.all_finished)
         state = Pending()
         with pytest.raises(ENDRUN) as exc:
             TaskRunner(task).check_task_trigger(
@@ -786,13 +786,13 @@ class TestCheckTaskTrigger:
         assert 'Trigger was "all_finished"' in str(exc.value.state)
 
     def test_all_finished_empty(self):
-        task = Task(trigger=prefect.triggers.all_finished)
+        task = Task(trigger=prefectlegacy.triggers.all_finished)
         state = Pending()
         new_state = TaskRunner(task).check_task_trigger(state=state, upstream_states={})
         assert new_state is state
 
     def test_manual_only(self):
-        task = Task(trigger=prefect.triggers.manual_only)
+        task = Task(trigger=prefectlegacy.triggers.manual_only)
         state = Pending()
         with pytest.raises(ENDRUN) as exc:
             TaskRunner(task).check_task_trigger(
@@ -801,7 +801,7 @@ class TestCheckTaskTrigger:
         assert isinstance(exc.value.state, Paused)
 
     def test_manual_only_empty(self):
-        task = Task(trigger=prefect.triggers.manual_only)
+        task = Task(trigger=prefectlegacy.triggers.manual_only)
         state = Pending()
         with pytest.raises(ENDRUN) as exc:
             new_state = TaskRunner(task).check_task_trigger(
@@ -810,9 +810,9 @@ class TestCheckTaskTrigger:
         assert isinstance(exc.value.state, Paused)
 
     def test_manual_passes_when_context_is_resume(self):
-        task = Task(trigger=prefect.triggers.manual_only)
+        task = Task(trigger=prefectlegacy.triggers.manual_only)
         state = Pending()
-        with prefect.context(resume=True):
+        with prefectlegacy.context(resume=True):
             new_state = TaskRunner(task).check_task_trigger(
                 state=state, upstream_states={1: Success()}
             )
@@ -969,7 +969,7 @@ class TestCheckTaskCached:
             cached_result_expiration=pendulum.now("utc") + timedelta(minutes=1),
         )
 
-        with prefect.context(caches={"Task": [state]}):
+        with prefectlegacy.context(caches={"Task": [state]}):
             new = TaskRunner(task).check_task_is_cached(
                 state=Pending(), inputs={"a": Result(1)}
             )
@@ -991,7 +991,7 @@ class TestCheckTaskCached:
             cached_result_expiration=pendulum.now("utc") + timedelta(minutes=1),
         )
 
-        with prefect.context(caches={"Task": [state_a]}):
+        with prefectlegacy.context(caches={"Task": [state_a]}):
             new = TaskRunner(task).check_task_is_cached(
                 state=state_b, inputs={"a": Result(1)}
             )
@@ -1010,7 +1010,7 @@ class TestCheckTaskCached:
             cached_result_expiration=pendulum.now("utc") + timedelta(minutes=1),
         )
 
-        with prefect.context(caches={"FOO": [state]}):
+        with prefectlegacy.context(caches={"FOO": [state]}):
             new = TaskRunner(task).check_task_is_cached(
                 state=Pending(), inputs={"a": Result(1)}
             )
@@ -1021,11 +1021,11 @@ class TestCheckTaskCached:
         ctxt = dict()
 
         def custom_validator(state, inputs, parameters):
-            ctxt.update(prefect.context.to_dict())
+            ctxt.update(prefectlegacy.context.to_dict())
             return False
 
         # have to have a state worth checking to trigger the validator
-        with prefect.context(caches={"Task": [State()]}, checkpointing=False):
+        with prefectlegacy.context(caches={"Task": [State()]}, checkpointing=False):
             task = Task(
                 cache_for=timedelta(seconds=10), cache_validator=custom_validator
             )
@@ -1079,7 +1079,7 @@ class TestRunTaskStep:
             TaskRunner(task=Task()).get_task_run_state(state=state, inputs={})
 
     def test_raise_success_signal(self):
-        @prefect.task
+        @prefectlegacy.task
         def fn():
             raise signals.SUCCESS()
 
@@ -1088,7 +1088,7 @@ class TestRunTaskStep:
         assert new_state.is_successful()
 
     def test_raise_fail_signal(self):
-        @prefect.task
+        @prefectlegacy.task
         def fn():
             raise signals.FAIL()
 
@@ -1097,7 +1097,7 @@ class TestRunTaskStep:
         assert new_state.is_failed()
 
     def test_raise_loop_signal(self):
-        @prefect.task
+        @prefectlegacy.task
         def fn():
             raise signals.LOOP(result=1)
 
@@ -1109,7 +1109,7 @@ class TestRunTaskStep:
         assert "looping" in new_state.message
 
     def test_raise_loop_signal_with_custom_message(self):
-        @prefect.task
+        @prefectlegacy.task
         def fn():
             raise signals.LOOP(message="My message")
 
@@ -1121,7 +1121,7 @@ class TestRunTaskStep:
         assert new_state.message == "My message"
 
     def test_raise_skip_signal(self):
-        @prefect.task
+        @prefectlegacy.task
         def fn():
             raise signals.SKIP()
 
@@ -1130,7 +1130,7 @@ class TestRunTaskStep:
         assert isinstance(new_state, Skipped)
 
     def test_raise_pause_signal(self):
-        @prefect.task
+        @prefectlegacy.task
         def fn():
             raise signals.PAUSE()
 
@@ -1139,7 +1139,7 @@ class TestRunTaskStep:
         assert isinstance(new_state, Paused)
 
     def test_run_with_error(self):
-        @prefect.task
+        @prefectlegacy.task
         def fn():
             1 / 0
 
@@ -1149,7 +1149,7 @@ class TestRunTaskStep:
         assert isinstance(new_state.result, ZeroDivisionError)
 
     def test_inputs(self):
-        @prefect.task
+        @prefectlegacy.task
         def fn(x):
             return x + 1
 
@@ -1161,7 +1161,7 @@ class TestRunTaskStep:
         assert new_state.result == 2
 
     def test_invalid_inputs(self):
-        @prefect.task
+        @prefectlegacy.task
         def fn(x):
             return x + 1
 
@@ -1185,11 +1185,11 @@ class TestRunTaskStep:
         assert isinstance(state._result, PrefectResult)
 
     def test_success_state_without_checkpoint(self):
-        @prefect.task(checkpoint=False, result=PrefectResult())
+        @prefectlegacy.task(checkpoint=False, result=PrefectResult())
         def fn(x):
             return x + 1
 
-        with prefect.context(checkpointing=True):
+        with prefectlegacy.context(checkpointing=True):
             new_state = TaskRunner(task=fn).get_task_run_state(
                 state=Running(), inputs={"x": Result(1)}
             )
@@ -1198,7 +1198,7 @@ class TestRunTaskStep:
 
     @pytest.mark.parametrize("checkpoint", [True, None])
     def test_success_state_with_checkpointing_in_config(self, checkpoint):
-        @prefect.task(checkpoint=checkpoint, result=PrefectResult())
+        @prefectlegacy.task(checkpoint=checkpoint, result=PrefectResult())
         def fn(x):
             return x + 1
 
@@ -1211,9 +1211,9 @@ class TestRunTaskStep:
         assert new_state._result.location == "3"
 
     def test_raised_success_state_is_checkpointed(self):
-        @prefect.task(checkpoint=True, result=PrefectResult())
+        @prefectlegacy.task(checkpoint=True, result=PrefectResult())
         def fn(x):
-            raise prefect.engine.signals.SUCCESS("custom-message", result=x + 1)
+            raise prefectlegacy.engine.signals.SUCCESS("custom-message", result=x + 1)
 
         edge = Edge(Task(), fn, key="x")
         with set_temporary_config({"flows.checkpointing": True}):
@@ -1227,7 +1227,7 @@ class TestRunTaskStep:
     def test_result_formatting_with_checkpointing(self, tmpdir):
         result = LocalResult(dir=tmpdir, location="{task_name}.txt")
 
-        @prefect.task(checkpoint=True, result=result)
+        @prefectlegacy.task(checkpoint=True, result=result)
         def fn(x):
             return x + 1
 
@@ -1244,7 +1244,7 @@ class TestRunTaskStep:
             dir=tmpdir, location=lambda **kwargs: kwargs["task_name"][:3] + ".txt"
         )
 
-        @prefect.task(checkpoint=True, result=result, name="big function name")
+        @prefectlegacy.task(checkpoint=True, result=result, name="big function name")
         def fn(x):
             return x + 1
 
@@ -1259,7 +1259,7 @@ class TestRunTaskStep:
     def test_result_formatting_with_templated_inputs(self, tmpdir):
         result = LocalResult(dir=tmpdir, location="{x}.txt")
 
-        @prefect.task(checkpoint=True, result=result, slug="1234567")
+        @prefectlegacy.task(checkpoint=True, result=result, slug="1234567")
         def fn(x):
             return x + 1
 
@@ -1276,7 +1276,7 @@ class TestRunTaskStep:
     ):
         result = LocalResult(dir=tmpdir, location="{config}.txt")
 
-        @prefect.task(checkpoint=True, result=result, slug="1234567")
+        @prefectlegacy.task(checkpoint=True, result=result, slug="1234567")
         def fn(config):
             return config
 
@@ -1291,7 +1291,7 @@ class TestRunTaskStep:
     def test_result_formatting_with_input_named_value(self, tmpdir):
         result = LocalResult(dir=tmpdir, location="{value}.txt")
 
-        @prefect.task(checkpoint=True, result=result, slug="1234567")
+        @prefectlegacy.task(checkpoint=True, result=result, slug="1234567")
         def fn(value):
             return value + 1
 
@@ -1305,11 +1305,11 @@ class TestRunTaskStep:
 
     @pytest.mark.parametrize("checkpoint", [True, None])
     def test_success_state_with_checkpointing_in_context(self, checkpoint):
-        @prefect.task(checkpoint=checkpoint, result=PrefectResult())
+        @prefectlegacy.task(checkpoint=checkpoint, result=PrefectResult())
         def fn(x):
             return x + 1
 
-        with prefect.context(checkpointing=True):
+        with prefectlegacy.context(checkpointing=True):
             new_state = TaskRunner(task=fn).get_task_run_state(
                 state=Running(), inputs={"x": Result(2)}
             )
@@ -1318,19 +1318,19 @@ class TestRunTaskStep:
 
     @pytest.mark.parametrize("checkpoint", [True, None])
     def test_success_state_is_checkpointed_if_result_handler_present(self, checkpoint):
-        @prefect.task(checkpoint=checkpoint, result=PrefectResult())
+        @prefectlegacy.task(checkpoint=checkpoint, result=PrefectResult())
         def fn():
             return 1
 
         ## checkpointing allows users to toggle behavior for local testing
-        with prefect.context(checkpointing=False):
+        with prefectlegacy.context(checkpointing=False):
             new_state = TaskRunner(task=fn).get_task_run_state(
                 state=Running(), inputs={}
             )
         assert new_state.is_successful()
         assert new_state._result.location is None
 
-        with prefect.context(checkpointing=True):
+        with prefectlegacy.context(checkpointing=True):
             new_state = TaskRunner(task=fn).get_task_run_state(
                 state=Running(), inputs={}
             )
@@ -1338,8 +1338,8 @@ class TestRunTaskStep:
         assert new_state._result.location == "1"
 
     def test_success_state_for_parameter(self):
-        p = prefect.Parameter("p", default=2)
-        with prefect.context(checkpointing=True):
+        p = prefectlegacy.Parameter("p", default=2)
+        with prefectlegacy.context(checkpointing=True):
             new_state = TaskRunner(task=p).get_task_run_state(
                 state=Running(), inputs={}
             )
@@ -1355,11 +1355,11 @@ class TestRunTaskStep:
             def write(self, *args, **kwargs):
                 raise SyntaxError("Oh boy")
 
-        @prefect.task(checkpoint=checkpoint, result=BadResult())
+        @prefectlegacy.task(checkpoint=checkpoint, result=BadResult())
         def fn(x):
             return x + 1
 
-        with prefect.context(checkpointing=True):
+        with prefectlegacy.context(checkpointing=True):
             new_state = TaskRunner(task=fn).get_task_run_state(
                 state=Running(), inputs={"x": Result(1)}
             )
@@ -1374,11 +1374,11 @@ class TestRunTaskStep:
             def write(self, *args, **kwargs):
                 raise SyntaxError("Oh boy")
 
-        @prefect.task(checkpoint=False, result=BadResult())
+        @prefectlegacy.task(checkpoint=False, result=BadResult())
         def fn(x):
             return x + 1
 
-        with prefect.context(checkpointing=True):
+        with prefectlegacy.context(checkpointing=True):
             new_state = TaskRunner(task=fn).get_task_run_state(
                 state=Running(), inputs={"x": Result(1)}
             )
@@ -1408,7 +1408,7 @@ class TestCheckRetryStep:
 
     def test_failed_one_max_retry_second_run(self):
         state = Failed()
-        with prefect.context(task_run_count=2):
+        with prefectlegacy.context(task_run_count=2):
             new_state = TaskRunner(
                 task=Task(max_retries=1, retry_delay=timedelta(0))
             ).check_for_retry(state=state, inputs={})
@@ -1423,7 +1423,7 @@ class TestCheckRetryStep:
         assert new_state.is_retrying()
 
     def test_retrying_when_run_count_greater_than_max_retries(self):
-        with prefect.context(task_run_count=10):
+        with prefectlegacy.context(task_run_count=10):
             state = Retrying()
             new_state = TaskRunner(
                 task=Task(max_retries=1, retry_delay=timedelta(0))
@@ -1438,7 +1438,7 @@ class TestCheckRetryStep:
         assert new_state is state
 
     def test_retrying_when_state_has_explicit_run_count_set(self):
-        with prefect.context(task_run_count=10):
+        with prefectlegacy.context(task_run_count=10):
             state = Retrying(run_count=5)
             new_state = TaskRunner(
                 task=Task(max_retries=1, retry_delay=timedelta(0))
@@ -1491,7 +1491,7 @@ class TestCacheResultStep:
         assert new_state is state
 
     def test_success_state_with_cache_for(self):
-        @prefect.task(cache_for=timedelta(minutes=10))
+        @prefectlegacy.task(cache_for=timedelta(minutes=10))
         def fn(x):
             return x + 1
 
@@ -1567,7 +1567,7 @@ class TestTargetExistsStep:
 
         my_task = Task(target="{task_name}-test-file", result=result)
 
-        with prefect.context(task_name="Task"):
+        with prefectlegacy.context(task_name="Task"):
             new_state = TaskRunner(task=my_task).check_target(
                 state=Running(result=result), inputs={}
             )
@@ -1623,7 +1623,7 @@ class TestTargetExistsStep:
 
         my_task = Task(target=lambda **kwargs: "{task_name}", result=result)
 
-        with prefect.context({"task_name": "testtask"}):
+        with prefectlegacy.context({"task_name": "testtask"}):
             new_state = TaskRunner(task=my_task).check_target(
                 state=Running(result=result), inputs={}
             )
@@ -1643,11 +1643,11 @@ class TestTargetExistsStep:
     def test_target_respects_multiple_flow_runs(self, tmp_dir):
         with set_temporary_config({"flows.checkpointing": True}):
 
-            @prefect.task(target="{task_name}")
+            @prefectlegacy.task(target="{task_name}")
             def my_task():
                 return "data"
 
-            with prefect.Flow("test", result=LocalResult(dir=tmp_dir)) as flow:
+            with prefectlegacy.Flow("test", result=LocalResult(dir=tmp_dir)) as flow:
                 t = my_task()
 
             state = flow.run()
@@ -1661,11 +1661,11 @@ class TestTargetExistsStep:
     def test_target_with_callable_uses_run_context(self, tmp_dir):
         with set_temporary_config({"flows.checkpointing": True}):
 
-            @prefect.task(target=lambda **kwargs: str(kwargs["task_run_count"]))
+            @prefectlegacy.task(target=lambda **kwargs: str(kwargs["task_run_count"]))
             def my_task():
                 return "data"
 
-            with prefect.Flow("test", result=LocalResult(dir=tmp_dir)) as flow:
+            with prefectlegacy.Flow("test", result=LocalResult(dir=tmp_dir)) as flow:
                 t = my_task()
 
             state = flow.run()
@@ -1679,11 +1679,11 @@ class TestTargetExistsStep:
     def test_target_with_callable_uses_task_inputs(self, tmp_dir):
         with set_temporary_config({"flows.checkpointing": True}):
 
-            @prefect.task(target=lambda **kwargs: str(kwargs["x"]))
+            @prefectlegacy.task(target=lambda **kwargs: str(kwargs["x"]))
             def my_task(x):
                 return x
 
-            with prefect.Flow("test", result=LocalResult(dir=tmp_dir)) as flow:
+            with prefectlegacy.Flow("test", result=LocalResult(dir=tmp_dir)) as flow:
                 t = my_task("test_input")
 
             state = flow.run()
@@ -1782,7 +1782,7 @@ class TestTaskStateHandlers:
     def test_task_handlers_are_called_on_retry(self):
         task_handler = MagicMock(side_effect=lambda t, o, n: n)
 
-        @prefect.task(
+        @prefectlegacy.task(
             state_handlers=[task_handler], max_retries=1, retry_delay=timedelta(0)
         )
         def fn():
@@ -1795,7 +1795,7 @@ class TestTaskStateHandlers:
     def test_task_handlers_can_return_none(self):
         task_handler = MagicMock(side_effect=lambda t, o, n: None)
 
-        @prefect.task(
+        @prefectlegacy.task(
             state_handlers=[task_handler], max_retries=1, retry_delay=timedelta(0)
         )
         def fn():
@@ -1808,7 +1808,7 @@ class TestTaskStateHandlers:
     def test_task_handlers_are_called_on_failure(self):
         task_handler = MagicMock(side_effect=lambda t, o, n: n)
 
-        @prefect.task(state_handlers=[task_handler])
+        @prefectlegacy.task(state_handlers=[task_handler])
         def fn():
             1 / 0
 
@@ -1819,9 +1819,9 @@ class TestTaskStateHandlers:
     def test_task_handlers_respect_signals(self):
         def state_handler(t, o, n):
             if n.is_failed():
-                raise prefect.engine.signals.PAUSE("Pausing.")
+                raise prefectlegacy.engine.signals.PAUSE("Pausing.")
 
-        @prefect.task(state_handlers=[state_handler])
+        @prefectlegacy.task(state_handlers=[state_handler])
         def fn():
             1 / 0
 
@@ -1831,9 +1831,9 @@ class TestTaskStateHandlers:
     def test_task_handlers_handle_retry_signals(self):
         def state_handler(t, o, n):
             if n.is_failed():
-                raise prefect.engine.signals.RETRY("Will retry.")
+                raise prefectlegacy.engine.signals.RETRY("Will retry.")
 
-        @prefect.task(state_handlers=[state_handler])
+        @prefectlegacy.task(state_handlers=[state_handler])
         def fn():
             1 / 0
 
@@ -1862,14 +1862,14 @@ class TestTaskStateHandlers:
         # previous result
         task = Task(state_handlers=[lambda *a: True, task_handler])
         with pytest.raises(AssertionError):
-            with prefect.utilities.debug.raise_on_exception():
+            with prefectlegacy.utilities.debug.raise_on_exception():
                 TaskRunner(task=task).run()
 
     def test_task_handler_that_doesnt_return_state_or_none(self):
         # this will raise an error because no state is returned
         task = Task(state_handlers=[lambda *a: True])
         with pytest.raises(AttributeError):
-            with prefect.utilities.debug.raise_on_exception():
+            with prefectlegacy.utilities.debug.raise_on_exception():
                 TaskRunner(task=task).run()
 
     def test_task_handler_errors_are_logged(self, caplog):
@@ -1898,7 +1898,7 @@ class TestTaskRunnerStateHandlers:
     def test_task_runner_handlers_are_called_on_retry(self):
         task_runner_handler = MagicMock(side_effect=lambda t, o, n: n)
 
-        @prefect.task(max_retries=1, retry_delay=timedelta(0))
+        @prefectlegacy.task(max_retries=1, retry_delay=timedelta(0))
         def fn():
             1 / 0
 
@@ -1911,7 +1911,7 @@ class TestTaskRunnerStateHandlers:
         task_runner_handler = MagicMock(side_effect=lambda t, o, n: n)
 
         runner = TaskRunner(
-            task=Task(trigger=prefect.triggers.all_failed),
+            task=Task(trigger=prefectlegacy.triggers.all_failed),
             state_handlers=[task_runner_handler],
         )
         state = runner.run(upstream_states={Edge(Task(), Task()): Success()})
@@ -1947,7 +1947,7 @@ class TestTaskRunnerStateHandlers:
             assert isinstance(new_state, State)
 
         with pytest.raises(AssertionError):
-            with prefect.utilities.debug.raise_on_exception():
+            with prefectlegacy.utilities.debug.raise_on_exception():
                 TaskRunner(
                     task=Task(),
                     state_handlers=[lambda *a: Ellipsis, task_runner_handler],
@@ -1956,7 +1956,7 @@ class TestTaskRunnerStateHandlers:
     def test_task_runner_handler_that_doesnt_return_state_or_none(self):
         # raises an error because the state handler doesn't return a state
         with pytest.raises(AttributeError):
-            with prefect.utilities.debug.raise_on_exception():
+            with prefectlegacy.utilities.debug.raise_on_exception():
                 TaskRunner(task=Task(), state_handlers=[lambda *a: True]).run()
 
     def test_task_handler_that_raises_signal_is_trapped(self):
@@ -2051,7 +2051,7 @@ class TestCheckTaskReadyToMapStep:
 
 
 def test_task_runner_skips_upstream_check_for_parent_mapped_task():
-    add = AddTask(trigger=prefect.triggers.all_failed)
+    add = AddTask(trigger=prefectlegacy.triggers.all_failed)
     ex = Edge(SuccessTask(), add, key="x")
     ey = Edge(ListTask(), add, key="y", mapped=True)
     runner = TaskRunner(add)
@@ -2063,7 +2063,7 @@ def test_task_runner_skips_upstream_check_for_parent_mapped_task():
 
 
 def test_task_runner_converts_pause_signal_to_paused_state_for_manual_only_triggers():
-    t1, t2 = SuccessTask(), SuccessTask(trigger=prefect.triggers.manual_only)
+    t1, t2 = SuccessTask(), SuccessTask(trigger=prefectlegacy.triggers.manual_only)
     e = Edge(t1, t2)
     runner = TaskRunner(t2)
     out = runner.run(upstream_states={e: Success(result=1)})
@@ -2072,7 +2072,7 @@ def test_task_runner_converts_pause_signal_to_paused_state_for_manual_only_trigg
 
 
 def test_task_runner_passes_manual_only_trigger_when_resume_state_is_passed():
-    t1, t2 = SuccessTask(), SuccessTask(trigger=prefect.triggers.manual_only)
+    t1, t2 = SuccessTask(), SuccessTask(trigger=prefectlegacy.triggers.manual_only)
     e = Edge(t1, t2)
     runner = TaskRunner(t2)
     out = runner.run(state=Resume(), upstream_states={e: Success(result=1)})
@@ -2107,7 +2107,7 @@ def test_mapped_tasks_parents_and_children_respond_to_individual_triggers():
     task_runner_handler = MagicMock(side_effect=lambda t, o, n: n)
 
     runner = TaskRunner(
-        task=Task(trigger=prefect.triggers.all_failed),
+        task=Task(trigger=prefectlegacy.triggers.all_failed),
         state_handlers=[task_runner_handler],
     )
     state = runner.run(
@@ -2159,11 +2159,11 @@ def test_pending_raised_from_endrun_has_updated_metadata():
 def test_failures_arent_checkpointed(checkpoint):
     result = MagicMock(write=MagicMock(side_effect=SyntaxError))
 
-    @prefect.task(checkpoint=checkpoint, result=result)
+    @prefectlegacy.task(checkpoint=checkpoint, result=result)
     def fn():
         raise TypeError("Bad types")
 
-    with prefect.context(checkpointing=True):
+    with prefectlegacy.context(checkpointing=True):
         new_state = TaskRunner(task=fn).run()
     assert new_state.is_failed()
     assert isinstance(new_state.result, TypeError)
@@ -2173,11 +2173,11 @@ def test_failures_arent_checkpointed(checkpoint):
 def test_skips_arent_checkpointed(checkpoint):
     result = MagicMock(write=MagicMock(side_effect=SyntaxError))
 
-    @prefect.task(checkpoint=checkpoint, result=result)
+    @prefectlegacy.task(checkpoint=checkpoint, result=result)
     def fn():
         return 2
 
-    with prefect.context(checkpointing=True):
+    with prefectlegacy.context(checkpointing=True):
         new_state = TaskRunner(task=fn).run(
             upstream_states={Edge(Task(), Task()): Skipped()}
         )
@@ -2185,9 +2185,9 @@ def test_skips_arent_checkpointed(checkpoint):
 
 
 def test_task_runner_provides_logger():
-    @prefect.task()
+    @prefectlegacy.task()
     def my_task():
-        logger = prefect.context.get("logger")
+        logger = prefectlegacy.context.get("logger")
         return logger
 
     state = TaskRunner(my_task).run()
@@ -2197,9 +2197,9 @@ def test_task_runner_provides_logger():
 
 class TestLooping:
     def test_looping_works(self):
-        @prefect.task
+        @prefectlegacy.task
         def my_task():
-            if prefect.context.get("task_loop_count", 1) < 3:
+            if prefectlegacy.context.get("task_loop_count", 1) < 3:
                 raise signals.LOOP()
             else:
                 return 42
@@ -2214,9 +2214,9 @@ class TestLooping:
         def sh(obj, old, new):
             glob.append(new)
 
-        @prefect.task(state_handlers=[sh])
+        @prefectlegacy.task(state_handlers=[sh])
         def my_task():
-            if prefect.context.get("task_loop_count", 1) < 3:
+            if prefectlegacy.context.get("task_loop_count", 1) < 3:
                 raise signals.LOOP()
             else:
                 return 42
@@ -2231,9 +2231,9 @@ class TestLooping:
         assert len([s for s in glob if s.is_successful()]) == 1
 
     def test_looping_doesnt_aggressively_log_task_starting(self, caplog):
-        @prefect.task
+        @prefectlegacy.task
         def my_task():
-            if prefect.context.get("task_loop_count", 1) < 10:
+            if prefectlegacy.context.get("task_loop_count", 1) < 10:
                 raise signals.LOOP()
             else:
                 return 42
@@ -2247,9 +2247,9 @@ class TestLooping:
         assert len(logs) >= 1
 
     def test_looping_doesnt_aggressively_log_task_finished(self, caplog):
-        @prefect.task
+        @prefectlegacy.task
         def my_task():
-            if prefect.context.get("task_loop_count", 1) < 10:
+            if prefectlegacy.context.get("task_loop_count", 1) < 10:
                 raise signals.LOOP()
             else:
                 return 42
@@ -2264,10 +2264,10 @@ class TestLooping:
         assert len(logs) <= 2  # but not too many were issued
 
     def test_looping_accumulates(self):
-        @prefect.task
+        @prefectlegacy.task
         def my_task():
-            curr = prefect.context.get("task_loop_result", 0)
-            if prefect.context.get("task_loop_count", 1) < 3:
+            curr = prefectlegacy.context.get("task_loop_result", 0)
+            if prefectlegacy.context.get("task_loop_count", 1) < 3:
                 raise signals.LOOP(result=curr + 1)
             else:
                 return curr + 1
@@ -2292,10 +2292,10 @@ class TestLooping:
 
         result = MyResult()
 
-        @prefect.task(checkpoint=checkpoint, result=result)
+        @prefectlegacy.task(checkpoint=checkpoint, result=result)
         def my_task():
-            curr = prefect.context.get("task_loop_result", 0)
-            if prefect.context.get("task_loop_count", 1) < 3:
+            curr = prefectlegacy.context.get("task_loop_result", 0)
+            if prefectlegacy.context.get("task_loop_count", 1) < 3:
                 raise signals.LOOP(result=curr + 1)
             else:
                 return curr + 1
@@ -2306,13 +2306,13 @@ class TestLooping:
         assert state.result == 3
 
     def test_looping_works_with_retries(self):
-        @prefect.task(max_retries=2, retry_delay=timedelta(seconds=0))
+        @prefectlegacy.task(max_retries=2, retry_delay=timedelta(seconds=0))
         def my_task():
-            if prefect.context.get("task_loop_count", 1) == 2:
-                if prefect.context.get("task_run_count", 1) > 1:
+            if prefectlegacy.context.get("task_loop_count", 1) == 2:
+                if prefectlegacy.context.get("task_run_count", 1) > 1:
                     return 42
                 raise SyntaxError("failure")
-            elif prefect.context.get("task_loop_count", 1) < 3:
+            elif prefectlegacy.context.get("task_loop_count", 1) < 3:
                 raise signals.LOOP()
 
         runner = TaskRunner(my_task)
@@ -2323,15 +2323,15 @@ class TestLooping:
         assert state.is_successful()
 
     def test_loop_results_work_with_retries(self):
-        @prefect.task(max_retries=2, retry_delay=timedelta(seconds=0))
+        @prefectlegacy.task(max_retries=2, retry_delay=timedelta(seconds=0))
         def my_task():
-            if prefect.context.get("task_loop_count", 1) == 3:
-                if prefect.context.get("task_run_count", 1) > 1:
-                    return prefect.context.get("task_loop_result")
+            if prefectlegacy.context.get("task_loop_count", 1) == 3:
+                if prefectlegacy.context.get("task_run_count", 1) > 1:
+                    return prefectlegacy.context.get("task_loop_result")
                 raise SyntaxError("failure")
-            elif prefect.context.get("task_loop_count", 1) < 3:
+            elif prefectlegacy.context.get("task_loop_count", 1) < 3:
                 raise signals.LOOP(
-                    result=prefect.context.get("task_loop_result", 0) + 1
+                    result=prefectlegacy.context.get("task_loop_result", 0) + 1
                 )
 
         runner = TaskRunner(my_task)
@@ -2383,7 +2383,7 @@ def test_task_runner_logs_stdout_disabled(caplog):
 def test_task_runner_logs_map_index_for_mapped_tasks(caplog):
     class MyTask(Task):
         def run(self):
-            map_index = prefect.context.get("map_index")
+            map_index = prefectlegacy.context.get("map_index")
             self.logger.info("{}".format(map_index))
 
     task = MyTask()
@@ -2392,7 +2392,7 @@ def test_task_runner_logs_map_index_for_mapped_tasks(caplog):
         state=None, upstream_states={edge: Success(result=Result(list(range(10))))}
     )
 
-    logs = [r.message for r in caplog.records if "prefect.Task:" in r.message]
+    logs = [r.message for r in caplog.records if "prefectlegacy.Task:" in r.message]
     task_name = task.name
     for line in logs:
         msg = line.split("INFO")[1]
@@ -2406,10 +2406,10 @@ class TestTaskRunNames:
         runner = TaskRunner(task=task)
         runner.task_run_id = "id"
 
-        with prefect.context():
-            assert prefect.context.get("task_run_name") is None
+        with prefectlegacy.context():
+            assert prefectlegacy.context.get("task_run_name") is None
             runner.set_task_run_name(task_inputs={})
-            assert prefect.context.get("task_run_name") == "asdf"
+            assert prefectlegacy.context.get("task_run_name") == "asdf"
 
         task = Task(name="test", task_run_name="{map_index}")
         runner = TaskRunner(task=task)
@@ -2418,27 +2418,27 @@ class TestTaskRunNames:
         class Temp:
             value = 100
 
-        with prefect.context():
-            assert prefect.context.get("task_run_name") is None
+        with prefectlegacy.context():
+            assert prefectlegacy.context.get("task_run_name") is None
             runner.set_task_run_name(task_inputs={"map_index": Temp()})
-            assert prefect.context.get("task_run_name") == "100"
+            assert prefectlegacy.context.get("task_run_name") == "100"
 
         task = Task(name="test", task_run_name=lambda **kwargs: "name")
         runner = TaskRunner(task=task)
         runner.task_run_id = "id"
 
-        with prefect.context():
-            assert prefect.context.get("task_run_name") is None
+        with prefectlegacy.context():
+            assert prefectlegacy.context.get("task_run_name") is None
             runner.set_task_run_name(task_inputs={})
-            assert prefect.context.get("task_run_name") == "name"
+            assert prefectlegacy.context.get("task_run_name") == "name"
 
     def test_task_runner_sets_task_run_name_in_context(self):
         def dynamic_task_run_name(**task_inputs):
             return f"hello-{task_inputs['input']}"
 
-        @prefect.task(name="hey", task_run_name=dynamic_task_run_name)
+        @prefectlegacy.task(name="hey", task_run_name=dynamic_task_run_name)
         def test_task(input):
-            return prefect.context.get("task_run_name")
+            return prefectlegacy.context.get("task_run_name")
 
         edge = Edge(Task(), Task(), key="input")
         state = Success(result="my-value")
@@ -2450,11 +2450,11 @@ class TestTaskRunNames:
         def dynamic_task_run_name(**task_inputs):
             return f"hello-{task_inputs['input']}"
 
-        @prefect.task(name="hey", task_run_name=dynamic_task_run_name)
+        @prefectlegacy.task(name="hey", task_run_name=dynamic_task_run_name)
         def test_task(input):
-            return prefect.context.get("task_run_name")
+            return prefectlegacy.context.get("task_run_name")
 
-        from prefect import Flow
+        from prefectlegacy import Flow
 
         with Flow("test") as flow:
             data = [1, 2, 3]
@@ -2468,11 +2468,11 @@ class TestTaskRunNames:
         A simple pipeline
         """
 
-        @prefect.task()
+        @prefectlegacy.task()
         def add_1(x):
             return x + 1
 
-        from prefect import Flow
+        from prefectlegacy import Flow
 
         with Flow("test") as flow:
             result = add_1(1).pipe(add_1).pipe(add_1).pipe(add_1)
@@ -2485,9 +2485,9 @@ class TestTaskRunNames:
         A simple pipeline with kwargs being passed in the pipe method
         """
         from datetime import datetime, timedelta
-        from prefect import Flow
+        from prefectlegacy import Flow
 
-        @prefect.task()
+        @prefectlegacy.task()
         def add_time(date: datetime, **kwargs) -> datetime:
             delta = timedelta(**kwargs)
             return date + delta
@@ -2508,9 +2508,9 @@ class TestTaskRunNames:
         """
         Verify that we don't accept positional args beyond the implicitly piped argument in .pipe
         """
-        from prefect import Flow
+        from prefectlegacy import Flow
 
-        @prefect.task()
+        @prefectlegacy.task()
         def accepts_anything(arg, **kwargs):
             print(dict(**kwargs))
             return arg
@@ -2525,9 +2525,9 @@ class TestTaskRunNames:
         """
         Verify that passing task as a keyword argument works fine
         """
-        from prefect import Flow
+        from prefectlegacy import Flow
 
-        @prefect.task()
+        @prefectlegacy.task()
         def accepts_anything(arg, **kwargs):
             return dict(**kwargs)
 
@@ -2542,9 +2542,9 @@ class TestTaskRunNames:
         """
         Verify that passing self as a keyword argument throws an error
         """
-        from prefect import Flow
+        from prefectlegacy import Flow
 
-        @prefect.task()
+        @prefectlegacy.task()
         def accepts_anything(arg, **kwargs):
             return dict(**kwargs)
 
@@ -2560,13 +2560,13 @@ class TestTaskRunNames:
         Verify that passing EdgeAnnotation to pipe returns Task objects
         that can chain further.
         """
-        from prefect import Flow
+        from prefectlegacy import Flow
 
-        @prefect.task
+        @prefectlegacy.task
         def add_one(number) -> int:
             return number + 1
 
-        @prefect.task
+        @prefectlegacy.task
         def aggregate(numbers) -> int:
             return sum(numbers)
 

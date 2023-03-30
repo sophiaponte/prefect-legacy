@@ -7,8 +7,8 @@ Uses the same flow from "Retries w/ Mapping" on a minute schedule.
 import random
 from datetime import datetime, timedelta
 
-from prefect import Flow, task
-from prefect.schedules import IntervalSchedule
+from prefectlegacy import Flow, task
+from prefectlegacy.schedules import IntervalSchedule
 
 
 def visualize(flow, old_state, new_state):

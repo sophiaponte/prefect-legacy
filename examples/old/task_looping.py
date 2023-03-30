@@ -7,15 +7,15 @@ from datetime import timedelta
 
 import requests
 
-import prefect
-from prefect import Flow, Parameter, task
-from prefect.engine.signals import LOOP
+import prefectlegacy
+from prefectlegacy import Flow, Parameter, task
+from prefectlegacy.engine.signals import LOOP
 
 
 @task(max_retries=5, retry_delay=timedelta(seconds=2))
 def compute_large_fibonacci(M):
     # we extract the accumulated task loop result from context
-    loop_payload = prefect.context.get("task_loop_result", {})
+    loop_payload = prefectlegacy.context.get("task_loop_result", {})
 
     n = loop_payload.get("n", 1)
     fib = loop_payload.get("fib", 1)

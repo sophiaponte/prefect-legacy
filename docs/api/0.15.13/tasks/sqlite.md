@@ -5,7 +5,7 @@ editLink: false
 # SQLite Tasks
 ---
  ## SQLiteQuery
- <div class='class-sig' id='prefect-tasks-database-sqlite-sqlitequery'><p class="prefect-sig">class </p><p class="prefect-class">prefect.tasks.database.sqlite.SQLiteQuery</p>(db=None, query=None, data=(), **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/tasks/database/sqlite.py#L9">[source]</a></span></div>
+ <div class='class-sig' id='prefect-tasks-database-sqlite-sqlitequery'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.tasks.database.sqlite.SQLiteQuery</p>(db=None, query=None, data=(), **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/tasks/database/sqlite.py#L9">[source]</a></span></div>
 
 Task for executing a single query against a sqlite3 database; returns the result (if any) from the query.
 
@@ -13,14 +13,14 @@ Task for executing a single query against a sqlite3 database; returns the result
 
 |methods: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |:----|
- | <div class='method-sig' id='prefect-tasks-database-sqlite-sqlitequery-run'><p class="prefect-class">prefect.tasks.database.sqlite.SQLiteQuery.run</p>(db=None, query=None, data=())<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/tasks/database/sqlite.py#L33">[source]</a></span></div>
+ | <div class='method-sig' id='prefect-tasks-database-sqlite-sqlitequery-run'><p class="prefect-class">prefectlegacy.tasks.database.sqlite.SQLiteQuery.run</p>(db=None, query=None, data=())<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/tasks/database/sqlite.py#L33">[source]</a></span></div>
 <p class="methods">**Args**:     <ul class="args"><li class="args">`db (str, optional)`: the location of the database (.db) file;         if not provided, `self.db` will be used instead.     </li><li class="args">`query (str, optional)`: the optional query to execute at runtime;         if not provided, `self.query` will be used instead. Note that a         query should consist of a _single SQL statement_.     </li><li class="args">`data (tuple, optional)`: values to use when query is a parametrized string. See         https://docs.python.org/3/library/sqlite3.html for more details.</li></ul> **Returns**:     <ul class="args"><li class="args">`[Any]`: the results of the query</li></ul></p>|
 
 ---
 <br>
 
  ## SQLiteScript
- <div class='class-sig' id='prefect-tasks-database-sqlite-sqlitescript'><p class="prefect-sig">class </p><p class="prefect-class">prefect.tasks.database.sqlite.SQLiteScript</p>(db=None, script=None, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/tasks/database/sqlite.py#L58">[source]</a></span></div>
+ <div class='class-sig' id='prefect-tasks-database-sqlite-sqlitescript'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.tasks.database.sqlite.SQLiteScript</p>(db=None, script=None, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/tasks/database/sqlite.py#L58">[source]</a></span></div>
 
 Task for executing a SQL script against a sqlite3 database.
 
@@ -28,7 +28,7 @@ Task for executing a SQL script against a sqlite3 database.
 
 |methods: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |:----|
- | <div class='method-sig' id='prefect-tasks-database-sqlite-sqlitescript-run'><p class="prefect-class">prefect.tasks.database.sqlite.SQLiteScript.run</p>(db=None, script=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/tasks/database/sqlite.py#L75">[source]</a></span></div>
+ | <div class='method-sig' id='prefect-tasks-database-sqlite-sqlitescript-run'><p class="prefect-class">prefectlegacy.tasks.database.sqlite.SQLiteScript.run</p>(db=None, script=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/tasks/database/sqlite.py#L75">[source]</a></span></div>
 <p class="methods">**Args**:     <ul class="args"><li class="args">`db (str, optional)`: the location of the database (.db) file;         if not provided, `self.db` will be used instead.     </li><li class="args">`script (str, optional)`: the optional script to execute at runtime;         if not provided, `self.script` will be used instead.</li></ul></p>|
 
 ---

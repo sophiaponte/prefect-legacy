@@ -44,8 +44,8 @@ For a more off-the-shelf experience, you can also use [Prefect Secrets](../conce
 All Prefect interfaces for third party services have default secrets they attempt to pull for authenticating ([the full list of names and expected types can be found below](#list-of-default-secret-names)).  There are a number of ways you can auto-populate these secrets.  Perhaps the easiest way is to [set your secret values in Prefect Cloud](../concepts/secrets.html#setting-a-secret) and declare them on your flow's storage option.  As an example:
 
 ```python
-from prefect import Flow
-from prefect.storage import GCS
+from prefectlegacy import Flow
+from prefectlegacy.storage import GCS
 
 
 storage = GCS(bucket="my-bucket", 
@@ -54,7 +54,7 @@ storage = GCS(bucket="my-bucket",
 f = Flow("empty-flow", storage=storage)
 ```
 
-Once this flow is registered and run through an Agent, the first thing it will do is pull the value of the `"GCP_CREDENTIALS"` secret from Prefect Cloud and place it into `prefect.context.secrets` under the appropriate key.  These credentials are now available for any task or Prefect API call to Google, _including for pulling the Flow itself from GCS_.
+Once this flow is registered and run through an Agent, the first thing it will do is pull the value of the `"GCP_CREDENTIALS"` secret from prefectlegacy Cloud and place it into `prefectlegacy.context.secrets` under the appropriate key.  These credentials are now available for any task or Prefect API call to Google, _including for pulling the Flow itself from GCS_.
 
 Any number of secrets can be declared on your `Storage` option.
 
@@ -71,7 +71,7 @@ prefect agent docker start \\
     -e PREFECT__CONTEXT__SECRETS__AWS_CREDENTIALS=${AWS_CREDENTIALS}
 ```
 
-This will then ensure that the `AWS_CREDENTIALS` secret is globally present in `prefect.context` for all flow runs submitted through this agent; in this case, it's value will be whatever value the `AWS_CREDENTIALS` environment variable has in the agent's own environment (which itself might have been set through some secure mechanism such as a Kubernetes Secret).
+This will then ensure that the `AWS_CREDENTIALS` secret is globally present in `prefectlegacy.context` for all flow runs submitted through this agent; in this case, it's value will be whatever value the `AWS_CREDENTIALS` environment variable has in the agent's own environment (which itself might have been set through some secure mechanism such as a Kubernetes Secret).
 
 ### Providing Secrets on a per-task basis
 

@@ -4,18 +4,18 @@ executes an empty Flow inside that container.  Make sure to pull `prefecthq/pref
 to running this Flow.
 """
 
-from prefect import Flow
-from prefect.tasks.docker import (
+from prefectlegacy import Flow
+from prefectlegacy.tasks.docker import (
     CreateContainer,
     GetContainerLogs,
     StartContainer,
     WaitOnContainer,
 )
-from prefect.triggers import always_run
+from prefectlegacy.triggers import always_run
 
 container = CreateContainer(
     image_name="prefecthq/prefect",
-    command='''python -c "from prefect import Flow; f = Flow('empty'); f.run()"''',
+    command='''python -c "from prefectlegacy import Flow; f = Flow('empty'); f.run()"''',
 )
 start = StartContainer()
 logs = GetContainerLogs(trigger=always_run)

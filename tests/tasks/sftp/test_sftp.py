@@ -2,7 +2,7 @@ from unittest.mock import MagicMock
 import pytest
 import os
 from paramiko import Transport, SFTPClient
-from prefect.tasks.sftp.sftp import SftpDownload, SftpUpload
+from prefectlegacy.tasks.sftp.sftp import SftpDownload, SftpUpload
 
 
 @pytest.fixture
@@ -14,8 +14,8 @@ def mock_conn(monkeypatch):
     connection = MagicMock()
     sftp_client.return_value = MagicMock(from_transport=connection)
 
-    monkeypatch.setattr("prefect.tasks.sftp.sftp.SFTPClient", sftp_client)
-    monkeypatch.setattr("prefect.tasks.sftp.sftp.Transport", transport)
+    monkeypatch.setattr("prefectlegacy.tasks.sftp.sftp.SFTPClient", sftp_client)
+    monkeypatch.setattr("prefectlegacy.tasks.sftp.sftp.Transport", transport)
 
     return sftp_conn, sftp_client
 
@@ -89,7 +89,7 @@ class TestSftpDownload:
 
     # test to check if the ddl/dml query was executed
     def test_execute_download(self, mock_conn):
-        from prefect import Flow
+        from prefectlegacy import Flow
 
         """
         Tests that the SftpDownload Task can download a file.

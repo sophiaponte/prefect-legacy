@@ -3,9 +3,9 @@ from unittest.mock import MagicMock
 import pytest
 import requests
 
-from prefect import context
-from prefect.tasks.notifications import SlackTask
-from prefect.utilities.configuration import set_temporary_config
+from prefectlegacy import context
+from prefectlegacy.tasks.notifications import SlackTask
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 class TestInitialization:

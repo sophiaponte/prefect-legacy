@@ -5,7 +5,7 @@ editLink: false
 # ECS Agent
 ---
  ## ECSAgent
- <div class='class-sig' id='prefect-agent-ecs-agent-ecsagent'><p class="prefect-sig">class </p><p class="prefect-class">prefect.agent.ecs.agent.ECSAgent</p>(agent_config_id=None, name=None, labels=None, env_vars=None, max_polls=None, agent_address=None, no_cloud_logs=None, task_definition_path=None, run_task_kwargs_path=None, aws_access_key_id=None, aws_secret_access_key=None, aws_session_token=None, region_name=None, cluster=None, launch_type=None, task_role_arn=None, execution_role_arn=None, botocore_config=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/agent/ecs/agent.py#L68">[source]</a></span></div>
+ <div class='class-sig' id='prefect-agent-ecs-agent-ecsagent'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.agent.ecs.agent.ECSAgent</p>(agent_config_id=None, name=None, labels=None, env_vars=None, max_polls=None, agent_address=None, no_cloud_logs=None, task_definition_path=None, run_task_kwargs_path=None, aws_access_key_id=None, aws_secret_access_key=None, aws_session_token=None, region_name=None, cluster=None, launch_type=None, task_role_arn=None, execution_role_arn=None, botocore_config=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/agent/ecs/agent.py#L68">[source]</a></span></div>
 
 Agent which deploys flow runs as ECS tasks.
 
@@ -17,7 +17,7 @@ Agent which deploys flow runs as ECS tasks.
 
 |methods: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |:----|
- | <div class='method-sig' id='prefect-agent-agent-agent-start'><p class="prefect-class">prefect.agent.agent.Agent.start</p>()<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/agent/agent.py#L173">[source]</a></span></div>
+ | <div class='method-sig' id='prefect-agent-agent-agent-start'><p class="prefect-class">prefectlegacy.agent.agent.Agent.start</p>()<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/agent/agent.py#L173">[source]</a></span></div>
 <p class="methods">The main entrypoint to the agent process. Sets up the agent then continuously polls for work to submit.<br><br>This is the only method that should need to be called externally.</p>|
 
 ---

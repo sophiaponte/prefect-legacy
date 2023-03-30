@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, Mock, patch
 import pytest
 import spacy
 
-from prefect.tasks.spacy.spacy_tasks import (
+from prefectlegacy.tasks.spacy.spacy_tasks import (
     SpacyComponent,
     SpacyNER,
     SpacyNLP,
@@ -22,7 +22,7 @@ class TestSpacyNLP:
         task = SpacyNLP(text="This is some text", spacy_model_name="en_core_web_sm")
         assert task.nlp is not None
 
-    @patch("prefect.tasks.spacy.spacy_tasks.spacy")
+    @patch("prefectlegacy.tasks.spacy.spacy_tasks.spacy")
     def test_load_nlp_model_version_lt3(self, spacy_mock):
         spacy_mock.configure_mock(__version__="2.3.7")  # some version less than 3.0
         task = SpacyNLP(text="This is some text", spacy_model_name="en_core_web_sm")

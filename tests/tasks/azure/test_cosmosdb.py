@@ -1,15 +1,15 @@
 from unittest.mock import MagicMock
-from prefect.tasks.azure.cosmosdb import CosmosDBCreateItem
+from prefectlegacy.tasks.azure.cosmosdb import CosmosDBCreateItem
 
 import pytest
 
-import prefect
-from prefect.tasks.azure import (
+import prefectlegacy
+from prefectlegacy.tasks.azure import (
     CosmosDBCreateItem,
     CosmosDBReadItems,
     CosmosDBQueryItems,
 )
-from prefect.utilities.configuration import set_temporary_config
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 class TestCosmosDBCreateItem:
@@ -44,11 +44,11 @@ class TestCosmosDBCreateItem:
         client = MagicMock()
         cosmos_client = MagicMock(CosmosClient=client)
         monkeypatch.setattr(
-            "prefect.tasks.azure.cosmosdb.azure.cosmos.cosmos_client", cosmos_client
+            "prefectlegacy.tasks.azure.cosmosdb.azure.cosmos.cosmos_client", cosmos_client
         )
         auth_dict = {"AZ_COSMOS_AUTH": {"masterKey": "42"}}
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(secrets=dict(AZ_CREDENTIALS=auth_dict)):
+            with prefectlegacy.context(secrets=dict(AZ_CREDENTIALS=auth_dict)):
                 task.run()
         kwargs = client.call_args[1]
         assert kwargs == {"auth": auth_dict["AZ_COSMOS_AUTH"], "url_connection": url}
@@ -80,11 +80,11 @@ class TestCosmosDBReadItem:
         client = MagicMock()
         cosmos_client = MagicMock(CosmosClient=client)
         monkeypatch.setattr(
-            "prefect.tasks.azure.cosmosdb.azure.cosmos.cosmos_client", cosmos_client
+            "prefectlegacy.tasks.azure.cosmosdb.azure.cosmos.cosmos_client", cosmos_client
         )
         auth_dict = {"AZ_COSMOS_AUTH": {"masterKey": "42"}}
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(secrets=dict(AZ_CREDENTIALS=auth_dict)):
+            with prefectlegacy.context(secrets=dict(AZ_CREDENTIALS=auth_dict)):
                 task.run()
         kwargs = client.call_args[1]
         assert kwargs == {"auth": auth_dict["AZ_COSMOS_AUTH"], "url_connection": url}
@@ -95,11 +95,11 @@ class TestCosmosDBReadItem:
         client = MagicMock()
         cosmos_client = MagicMock(CosmosClient=client)
         monkeypatch.setattr(
-            "prefect.tasks.azure.cosmosdb.azure.cosmos.cosmos_client", cosmos_client
+            "prefectlegacy.tasks.azure.cosmosdb.azure.cosmos.cosmos_client", cosmos_client
         )
         auth_dict = {"AZ_COSMOS_AUTH": {"masterKey": "42"}}
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(secrets=dict(AZ_CREDENTIALS=auth_dict)):
+            with prefectlegacy.context(secrets=dict(AZ_CREDENTIALS=auth_dict)):
                 task.run()
         called_function = client.mock_calls[1][0]
         assert called_function == "().ReadItem"
@@ -110,11 +110,11 @@ class TestCosmosDBReadItem:
         client = MagicMock()
         cosmos_client = MagicMock(CosmosClient=client)
         monkeypatch.setattr(
-            "prefect.tasks.azure.cosmosdb.azure.cosmos.cosmos_client", cosmos_client
+            "prefectlegacy.tasks.azure.cosmosdb.azure.cosmos.cosmos_client", cosmos_client
         )
         auth_dict = {"AZ_COSMOS_AUTH": {"masterKey": "42"}}
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(secrets=dict(AZ_CREDENTIALS=auth_dict)):
+            with prefectlegacy.context(secrets=dict(AZ_CREDENTIALS=auth_dict)):
                 task.run()
         called_function = client.mock_calls[1][0]
         assert called_function == "().ReadItems"
@@ -152,11 +152,11 @@ class TestCosmosDBQueryItem:
         client = MagicMock()
         cosmos_client = MagicMock(CosmosClient=client)
         monkeypatch.setattr(
-            "prefect.tasks.azure.cosmosdb.azure.cosmos.cosmos_client", cosmos_client
+            "prefectlegacy.tasks.azure.cosmosdb.azure.cosmos.cosmos_client", cosmos_client
         )
         auth_dict = {"AZ_COSMOS_AUTH": {"masterKey": "42"}}
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(secrets=dict(AZ_CREDENTIALS=auth_dict)):
+            with prefectlegacy.context(secrets=dict(AZ_CREDENTIALS=auth_dict)):
                 task.run()
         kwargs = client.call_args[1]
         assert kwargs == {"auth": auth_dict["AZ_COSMOS_AUTH"], "url_connection": url}

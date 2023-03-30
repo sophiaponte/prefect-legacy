@@ -5,10 +5,10 @@ import tempfile
 
 import pytest
 
-from prefect import Flow, Task, task
-from prefect.engine.results import LocalResult
-from prefect.storage import _healthcheck as healthchecks
-from prefect.utilities.storage import flow_to_bytes_pickle
+from prefectlegacy import Flow, Task, task
+from prefectlegacy.engine.results import LocalResult
+from prefectlegacy.storage import _healthcheck as healthchecks
+from prefectlegacy.utilities.storage import flow_to_bytes_pickle
 
 
 pytestmark = pytest.mark.skipif(
@@ -58,7 +58,7 @@ class TestSerialization:
 
 class TestScriptImport:
     def test_import_from_script(self, tmpdir):
-        contents = """from prefect import Flow\nf=Flow('test-flow')"""
+        contents = """from prefectlegacy import Flow\nf=Flow('test-flow')"""
 
         full_path = os.path.join(tmpdir, "flow.py")
 
@@ -71,7 +71,7 @@ class TestScriptImport:
         assert flows[1].run().is_successful()
 
     def test_import_from_script_fails(self, tmpdir):
-        contents = """from my_module import not_exists\nfrom prefect import Flow\nf=Flow('test-flow')"""
+        contents = """from my_module import not_exists\nfrom prefectlegacy import Flow\nf=Flow('test-flow')"""
 
         full_path = os.path.join(tmpdir, "flow.py")
 

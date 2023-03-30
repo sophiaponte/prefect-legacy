@@ -7,9 +7,9 @@ import threading
 import time
 from unittest.mock import MagicMock
 
-import prefect
-from prefect.exceptions import TaskTimeoutSignal
-from prefect.utilities.executors import (
+import prefectlegacy
+from prefectlegacy.exceptions import TaskTimeoutSignal
+from prefectlegacy.utilities.executors import (
     run_with_thread_timeout,
     run_with_multiprocess_timeout,
     multiprocessing_safe_run_and_retrieve,
@@ -17,7 +17,7 @@ from prefect.utilities.executors import (
     RecursiveCall,
     HeartbeatThread,
 )
-from prefect.engine.signals import FAIL
+from prefectlegacy.engine.signals import FAIL
 
 # We will test the low-level timeout handlers here and `run_task_with_timeout`
 # is covered in `tests.core.test_flow.test_timeout_actually_stops_execution`
@@ -180,9 +180,9 @@ def test_timeout_handler_doesnt_do_anything_if_no_timeout(timeout_handler):
 @pytest.mark.parametrize("timeout_handler", TIMEOUT_HANDLERS)
 def test_timeout_handler_preserves_context(timeout_handler):
     def my_fun(x, **kwargs):
-        return prefect.context.get("test_key")
+        return prefectlegacy.context.get("test_key")
 
-    with prefect.context(test_key=42):
+    with prefectlegacy.context(test_key=42):
         res = timeout_handler(my_fun, args=[2], timeout=10)
 
     assert res == 42
@@ -192,7 +192,7 @@ def test_timeout_handler_preserves_context(timeout_handler):
     sys.platform == "win32", reason="Windows doesn't support any timeout logic"
 )
 def test_run_with_thread_timeout_preserves_logging(caplog):
-    run_with_thread_timeout(prefect.Flow("logs").run, timeout=10)
+    run_with_thread_timeout(prefectlegacy.Flow("logs").run, timeout=10)
     assert len(caplog.messages) >= 2  # 1 INFO to start, 1 INFO to end
 
 
@@ -203,7 +203,7 @@ def test_run_with_multiprocess_timeout_preserves_logging(capfd):
     """
     Requires fd capturing because the subprocess output won't be captured by caplog
     """
-    run_with_multiprocess_timeout(prefect.Flow("logs").run, timeout=10)
+    run_with_multiprocess_timeout(prefectlegacy.Flow("logs").run, timeout=10)
     stdout = capfd.readouterr().out
     assert "Beginning Flow run" in stdout
     assert "Flow run SUCCESS" in stdout
@@ -360,7 +360,7 @@ def test_recursion_raises_when_not_decorated():
 
 def test_events_can_stop_the_heartbeat(monkeypatch):
     Client = MagicMock()
-    monkeypatch.setattr("prefect.utilities.executors.Client", Client)
+    monkeypatch.setattr("prefectlegacy.utilities.executors.Client", Client)
     stop_event = threading.Event()
     heartbeat = HeartbeatThread(stop_event, "no-flow-run-id")
     heartbeat.start()
@@ -372,7 +372,7 @@ def test_events_can_stop_the_heartbeat(monkeypatch):
 
 def test_multiple_heartbeats_can_be_independently_stopped(monkeypatch):
     Client = MagicMock()
-    monkeypatch.setattr("prefect.utilities.executors.Client", Client)
+    monkeypatch.setattr("prefectlegacy.utilities.executors.Client", Client)
 
     def heartbeat_factory():
         stop_event = threading.Event()
@@ -395,7 +395,7 @@ def test_multiple_heartbeats_can_be_independently_stopped(monkeypatch):
 
 def test_heartbeat_is_daemonic_by_default(monkeypatch):
     Client = MagicMock()
-    monkeypatch.setattr("prefect.utilities.executors.Client", Client)
+    monkeypatch.setattr("prefectlegacy.utilities.executors.Client", Client)
     stop_event = threading.Event()
     heartbeat = HeartbeatThread(stop_event, "no-flow-run-id")
     assert heartbeat.daemon
@@ -403,7 +403,7 @@ def test_heartbeat_is_daemonic_by_default(monkeypatch):
 
 def test_heartbeat_sends_signals_to_client(monkeypatch):
     Client = MagicMock()
-    monkeypatch.setattr("prefect.utilities.executors.Client", Client)
+    monkeypatch.setattr("prefectlegacy.utilities.executors.Client", Client)
     stop_event = threading.Event()
     heartbeat = HeartbeatThread(stop_event, "no-flow-run-id")
     heartbeat.start()
@@ -417,8 +417,8 @@ def test_heartbeat_sends_signals_to_client(monkeypatch):
 def test_heartbeat_exceptions_are_logged_to_cloud(monkeypatch):
     Client = MagicMock()
     LOG_MANAGER = MagicMock()
-    monkeypatch.setattr("prefect.utilities.executors.Client", Client)
-    monkeypatch.setattr("prefect.utilities.logging.LOG_MANAGER", LOG_MANAGER)
+    monkeypatch.setattr("prefectlegacy.utilities.executors.Client", Client)
+    monkeypatch.setattr("prefectlegacy.utilities.logging.LOG_MANAGER", LOG_MANAGER)
     Client().update_flow_run_heartbeat.side_effect = ValueError("Foo")
 
     stop_event = threading.Event()
@@ -430,7 +430,7 @@ def test_heartbeat_exceptions_are_logged_to_cloud(monkeypatch):
 
     log = LOG_MANAGER.enqueue.call_args[0][0]
     assert log["flow_run_id"] == "my-special-flow-run-id"
-    assert log["name"] == "prefect.threaded_heartbeat"
+    assert log["name"] == "prefectlegacy.threaded_heartbeat"
     assert log["level"] == "ERROR"
     assert "Traceback" in log["message"]
     assert (

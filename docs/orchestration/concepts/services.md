@@ -57,7 +57,7 @@ heartbeat_mode = "thread" # ['process', 'thread', 'off']
 
 Additionally, this can be set using the `run_config`
 ```python
-from prefect.run_configs import UniversalRun
+from prefectlegacy.run_configs import UniversalRun
 flow.run_config = UniversalRun(env={"PREFECT__CLOUD__HEARTBEAT_MODE": "thread"})
 ```
 

@@ -40,8 +40,8 @@ available arguments in the Dask Cloud Provider
 ```python
 from dask_cloudprovider import FargateCluster
 
-from prefect import Flow, task
-from prefect.environments import DaskCloudProviderEnvironment
+from prefectlegacy import Flow, task
+from prefectlegacy.environments import DaskCloudProviderEnvironment
 
 environment = DaskCloudProviderEnvironment(
     provider_class=FargateCluster,
@@ -89,8 +89,8 @@ that were created.
 ```python
 from dask_cloudprovider import FargateCluster
 
-from prefect import Flow, Parameter, task
-from prefect.executors import DaskExecutor
+from prefectlegacy import Flow, Parameter, task
+from prefectlegacy.executors import DaskExecutor
 
 cluster = FargateCluster(
     image="prefecthq/prefect:latest",
@@ -142,7 +142,7 @@ while the above Flow processed a list of 100 items with 4 Dask workers:
 You can find the URL for the Dask dashboard of your cluster in the Flow logs:
 
 ```
-April 26th 2020 at 12:17:41pm | prefect.DaskCloudProviderEnvironment
+April 26th 2020 at 12:17:41pm | prefectlegacy.DaskCloudProviderEnvironment
 Dask cluster created. Scheduler address: tls://172.33.18.197:8786 Dashboard: http://172.33.18.197:8787
 ```
 
@@ -184,8 +184,8 @@ callback function. (See the last code example on this page.)
 ```python
 from dask_cloudprovider import FargateCluster
 
-from prefect import Flow, task, Parameter
-from prefect.environments import DaskCloudProviderEnvironment
+from prefectlegacy import Flow, task, Parameter
+from prefectlegacy.environments import DaskCloudProviderEnvironment
 
 environment = DaskCloudProviderEnvironment(
     provider_class=FargateCluster,
@@ -238,9 +238,9 @@ from typing import Any, List, Dict
 from distributed.security import Security
 from dask_cloudprovider import FargateCluster
 
-import prefect
-from prefect import Flow, Parameter, task
-from prefect.environments import DaskCloudProviderEnvironment
+import prefectlegacy
+from prefectlegacy import Flow, Parameter, task
+from prefectlegacy.environments import DaskCloudProviderEnvironment
 
 
 security = Security(

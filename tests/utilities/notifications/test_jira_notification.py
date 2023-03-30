@@ -4,9 +4,9 @@ import pytest
 
 pytest.importorskip("jira")
 
-import prefect
-from prefect import Task, task
-from prefect.engine.state import (
+import prefectlegacy
+from prefectlegacy import Task, task
+from prefectlegacy.engine.state import (
     Cached,
     Failed,
     Finished,
@@ -19,8 +19,8 @@ from prefect.engine.state import (
     Success,
     TriggerFailed,
 )
-from prefect.utilities.configuration import set_temporary_config
-from prefect.utilities.notifications.jira_notification import jira_notifier
+from prefectlegacy.utilities.configuration import set_temporary_config
+from prefectlegacy.utilities.notifications.jira_notification import jira_notifier
 
 
 def test_jira_notifier_returns_new_state_and_old_state_is_ignored(monkeypatch):
@@ -29,7 +29,7 @@ def test_jira_notifier_returns_new_state_and_old_state_is_ignored(monkeypatch):
     monkeypatch.setattr("jira.JIRA", jira)
     new_state = Failed(message="1", result=0)
     with set_temporary_config({"cloud.use_local_secrets": True}):
-        with prefect.context(
+        with prefectlegacy.context(
             secrets=dict(
                 JIRASECRETS={"JIRAUSER": "Bob", "JIRATOKEN": "123", "JIRASERVER": ""}
             )
@@ -51,7 +51,7 @@ def test_jira_notifier_pulls_creds_from_secret(monkeypatch):
     monkeypatch.setattr("jira.JIRA", jira)
     state = Failed(message="1", result=0)
     with set_temporary_config({"cloud.use_local_secrets": True}):
-        with prefect.context(
+        with prefectlegacy.context(
             secrets=dict(
                 JIRASECRETS={
                     "JIRAUSER": "Bob",
@@ -101,7 +101,7 @@ def test_jira_notifier_ignores_ignore_states(monkeypatch):
     for state in all_states:
         s = state()
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(
+            with prefectlegacy.context(
                 secrets=dict(
                     JIRASECRETS={"JIRAUSER": "Bob", "JIRATOKEN": "", "JIRASERVER": ""}
                 )
@@ -139,7 +139,7 @@ def test_jira_notifier_is_curried_and_ignores_ignore_states(monkeypatch, state):
     monkeypatch.setattr("jira.JIRA", jiraMock)
     handler = jira_notifier(ignore_states=[Finished])
     with set_temporary_config({"cloud.use_local_secrets": True}):
-        with prefect.context(
+        with prefectlegacy.context(
             secrets=dict(
                 JIRASECRETS={"JIRAUSER": "Bob", "JIRATOKEN": "", "JIRASERVER": ""}
             )
@@ -176,7 +176,7 @@ def test_jira_notifier_is_curried_and_uses_only_states(monkeypatch, state):
     monkeypatch.setattr("jira.JIRA", jiraMock)
     handler = jira_notifier(only_states=[TriggerFailed])
     with set_temporary_config({"cloud.use_local_secrets": True}):
-        with prefect.context(
+        with prefectlegacy.context(
             secrets=dict(
                 JIRASECRETS={"JIRAUSER": "Bob", "JIRATOKEN": "", "JIRASERVER": ""}
             )

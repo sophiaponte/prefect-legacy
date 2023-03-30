@@ -5,10 +5,10 @@ import pendulum
 import pytest
 from unittest.mock import MagicMock
 
-from prefect import Flow
-from prefect.backend import FlowView
-from prefect.run_configs import UniversalRun
-from prefect.storage import Local
+from prefectlegacy import Flow
+from prefectlegacy.backend import FlowView
+from prefectlegacy.run_configs import UniversalRun
+from prefectlegacy.storage import Local
 
 FLOW_DATA_1 = {
     "id": "id-1",
@@ -66,7 +66,7 @@ def test_flow_view_query_for_flow_unpacks_result_singleton(patch_post):
 
 def test_flow_view_query_for_flow_uses_where_in_query(monkeypatch):
     post = MagicMock(return_value={"data": {"flow": [FLOW_DATA_1]}})
-    monkeypatch.setattr("prefect.client.client.Client.post", post)
+    monkeypatch.setattr("prefectlegacy.client.client.Client.post", post)
 
     FlowView._query_for_flow(where={"foo": {"_eq": "bar"}})
 
@@ -77,7 +77,7 @@ def test_flow_view_query_for_flow_uses_where_in_query(monkeypatch):
 
 def test_flow_view_query_for_flow_includes_all_required_data(monkeypatch):
     graphql = MagicMock(return_value={"data": {"flow": [FLOW_DATA_1]}})
-    monkeypatch.setattr("prefect.client.client.Client.graphql", graphql)
+    monkeypatch.setattr("prefectlegacy.client.client.Client.graphql", graphql)
 
     FlowView._query_for_flow(where={})
 
@@ -125,7 +125,7 @@ def test_flow_view_from_returns_instance(patch_post, from_method):
 
 def test_flow_view_from_flow_id_where_clause(monkeypatch):
     post = MagicMock(return_value={"data": {"flow": [FLOW_DATA_1]}})
-    monkeypatch.setattr("prefect.client.client.Client.post", post)
+    monkeypatch.setattr("prefectlegacy.client.client.Client.post", post)
 
     FlowView.from_flow_id(flow_id="id-1")
 
@@ -136,7 +136,7 @@ def test_flow_view_from_flow_id_where_clause(monkeypatch):
 
 def test_flow_view_from_flow_name_where_and_order_clauses(monkeypatch):
     post = MagicMock(return_value={"data": {"flow": [FLOW_DATA_1]}})
-    monkeypatch.setattr("prefect.client.client.Client.post", post)
+    monkeypatch.setattr("prefectlegacy.client.client.Client.post", post)
 
     FlowView.from_flow_name(flow_name="name-1")
 
@@ -149,7 +149,7 @@ def test_flow_view_from_flow_name_where_and_order_clauses(monkeypatch):
 
 def test_flow_view_from_flow_name_and_project_where_and_order_clauses(monkeypatch):
     post = MagicMock(return_value={"data": {"flow": [FLOW_DATA_1]}})
-    monkeypatch.setattr("prefect.client.client.Client.post", post)
+    monkeypatch.setattr("prefectlegacy.client.client.Client.post", post)
 
     FlowView.from_flow_name(flow_name="name-1", project_name="project-1")
 
@@ -162,7 +162,7 @@ def test_flow_view_from_flow_name_and_project_where_and_order_clauses(monkeypatc
 
 def test_flow_view_from_flow_group_id_where_and_order_clauses(monkeypatch):
     post = MagicMock(return_value={"data": {"flow": [FLOW_DATA_1]}})
-    monkeypatch.setattr("prefect.client.client.Client.post", post)
+    monkeypatch.setattr("prefectlegacy.client.client.Client.post", post)
 
     FlowView.from_flow_group_id(flow_group_id="flow-group-id-1")
 

@@ -5,8 +5,8 @@ from unittest.mock import MagicMock
 import pytest
 from click.testing import CliRunner
 
-from prefect.cli.describe import describe
-from prefect.utilities.configuration import set_temporary_config
+from prefectlegacy.cli.describe import describe
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 def test_describe_init():

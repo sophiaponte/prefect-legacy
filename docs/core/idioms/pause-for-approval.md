@@ -3,7 +3,7 @@
 There are many situations when a workflow contains tasks that require some form of manual approval to continue. Prefect has two built-in mechanisms for achieving this pattern:
 
 - a manual-only trigger that can be configured on a per task basis, and unconditionally prevents the task from running unless a user approves it
-- a [PAUSE](https://docs.prefect.io/api/latest/engine/signals.html#pause) signal that can be raised programmatically when certain conditions are met and also prevents the task from running unless a user approves it
+- a [PAUSE](https://docs.prefectlegacy.io/api/latest/engine/signals.html#pause) signal that can be raised programmatically when certain conditions are met and also prevents the task from running unless a user approves it
 
 Both these mechanisms can only be resumed by an individual or event, either from the Prefect UI or GraphQL API. 
 
@@ -11,8 +11,8 @@ This manual-only trigger example demonstrates the functionality by running the w
  
 ```python
 
-from prefect import task, Flow
-from prefect.triggers import manual_only
+from prefectlegacy import task, Flow
+from prefectlegacy.triggers import manual_only
 
 @task
 def build():

@@ -3,10 +3,10 @@ from unittest.mock import MagicMock
 import cloudpickle
 import pytest
 
-import prefect
-from prefect.client import Client
-from prefect.utilities.configuration import set_temporary_config
-from prefect.engine.results import AzureResult
+import prefectlegacy
+from prefectlegacy.client import Client
+from prefectlegacy.utilities.configuration import set_temporary_config
+from prefectlegacy.engine.results import AzureResult
 
 pytest.importorskip("azure.storage.blob")
 
@@ -44,7 +44,7 @@ class TestAzureResult:
         result.initialize_service()
         azure_client.assert_called_with(conn_str="con1;AccountKey=abc", credential=None)
 
-        with prefect.context({"secrets": {"test": "con2;AccountKey=abc"}}):
+        with prefectlegacy.context({"secrets": {"test": "con2;AccountKey=abc"}}):
             result = AzureResult(container="bob", connection_string_secret="test")
             result.initialize_service()
             azure_client.assert_called_with(
@@ -56,7 +56,7 @@ class TestAzureResult:
         result.initialize_service()
         azure_client.assert_called_with(conn_str="con1", credential="mocked!")
 
-        with prefect.context({"secrets": {"test": "con2"}}):
+        with prefectlegacy.context({"secrets": {"test": "con2"}}):
             result = AzureResult(container="bob", connection_string_secret="test")
             result.initialize_service()
             azure_client.assert_called_with(conn_str="con2", credential="mocked!")
@@ -65,7 +65,7 @@ class TestAzureResult:
         client = MagicMock(upload_blob=MagicMock())
         service = MagicMock(get_blob_client=MagicMock(return_value=client))
         monkeypatch.setattr(
-            "prefect.engine.results.azure_result.AzureResult.service", service
+            "prefectlegacy.engine.results.azure_result.AzureResult.service", service
         )
 
         result = AzureResult(container="foo", location="{thing}/here.txt")
@@ -84,7 +84,7 @@ class TestAzureResult:
         )
         service = MagicMock(get_blob_client=MagicMock(return_value=client))
         monkeypatch.setattr(
-            "prefect.engine.results.azure_result.AzureResult.service", service
+            "prefectlegacy.engine.results.azure_result.AzureResult.service", service
         )
 
         result = AzureResult(container="foo", location="{thing}/here.txt")
@@ -97,7 +97,7 @@ class TestAzureResult:
         client = MagicMock(upload_blob=MagicMock())
         service = MagicMock(get_blob_client=MagicMock(return_value=client))
         monkeypatch.setattr(
-            "prefect.engine.results.azure_result.AzureResult.service", service
+            "prefectlegacy.engine.results.azure_result.AzureResult.service", service
         )
 
         result = AzureResult(container="foo", location="nothing/here.txt")
@@ -115,7 +115,7 @@ class TestAzureResult:
         client = MagicMock(exists=MagicMock(return_value=exists))
         service = MagicMock(get_blob_client=MagicMock(return_value=client))
         monkeypatch.setattr(
-            "prefect.engine.results.azure_result.AzureResult.service", service
+            "prefectlegacy.engine.results.azure_result.AzureResult.service", service
         )
 
         result = AzureResult(container="foo", location="{thing}/here.txt")

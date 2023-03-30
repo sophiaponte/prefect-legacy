@@ -1,7 +1,7 @@
-from prefect.core import Edge, Flow, Parameter, Task
-from prefect.engine.results import LocalResult
-from prefect.tasks.core.operators import GetAttr
-from prefect.utilities.collections import DotDict
+from prefectlegacy.core import Edge, Flow, Parameter, Task
+from prefectlegacy.engine.results import LocalResult
+from prefectlegacy.tasks.core.operators import GetAttr
+from prefectlegacy.utilities.collections import DotDict
 
 
 class TestInteractionMethods:

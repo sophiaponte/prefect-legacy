@@ -16,12 +16,12 @@ After a few minutes of editing, you might come up with a flow that looks
 something like this:
 
 ```python
-import prefect
-from prefect import task, Flow, Parameter
+import prefectlegacy
+from prefectlegacy import task, Flow, Parameter
 
 @task
 def say_hello(name):
-    logger = prefect.context.get("logger")
+    logger = prefectlegacy.context.get("logger")
     logger.info(f"Hello, {name}!")
 
 with Flow("hello-flow") as flow:

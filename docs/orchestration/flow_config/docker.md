@@ -24,8 +24,8 @@ When executing Prefect flows, Python code is loaded from two locations:
 An example may help clarify the distinction here. Given the following flow
 
 ```python
-from prefect import Flow, task
-from prefect.storage import GitHub
+from prefectlegacy import Flow, task
+from prefectlegacy.storage import GitHub
 
 import numpy
 from my_task_library import task_1
@@ -108,7 +108,7 @@ For example, here we configure a flow running on Kubernetes to install
 `scikit-learn` and `matplotlib` at runtime.
 
 ```python
-from prefect.run_configs import KubernetesRun
+from prefectlegacy.run_configs import KubernetesRun
 
 flow.run_config = KubernetesRun(env={"EXTRA_PIP_PACKAGES": "scikit-learn matplotlib"})
 ```
@@ -133,7 +133,7 @@ Here we provide an example `Dockerfile` for building an image based on
 `prefecthq/prefect:0.14.10`, but with `scikit-learn` installed.
 
 ```dockerfile
-FROM prefecthq/prefect:0.14.10
+from prefectlegacyhq/prefect:0.14.10
 
 RUN pip install scikit-learn
 ```
@@ -160,7 +160,7 @@ config](./run_configs.md). For example, here we configure a flow deployed on
 Kubernetes to use the `my_org/my_custom_image:latest` image.
 
 ```python
-from prefect.run_configs import KubernetesRun
+from prefectlegacy.run_configs import KubernetesRun
 
 flow.run_configs = KubernetesRun(image="my_org/my_custom_image:latest")
 ```
@@ -186,7 +186,7 @@ image) that contains your flow source, as well as all specified python
 dependencies.
 
 ```python
-from prefect.storage import Docker
+from prefectlegacy.storage import Docker
 
 flow.storage = Docker(python_dependencies=["scikit-learn", "matplotlib"])
 ```

@@ -1,8 +1,8 @@
 import json
 import logging
 
-from prefect import Flow
-from prefect.tasks.jupyter import ExecuteNotebook
+from prefectlegacy import Flow
+from prefectlegacy.tasks.jupyter import ExecuteNotebook
 
 
 def test_jupyter_html_output():

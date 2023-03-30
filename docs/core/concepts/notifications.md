@@ -35,7 +35,7 @@ As you can see, the state handler API is a simple way for executing arbitrary Py
 A simple example will clarify its use:
 
 ```python
-from prefect import Task, Flow
+from prefectlegacy import Task, Flow
 
 
 def my_state_handler(obj, old_state, new_state):
@@ -90,8 +90,8 @@ As our above example demonstrated, it is very easy to intercept task states and 
 
 ```python
 import requests
-from prefect import Task, Flow
-from prefect.client.secrets import Secret
+from prefectlegacy import Task, Flow
+from prefectlegacy.client.secrets import Secret
 
 def post_to_slack(task, old_state, new_state):
     if new_state.is_finished():
@@ -125,7 +125,7 @@ Most of our examples so far inform the user if and when a task enters a certain 
 
 ```python
 import requests
-from prefect import Task, Flow
+from prefectlegacy import Task, Flow
 
 
 def post_to_slack(task, old_state, new_state):
@@ -153,8 +153,8 @@ _any_ Prefect State can carry data - this includes `Failed` states.
 Let's implement a task that has a special mode of failure; if this failure mode occurs, we want to be alerted immediately.
 
 ```python
-from prefect import task, Flow
-from prefect.engine import signals
+from prefectlegacy import task, Flow
+from prefectlegacy.engine import signals
 
 
 def alert_on_special_failure(task, old_state, new_state):
@@ -197,10 +197,10 @@ If you choose to provide multiple state handlers to a task, note that they will 
 
 ## Higher level API
 
-Prefect provides tools for creating state handlers from smaller, more modular pieces. In particular, the `callback_factory` helper utility located in `prefect.utilities.notifications` allows you to create state handlers from two simpler functions - one that implements an action, and another that performs a check (or filter) that determines when that action should occur. Let's re-implement our `post_to_slack` retry handler using this utility:
+Prefect provides tools for creating state handlers from smaller, more modular pieces. In particular, the `callback_factory` helper utility located in `prefectlegacy.utilities.notifications` allows you to create state handlers from two simpler functions - one that implements an action, and another that performs a check (or filter) that determines when that action should occur. Let's re-implement our `post_to_slack` retry handler using this utility:
 
 ```python
-from prefect.utilities.notifications import callback_factory
+from prefectlegacy.utilities.notifications import callback_factory
 
 
 def send_post(task, state):

@@ -19,7 +19,7 @@ kwarg when running locally with `flow.run`.
 For more information, see the [Parameter docs](/core/concepts/parameters.md).
 """
 
-from prefect import Flow, Parameter, task
+from prefectlegacy import Flow, Parameter, task
 
 
 @task(log_stdout=True)

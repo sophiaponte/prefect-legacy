@@ -2,13 +2,13 @@
 
 Prefect's settings are stored in a configuration file called `config.toml`. In general, you should not edit this file directly to modify Prefect's settings. Instead, you should use [environment variables](#environment-variables) for temporary settings, or create a [user configuration file](#user-configuration) for permanent settings.
 
-The configuration file is parsed when Prefect is first imported and is available as a live object in `prefect.config`. To access any value, use dot-notation (for example, `prefect.config.tasks.defaults.checkpoint`).
+The configuration file is parsed when Prefect is first imported and is available as a live object in `prefectlegacy.config`. To access any value, use dot-notation (for example, `prefectlegacy.config.tasks.defaults.checkpoint`).
 
 ## Environment variables
 
 Any lowercase Prefect configuration key can be set by environment variable. In order to do so, prefix the variable with `PREFECT__` and use two underscores (`__`) to separate each part of the key.
 
-For example, if you set `PREFECT__TASKS__DEFAULTS__MAX_RETRIES=4`, then `prefect.config.tasks.defaults.max_retries == 4`.
+For example, if you set `PREFECT__TASKS__DEFAULTS__MAX_RETRIES=4`, then `prefectlegacy.config.tasks.defaults.max_retries == 4`.
 
 ::: tip Interpolated keys are lowercase
 Environment variables are always interpreted as lowercase configuration keys, _except_ whenever they are specifying local secrets. For example,
@@ -34,7 +34,7 @@ respective Python type
 
 In addition to environment variables, users can provide a custom configuration file. Any values in the custom configuration will be loaded _on top_ of the default values, but prior to interpolation, meaning the user configuration only needs to contain values you want to change.
 
-By default, Prefect will look for a user configuration file at `$HOME/.prefect/config.toml`, but you can change that location by setting the environment variable `PREFECT__USER_CONFIG_PATH` appropriately. Please note the double-underscore (`__`) in the variable name; this ensures that it will be available at runtime as `prefect.config.user_config_path`.
+By default, Prefect will look for a user configuration file at `$HOME/.prefect/config.toml`, but you can change that location by setting the environment variable `PREFECT__USER_CONFIG_PATH` appropriately. Please note the double-underscore (`__`) in the variable name; this ensures that it will be available at runtime as `prefectlegacy.config.user_config_path`.
 
 ### Configuration precedence
 
@@ -56,7 +56,7 @@ Any string value that contains the name of an environment variable prefixed by "
 path = "$DIR/file.txt"
 ```
 
-In this case, loading `prefect.config.path == "/foo/file.txt"`
+In this case, loading `prefectlegacy.config.path == "/foo/file.txt"`
 
 Environment variables are always interpreted as lowercase keys.
 
@@ -75,7 +75,7 @@ url = "https://${api.host}:${api.port}"
 ```
 
 ```python
-assert prefect.config.api.url == "https://localhost:5432"
+assert prefectlegacy.config.api.url == "https://localhost:5432"
 ```
 
 Or even to create complex switching logic based on the value of one variable:
@@ -94,8 +94,8 @@ user = "${environments.${environment}.user}"
 ```
 
 ```python
-assert prefect.config.environment == "prod"
-assert prefect.config.user == "admin"
+assert prefectlegacy.config.environment == "prod"
+assert prefectlegacy.config.user == "admin"
 ```
 
 #### Validation

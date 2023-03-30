@@ -10,14 +10,14 @@ from unittest.mock import MagicMock
 import pendulum
 import pytest
 
-import prefect
-from prefect.core import Flow, Parameter, Task
-from prefect.engine import signals
-from prefect.engine.cache_validators import duration_only
-from prefect.executors import Executor, LocalExecutor
-from prefect.engine.flow_runner import ENDRUN, FlowRunner, FlowRunnerInitializeResult
-from prefect.engine.result import Result
-from prefect.engine.state import (
+import prefectlegacy
+from prefectlegacy.core import Flow, Parameter, Task
+from prefectlegacy.engine import signals
+from prefectlegacy.engine.cache_validators import duration_only
+from prefectlegacy.executors import Executor, LocalExecutor
+from prefectlegacy.engine.flow_runner import ENDRUN, FlowRunner, FlowRunnerInitializeResult
+from prefectlegacy.engine.result import Result
+from prefectlegacy.engine.state import (
     Cached,
     Failed,
     Finished,
@@ -34,10 +34,10 @@ from prefect.engine.state import (
     TimedOut,
     TriggerFailed,
 )
-from prefect.tasks.secrets import PrefectSecret
-from prefect.triggers import manual_only
-from prefect.utilities.debug import raise_on_exception
-from prefect.exceptions import TaskTimeoutSignal
+from prefectlegacy.tasks.secrets import prefectlegacySecret
+from prefectlegacy.triggers import manual_only
+from prefectlegacy.utilities.debug import raise_on_exception
+from prefectlegacy.exceptions import TaskTimeoutSignal
 
 
 class SuccessTask(Task):
@@ -65,25 +65,25 @@ class ErrorTask(Task):
 
 class RaiseFailTask(Task):
     def run(self):
-        raise prefect.engine.signals.FAIL("custom-fail-message")
+        raise prefectlegacy.engine.signals.FAIL("custom-fail-message")
         raise ValueError("custom-error-message")  # pylint: disable=W0101
 
 
 class RaiseSkipTask(Task):
     def run(self):
-        raise prefect.engine.signals.SKIP()
+        raise prefectlegacy.engine.signals.SKIP()
         raise ValueError()  # pylint: disable=W0101
 
 
 class RaiseSuccessTask(Task):
     def run(self):
-        raise prefect.engine.signals.SUCCESS()
+        raise prefectlegacy.engine.signals.SUCCESS()
         raise ValueError()  # pylint: disable=W0101
 
 
 class RaiseRetryTask(Task):
     def run(self):
-        raise prefect.engine.signals.RETRY()
+        raise prefectlegacy.engine.signals.RETRY()
         raise ValueError()  # pylint: disable=W0101
 
 
@@ -99,7 +99,7 @@ class SlowTask(Task):
 
 def test_flow_runner_has_logger():
     r = FlowRunner(Flow(name="test"))
-    assert r.logger.name == "prefect.FlowRunner"
+    assert r.logger.name == "prefectlegacy.FlowRunner"
 
 
 def test_flow_runner_runs_basic_flow_with_1_task():
@@ -185,7 +185,7 @@ def test_flow_runner_runs_basic_flow_with_2_dependent_tasks_and_first_task_fails
 def test_flow_runner_runs_flow_with_2_dependent_tasks_and_first_task_fails_and_second_has_trigger():
     flow = Flow(name="test")
     task1 = ErrorTask()
-    task2 = SuccessTask(trigger=prefect.triggers.all_failed)
+    task2 = SuccessTask(trigger=prefectlegacy.triggers.all_failed)
 
     flow.add_edge(task1, task2)
 
@@ -276,7 +276,7 @@ def test_secrets_dynamically_pull_from_context():
     assert flow_state.is_running()
     assert flow_state.result[task1].is_retrying()
 
-    with prefect.context(secrets=dict(foo=42)):
+    with prefectlegacy.context(secrets=dict(foo=42)):
         time.sleep(1)
         flow_state = FlowRunner(flow=flow).run(task_states=flow_state.result)
 
@@ -284,7 +284,7 @@ def test_secrets_dynamically_pull_from_context():
 
 
 def test_secrets_are_rerun_on_restart():
-    @prefect.task
+    @prefectlegacy.task
     def identity(x):
         return x
 
@@ -292,7 +292,7 @@ def test_secrets_are_rerun_on_restart():
         secret = PrefectSecret("key")
         val = identity(secret)
 
-    with prefect.context(secrets={"key": "val"}):
+    with prefectlegacy.context(secrets={"key": "val"}):
         state = FlowRunner(flow=flow).run(
             task_states={secret: Success()}, return_tasks=[val]
         )
@@ -321,7 +321,7 @@ def test_flow_runner_does_return_tasks_when_requested():
 
 def test_required_parameters_must_be_provided():
     flow = Flow(name="test")
-    y = prefect.Parameter("y")
+    y = prefectlegacy.Parameter("y")
     flow.add_task(y)
     flow_state = FlowRunner(flow=flow).run(return_tasks=[y])
     assert isinstance(flow_state, Failed)
@@ -331,7 +331,7 @@ def test_required_parameters_must_be_provided():
 
 def test_parameters_are_placed_into_context():
     flow = Flow(name="test")
-    y = prefect.Parameter("y", default=99)
+    y = prefectlegacy.Parameter("y", default=99)
     flow.add_task(y)
     flow_state = FlowRunner(flow=flow).run(return_tasks=[y], parameters=dict(y=42))
     assert isinstance(flow_state, Success)
@@ -339,12 +339,12 @@ def test_parameters_are_placed_into_context():
 
 
 def test_parameters_are_placed_into_context_including_defaults():
-    @prefect.task
+    @prefectlegacy.task
     def whats_in_ctx():
-        return prefect.context.parameters
+        return prefectlegacy.context.parameters
 
-    y = prefect.Parameter("y", default=99)
-    z = prefect.Parameter("z", default=19)
+    y = prefectlegacy.Parameter("y", default=99)
+    z = prefectlegacy.Parameter("z", default=19)
     flow = Flow(name="test", tasks=[y, z, whats_in_ctx])
     flow_state = FlowRunner(flow=flow).run(
         return_tasks=[whats_in_ctx], parameters=dict(y=42)
@@ -355,9 +355,9 @@ def test_parameters_are_placed_into_context_including_defaults():
 
 def test_parameters_are_placed_into_context_and_override_current_context():
     flow = Flow(name="test")
-    y = prefect.Parameter("y", default=99)
+    y = prefectlegacy.Parameter("y", default=99)
     flow.add_task(y)
-    with prefect.context(parameters=dict(y=88, z=55)):
+    with prefectlegacy.context(parameters=dict(y=88, z=55)):
         flow_state = FlowRunner(flow=flow).run(return_tasks=[y], parameters=dict(y=42))
     assert isinstance(flow_state, Success)
     assert flow_state.result[y].result == 42
@@ -366,7 +366,7 @@ def test_parameters_are_placed_into_context_and_override_current_context():
 def test_flow_run_state_determined_by_reference_tasks():
     flow = Flow(name="test")
     t1 = ErrorTask()
-    t2 = SuccessTask(trigger=prefect.triggers.all_finished)
+    t2 = SuccessTask(trigger=prefectlegacy.triggers.all_finished)
     flow.add_edge(t1, t2)
 
     flow.set_reference_tasks([t1])
@@ -379,7 +379,7 @@ def test_flow_run_state_determined_by_reference_tasks():
 def test_flow_run_state_not_determined_by_reference_tasks_if_terminal_tasks_are_not_finished():
     flow = Flow(name="test")
     t1 = ErrorTask()
-    t2 = RaiseRetryTask(trigger=prefect.triggers.all_finished)
+    t2 = RaiseRetryTask(trigger=prefectlegacy.triggers.all_finished)
     flow.add_edge(t1, t2)
 
     flow.set_reference_tasks([t1])
@@ -611,7 +611,7 @@ class TestOutputCaching:
 
 class TestCachingFromContext:
     def test_caches_do_not_persist_across_flow_runner_runs(self):
-        @prefect.task(cache_for=datetime.timedelta(seconds=10))
+        @prefectlegacy.task(cache_for=datetime.timedelta(seconds=10))
         def test_task():
             return random.random()
 
@@ -750,7 +750,7 @@ def test_flow_runner_uses_user_provided_executor():
 def test_flow_runner_captures_and_exposes_dask_errors(executor):
     q = queue.Queue()
 
-    @prefect.task
+    @prefectlegacy.task
     def put():
         q.put(55)
 
@@ -776,7 +776,7 @@ def test_flow_runner_allows_for_parallelism_with_times(executor):
     # related:
     # "https://stackoverflow.com/questions/52121686/why-is-dask-distributed-not-parallelizing-the-first-run-of-my-workflow"
 
-    @prefect.task
+    @prefectlegacy.task
     def record_times():
         res = []
         pause = random.randint(0, 75)
@@ -808,16 +808,16 @@ def test_flow_runner_allows_for_parallelism_with_times(executor):
     "executor", ["local", "mproc", "mthread", "sync"], indirect=True
 )
 def test_flow_runner_properly_provides_context_to_task_runners(executor):
-    @prefect.task
+    @prefectlegacy.task
     def my_name():
-        return prefect.context.get("my_name")
+        return prefectlegacy.context.get("my_name")
 
-    @prefect.task
+    @prefectlegacy.task
     def flow_name():
-        return prefect.context.get("flow_name")
+        return prefectlegacy.context.get("flow_name")
 
     flow = Flow(name="test-dummy", tasks=[flow_name, my_name])
-    with prefect.context(my_name="marvin"):
+    with prefectlegacy.context(my_name="marvin"):
         res = flow.run(executor=executor)
 
     assert res.result[flow_name].result == "test-dummy"
@@ -826,7 +826,7 @@ def test_flow_runner_properly_provides_context_to_task_runners(executor):
     with Flow("test-map") as f:
         tt = flow_name.map(upstream_tasks=[my_name])
 
-    with prefect.context(my_name="mapped-marvin"):
+    with prefectlegacy.context(my_name="mapped-marvin"):
         res = f.run(executor=executor)
 
     assert res.result[my_name].result == "mapped-marvin"
@@ -931,7 +931,7 @@ class TestFlowStateHandlers:
         # previous result
         flow = Flow(name="test", state_handlers=[lambda *a: True, flow_handler])
         with pytest.raises(AssertionError):
-            with prefect.utilities.debug.raise_on_exception():
+            with prefectlegacy.utilities.debug.raise_on_exception():
                 FlowRunner(flow=flow).run()
 
     def test_task_handler_that_doesnt_return_state_or_none(self):
@@ -939,7 +939,7 @@ class TestFlowStateHandlers:
         # raises an attribute error because it tries to access a property of the state that
         # doesn't exist on None
         with pytest.raises(AttributeError):
-            with prefect.utilities.debug.raise_on_exception():
+            with prefectlegacy.utilities.debug.raise_on_exception():
                 FlowRunner(flow=flow).run()
 
 
@@ -962,7 +962,7 @@ class TestFlowRunnerStateHandlers:
         # and raise an error, as long as the flow_handlers are called in sequence on the
         # previous result
         with pytest.raises(AssertionError):
-            with prefect.utilities.debug.raise_on_exception():
+            with prefectlegacy.utilities.debug.raise_on_exception():
                 FlowRunner(
                     flow=Flow(name="test"),
                     state_handlers=[lambda *a: True, flow_runner_handler],
@@ -972,7 +972,7 @@ class TestFlowRunnerStateHandlers:
         # raises an attribute error because it tries to access a property of the state that
         # doesn't exist on None
         with pytest.raises(AttributeError):
-            with prefect.utilities.debug.raise_on_exception():
+            with prefectlegacy.utilities.debug.raise_on_exception():
                 FlowRunner(
                     flow=Flow(name="test"), state_handlers=[lambda *a: True]
                 ).run()
@@ -999,7 +999,7 @@ def test_improper_use_of_unmapped_fails_gracefully():
     x = Parameter("x", default=[1, 2, 3])
     with Flow(name="test") as f:
         res = add.map(
-            x, y=prefect.tasks.core.constants.Constant(8)
+            x, y=prefectlegacy.tasks.core.constants.Constant(8)
         )  # incorrect, should use `unmapped`
 
     state = FlowRunner(flow=f).run(return_tasks=f.tasks)
@@ -1054,21 +1054,21 @@ def test_endrun_raised_in_initialize_is_caught_correctly():
 
 def test_task_runner_cls_uses_default_function_if_none():
     fr = FlowRunner(flow=None, task_runner_cls=None)
-    assert fr.task_runner_cls is prefect.engine.get_default_task_runner_class()
+    assert fr.task_runner_cls is prefectlegacy.engine.get_default_task_runner_class()
 
-    with prefect.utilities.configuration.set_temporary_config(
-        {"engine.task_runner.default_class": "prefect.engine.cloud.CloudTaskRunner"}
+    with prefectlegacy.utilities.configuration.set_temporary_config(
+        {"engine.task_runner.default_class": "prefectlegacy.engine.cloud.CloudTaskRunner"}
     ):
         fr = FlowRunner(flow=None, task_runner_cls=None)
-        assert fr.task_runner_cls is prefect.engine.get_default_task_runner_class()
+        assert fr.task_runner_cls is prefectlegacy.engine.get_default_task_runner_class()
 
 
 def test_flow_run_uses_default_flow_runner(monkeypatch):
     x = MagicMock()
-    monkeypatch.setattr("prefect.engine.flow_runner.FlowRunner", x)
+    monkeypatch.setattr("prefectlegacy.engine.flow_runner.FlowRunner", x)
 
-    with prefect.utilities.configuration.set_temporary_config(
-        {"engine.flow_runner.default_class": "prefect.engine.x"}
+    with prefectlegacy.utilities.configuration.set_temporary_config(
+        {"engine.flow_runner.default_class": "prefectlegacy.engine.x"}
     ):
         with pytest.warns(UserWarning):
             Flow(name="test").run()
@@ -1077,14 +1077,14 @@ def test_flow_run_uses_default_flow_runner(monkeypatch):
 
 
 def test_parameters_can_be_set_in_context_if_none_passed():
-    x = prefect.Parameter("x")
+    x = prefectlegacy.Parameter("x")
     f = FlowRunner(Flow(name="test", tasks=[x]))
     state = f.run(parameters={}, context={"parameters": {"x": 5}}, return_tasks=[x])
     assert state.result[x].result == 5
 
 
 def test_parameters_overwrite_context():
-    x = prefect.Parameter("x")
+    x = prefectlegacy.Parameter("x")
     f = FlowRunner(Flow(name="test", tasks=[x]))
     state = f.run(
         parameters={"x": 2}, context={"parameters": {"x": 5}}, return_tasks=[x]
@@ -1093,8 +1093,8 @@ def test_parameters_overwrite_context():
 
 
 def test_parameters_overwrite_context_only_if_key_matches():
-    x = prefect.Parameter("x")
-    y = prefect.Parameter("y")
+    x = prefectlegacy.Parameter("x")
+    y = prefectlegacy.Parameter("y")
     f = FlowRunner(Flow(name="test", tasks=[x, y]))
     state = f.run(
         parameters={"x": 2},
@@ -1204,9 +1204,9 @@ class TestMapping:
 
 
 def test_task_contexts_are_provided_to_tasks():
-    @prefect.task(name="rc", slug="rc")
+    @prefectlegacy.task(name="rc", slug="rc")
     def return_context():
-        return prefect.context.to_dict()
+        return prefectlegacy.context.to_dict()
 
     with Flow(name="test") as flow:
         rc = return_context()
@@ -1228,11 +1228,11 @@ def test_paused_tasks_stay_paused_when_run():
 
 class TestContext:
     def test_flow_runner_passes_along_its_run_context_to_tasks(self):
-        @prefect.task
+        @prefectlegacy.task
         def grab_key():
-            return prefect.context["THE_ANSWER"]
+            return prefectlegacy.context["THE_ANSWER"]
 
-        with prefect.context(THE_ANSWER=42):
+        with prefectlegacy.context(THE_ANSWER=42):
             runner = FlowRunner(Flow(name="test", tasks=[grab_key]))
             flow_state = runner.run(return_tasks=[grab_key])
 
@@ -1240,9 +1240,9 @@ class TestContext:
         assert flow_state.result[grab_key].result == 42
 
     def test_flow_runner_provides_scheduled_start_time(self):
-        @prefect.task
+        @prefectlegacy.task
         def return_scheduled_start_time():
-            return prefect.context.get("scheduled_start_time")
+            return prefectlegacy.context.get("scheduled_start_time")
 
         f = Flow(name="test", tasks=[return_scheduled_start_time])
         res = f.run()
@@ -1257,9 +1257,9 @@ class TestContext:
     def test_flow_runner_doesnt_override_scheduled_start_time_when_running_on_schedule(
         self, run_on_schedule
     ):
-        @prefect.task
+        @prefectlegacy.task
         def return_scheduled_start_time():
-            return prefect.context.get("scheduled_start_time")
+            return prefectlegacy.context.get("scheduled_start_time")
 
         f = Flow(name="test", tasks=[return_scheduled_start_time])
         res = f.run(
@@ -1273,9 +1273,9 @@ class TestContext:
         "date", ["today_nodash", "tomorrow_nodash", "yesterday_nodash"]
     )
     def test_context_contains_nodash_date_formats(self, date):
-        @prefect.task
+        @prefectlegacy.task
         def return_ctx_key():
-            return prefect.context.get(date)
+            return prefectlegacy.context.get(date)
 
         f = Flow(name="test", tasks=[return_ctx_key])
         res = f.run()
@@ -1288,9 +1288,9 @@ class TestContext:
 
     @pytest.mark.parametrize("date", ["today", "tomorrow", "yesterday"])
     def test_context_contains_date_formats(self, date):
-        @prefect.task
+        @prefectlegacy.task
         def return_ctx_key():
-            return prefect.context.get(date)
+            return prefectlegacy.context.get(date)
 
         f = Flow(name="test", tasks=[return_ctx_key])
         res = f.run()
@@ -1302,9 +1302,9 @@ class TestContext:
         assert len(output) == 10
 
     def test_context_includes_date(self):
-        @prefect.task
+        @prefectlegacy.task
         def return_ctx_key():
-            return prefect.context.get("date")
+            return prefectlegacy.context.get("date")
 
         f = Flow(name="test", tasks=[return_ctx_key])
         res = f.run()
@@ -1316,14 +1316,14 @@ class TestContext:
 
     @pytest.mark.parametrize("as_string", [True, False])
     def test_context_derives_dates_from_custom_date(self, as_string):
-        @prefect.task
+        @prefectlegacy.task
         def return_ctx():
-            return prefect.context.copy()
+            return prefectlegacy.context.copy()
 
         custom_date = pendulum.now().add(months=1)
 
         f = Flow(name="test", tasks=[return_ctx])
-        with prefect.context(
+        with prefectlegacy.context(
             {"date": custom_date.to_datetime_string() if as_string else custom_date}
         ):
             res = f.run()
@@ -1351,12 +1351,12 @@ class TestContext:
 
         caplog.set_level(logging.WARNING)
 
-        @prefect.task
+        @prefectlegacy.task
         def return_ctx_key():
-            return prefect.context.get("tomorrow")
+            return prefectlegacy.context.get("tomorrow")
 
         f = Flow(name="test", tasks=[return_ctx_key])
-        with prefect.context({"date": "foobar"}):
+        with prefectlegacy.context({"date": "foobar"}):
             res = f.run()
 
         assert res.is_successful()
@@ -1385,12 +1385,12 @@ class TestContext:
     def test_user_provided_context_is_prioritized(
         self, outer_context, inner_context, sol
     ):
-        @prefect.task
+        @prefectlegacy.task
         def return_ctx_key():
-            return prefect.context.get("date")
+            return prefectlegacy.context.get("date")
 
         f = Flow(name="test", tasks=[return_ctx_key])
-        with prefect.context(**outer_context):
+        with prefectlegacy.context(**outer_context):
             res = f.run(context=inner_context)
 
         assert res.is_successful()
@@ -1403,9 +1403,9 @@ class TestContext:
     "executor", ["local", "sync", "mproc", "mthread", "threaded_local"], indirect=True
 )
 def test_task_logs_survive_if_timeout_is_used(caplog, executor):
-    @prefect.task(timeout=2)
+    @prefectlegacy.task(timeout=2)
     def log_stuff():
-        logger = prefect.context.get("logger")
+        logger = prefectlegacy.context.get("logger")
         logger.critical("important log right here")
 
     f = Flow(name="logs", tasks=[log_stuff])
@@ -1423,7 +1423,7 @@ def test_constant_tasks_arent_submitted(caplog):
             calls.append(kwargs)
             return super().submit(*args, **kwargs)
 
-    @prefect.task
+    @prefectlegacy.task
     def add(x):
         return x + 1
 
@@ -1450,7 +1450,7 @@ def test_constant_tasks_arent_submitted_when_mapped(caplog):
             calls.append(kwargs)
             return super().submit(*args, **kwargs)
 
-    @prefect.task
+    @prefectlegacy.task
     def add(x):
         return x + 1
 
@@ -1489,11 +1489,11 @@ def test_dask_executor_with_flow_runner_sets_task_keys(mthread):
         def wait(self, x):
             return mthread.wait(x)
 
-    @prefect.task
+    @prefectlegacy.task
     def inc(x):
         return x + 1
 
-    @prefect.task
+    @prefectlegacy.task
     def do_sum(x):
         return sum(x)
 

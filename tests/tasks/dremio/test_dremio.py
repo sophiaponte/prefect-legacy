@@ -2,7 +2,7 @@ import pytest
 import os
 from pyarrow.flight import FlightUnavailableError
 
-from prefect.tasks.dremio.dremio import DremioFetch
+from prefectlegacy.tasks.dremio.dremio import DremioFetch
 
 
 class TestDremioFetch:

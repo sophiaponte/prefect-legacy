@@ -2,7 +2,7 @@ import sys
 import pytest
 import yaml
 
-from prefect.run_configs import ECSRun
+from prefectlegacy.run_configs import ECSRun
 
 
 def test_no_args():

@@ -17,10 +17,10 @@ To maximize the clarity of your Prefect code, we recommend organizing your scrip
 #--------------------------------------------------------------
 
 # basic imports
-from prefect import Flow, Parameter, task
+from prefectlegacy import Flow, Parameter, task
 
 # specific task class imports
-from prefect.tasks.shell import ShellTask
+from prefectlegacy.tasks.shell import ShellTask
 
 
 #--------------------------------------------------------------

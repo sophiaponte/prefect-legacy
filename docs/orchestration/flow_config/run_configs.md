@@ -12,8 +12,8 @@ part of the `Flow` constructor, or set it as an attribute later before calling
 `flow.register`. For example, to configure a flow to run on Kubernetes:
 
 ```python
-from prefect import Flow
-from prefect.run_configs import KubernetesRun
+from prefectlegacy import Flow
+from prefectlegacy.run_configs import KubernetesRun
 
 # Set run_config as part of the constructor
 with Flow("example", run_config=KubernetesRun()) as flow:
@@ -40,8 +40,8 @@ execute, the labels set on the agent must be a *superset* of those set on the
 For example, here we configure a flow with `labels=["dev", "ml"]`:
 
 ```python
-from prefect import Flow
-from prefect.run_configs import LocalRun
+from prefectlegacy import Flow
+from prefectlegacy.run_configs import LocalRun
 
 # Configure a flow with a `dev` label
 flow = Flow(
@@ -80,7 +80,7 @@ backend specific fields use one of the other `RunConfig` types.
 Use the defaults set on the agent:
 
 ```python
-from prefect.run_configs import UniversalRun
+from prefectlegacy.run_configs import UniversalRun
 
 flow.run_config = UniversalRun()
 ```
@@ -102,7 +102,7 @@ runs deployed as local processes with a
 Use the defaults set on the agent:
 
 ```python
-from prefect.run_configs import LocalRun
+from prefectlegacy.run_configs import LocalRun
 
 flow.run_config = LocalRun()
 ```
@@ -130,7 +130,7 @@ runs deployed as docker containers with a
 Use the defaults set on the agent:
 
 ```python
-from prefect.run_configs import DockerRun
+from prefectlegacy.run_configs import DockerRun
 
 flow.run_config = DockerRun()
 ```
@@ -158,7 +158,7 @@ configures flow runs deployed as Kubernetes jobs with a
 Use the defaults set on the agent:
 
 ```python
-from prefect.run_configs import KubernetesRun
+from prefectlegacy.run_configs import KubernetesRun
 
 flow.run_config = KubernetesRun()
 ```
@@ -207,7 +207,7 @@ deployed as ECS tasks with a ECSAgent.
 Use the defaults set on the agent:
 
 ```python
-from prefect.run_configs import ECSRun
+from prefectlegacy.run_configs import ECSRun
 
 flow.run_config = ECSRun()
 ```
@@ -248,7 +248,7 @@ deployed as Vertex CustomJobs with a VertexAgent.
 Use the defaults set on the agent:
 
 ```python
-from prefect.run_configs import VertexRun
+from prefectlegacy.run_configs import VertexRun
 
 flow.run_config = VertexRun()
 ```

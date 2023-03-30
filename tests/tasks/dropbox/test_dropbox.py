@@ -2,9 +2,9 @@ from unittest.mock import MagicMock
 
 import pytest
 
-import prefect
-from prefect.tasks.dropbox import DropboxDownload
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy.tasks.dropbox import DropboxDownload
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 class TestInitialization:
@@ -29,7 +29,7 @@ class TestCredentials:
         task = DropboxDownload(path="test")
 
         dbx = MagicMock()
-        monkeypatch.setattr("prefect.tasks.dropbox.dropbox.dropbox.Dropbox", dbx)
+        monkeypatch.setattr("prefectlegacy.tasks.dropbox.dropbox.dropbox.Dropbox", dbx)
 
         task.run(access_token="HI")
 

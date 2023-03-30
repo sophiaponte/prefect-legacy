@@ -35,7 +35,7 @@ However, if a mapped task relies on another mapped task, Prefect does not reduce
 Here's how the previous example would look as a Prefect flow:
 
 ```python
-from prefect import Flow, task
+from prefectlegacy import Flow, task
 
 numbers = [1, 2, 3]
 map_fn = task(lambda x: x + 1)
@@ -60,7 +60,7 @@ The simplest Prefect map takes a tasks and applies it to each element of its inp
 For example, if we define a task for adding 10 to a number, we can trivially apply that task to each element of a list:
 
 ```python
-from prefect import Flow, task
+from prefectlegacy import Flow, task
 
 @task
 def add_ten(x):
@@ -81,7 +81,7 @@ The actual execution of the child tasks which are applied to each element of the
 Since `mapped_result` is nothing more than a task with an iterable result, we can immediately use it as the input for another round of mapping:
 
 ```python
-from prefect import Flow, task
+from prefectlegacy import Flow, task
 
 @task
 def add_ten(x):
@@ -105,7 +105,7 @@ In general, each layer of an iterated map has the same number of children: if yo
 Using `flatten()` is more efficient than adding a reduce step to an otherwise-iterated map, because Prefect will compute the flatmap without gathering all data to a single worker.
 
 ```python
-from prefect import Flow, task, flatten
+from prefectlegacy import Flow, task, flatten
 
 @task
 def A():
@@ -135,7 +135,7 @@ with Flow('flat map') as f:
 Prefect automatically gathers mapped results into a list if they are needed by a non-mapped task. Therefore, all users need to do to "reduce" a mapped result is supply it to a task!
 
 ```python
-from prefect import Flow, task
+from prefectlegacy import Flow, task
 
 @task
 def add_ten(x):
@@ -159,9 +159,9 @@ In this example, `sum_numbers` received an automatically-reduced list of results
 If the output of one mapped task is used as input to another mapped task, any failed or skipped task will make the subsequent task fail/skip by default. However sometimes, we want to exclude skipped/failed tasks' output or outputs that are `None`. Prefect provides this functionality with `FilterTask()`.
 
 ```python
-from prefect import task, Flow, context
-from prefect.tasks.control_flow.filter import FilterTask
-from prefect.engine.signals import SKIP
+from prefectlegacy import task, Flow, context
+from prefectlegacy.tasks.control_flow.filter import FilterTask
+from prefectlegacy.engine.signals import SKIP
 
 filter_results = FilterTask(
     filter_func=lambda x: not isinstance(x, (BaseException, SKIP, type(None)))
@@ -205,7 +205,7 @@ In the example above, `raw_out` will contain `[0, RuntimeError, SKIP, None, 4]`.
 When a task is mapped over its inputs, it retains the same call signature and arguments, but iterates over the inputs to generate its children tasks. Sometimes, we don't want to iterate over one of the inputs -- perhaps it's a constant value, or a list that's required in its entirety. Prefect supplies a convenient `unmapped()` annotation for this case.
 
 ```python
-from prefect import Flow, task, unmapped
+from prefectlegacy import Flow, task, unmapped
 
 @task
 def add(x, y):
@@ -225,8 +225,8 @@ Prefect also provides a `mapped()` annotation that can be used to indicate that 
 ## Complex mapped pipelines
 
 Sometimes you want to encode a more complex structure in your mapped pipelines
-- for example, adding conditional tasks using `prefect.case`. This can be done
-using `prefect.apply_map`. This takes a function that adds multiple *scalar*
+- for example, adding conditional tasks using `prefectlegacy.case`. This can be done
+using `prefectlegacy.apply_map`. This takes a function that adds multiple *scalar*
 tasks to a flow, and converts those tasks to run as parallel *mapped*
 pipelines.
 
@@ -241,8 +241,8 @@ several tasks. Just as we can map single tasks like `inc` using `inc.map`, we
 can map functions that create multiple tasks using `apply_map`.
 
 ```python
-from prefect import Flow, task, case, apply_map
-from prefect.tasks.control_flow import merge
+from prefectlegacy import Flow, task, case, apply_map
+from prefectlegacy.tasks.control_flow import merge
 
 @task
 def inc(x):

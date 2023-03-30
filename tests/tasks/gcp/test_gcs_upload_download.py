@@ -3,11 +3,11 @@ from unittest.mock import MagicMock
 import pytest
 from google.cloud.exceptions import NotFound
 
-import prefect
-import prefect.utilities.gcp
-from prefect.tasks.gcp import GCSDownload, GCSUpload
-from prefect.tasks.gcp.storage import GCSBaseTask
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+import prefectlegacy.utilities.gcp
+from prefectlegacy.tasks.gcp import GCSDownload, GCSUpload
+from prefectlegacy.tasks.gcp.storage import GCSBaseTask
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 @pytest.fixture(autouse=True, params=["download", "upload"])
@@ -56,7 +56,7 @@ class TestBuckets:
         run_arg = "data" if isinstance(task, GCSUpload) else "blob"
 
         client = MagicMock()
-        monkeypatch.setattr("prefect.tasks.gcp.storage.get_storage_client", client)
+        monkeypatch.setattr("prefectlegacy.tasks.gcp.storage.get_storage_client", client)
 
         task.run(**{run_arg: "empty"}, credentials={})
         task.run(**{run_arg: "empty", "bucket": "run"}, credentials={})
@@ -73,7 +73,7 @@ class TestBuckets:
         client.return_value = MagicMock(
             get_bucket=MagicMock(side_effect=NotFound("no bucket"))
         )
-        monkeypatch.setattr("prefect.tasks.gcp.storage.get_storage_client", client)
+        monkeypatch.setattr("prefectlegacy.tasks.gcp.storage.get_storage_client", client)
 
         with pytest.raises(NotFound, match="no bucket"):
             task.run(**{run_arg: "empty"}, credentials={})
@@ -85,7 +85,7 @@ class TestBuckets:
         client.return_value = MagicMock(
             get_bucket=MagicMock(side_effect=NotFound("no bucket"))
         )
-        monkeypatch.setattr("prefect.tasks.gcp.storage.get_storage_client", client)
+        monkeypatch.setattr("prefectlegacy.tasks.gcp.storage.get_storage_client", client)
 
         task.run(data="empty", credentials={})
         task.run(data="empty", bucket="run", credentials={})
@@ -104,7 +104,7 @@ class TestBlob:
         client.return_value = MagicMock(
             get_bucket=MagicMock(return_value=MagicMock(blob=blob))
         )
-        monkeypatch.setattr("prefect.tasks.gcp.storage.get_storage_client", client)
+        monkeypatch.setattr("prefectlegacy.tasks.gcp.storage.get_storage_client", client)
 
         task.run(data="empty", credentials={})
         task.run(data="empty", blob="run-time", credentials={})
@@ -121,7 +121,7 @@ class TestBlob:
         client.return_value = MagicMock(
             get_bucket=MagicMock(return_value=MagicMock(blob=blob))
         )
-        monkeypatch.setattr("prefect.tasks.gcp.storage.get_storage_client", client)
+        monkeypatch.setattr("prefectlegacy.tasks.gcp.storage.get_storage_client", client)
 
         task.run(blob="run-time", credentials={})
 
@@ -137,7 +137,7 @@ class TestRuntimeValidation:
         client.return_value = MagicMock(
             get_bucket=MagicMock(return_value=MagicMock(blob=blob))
         )
-        monkeypatch.setattr("prefect.tasks.gcp.storage.get_storage_client", client)
+        monkeypatch.setattr("prefectlegacy.tasks.gcp.storage.get_storage_client", client)
 
         with pytest.raises(
             TypeError, match="data must be str, bytes or BytesIO: got .* instead"

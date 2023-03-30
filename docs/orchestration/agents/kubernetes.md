@@ -50,7 +50,7 @@ default) or [KubernetesRun](/orchestration/flow_config/run_configs.md#kubernetes
 environment for a flow (exposing `env`, `image`, `cpu_limit`, etc...):
 
 ```python
-from prefect.run_configs import KubernetesRun
+from prefectlegacy.run_configs import KubernetesRun
 
 # Configure extra environment variables for this flow,
 # and set a custom image
@@ -140,7 +140,7 @@ configured per-flow (on the
 own template.
 
 For reference, the default template packaged with Prefect can be found
-[here](https://github.com/PrefectHQ/prefect/blob/master/src/prefect/agent/kubernetes/job_template.yaml).
+[here](https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/agent/kubernetes/job_template.yaml).
 
 To provide your own job template, you can use the `--job-template` flag. This
 takes a path to a job template YAML file. The path can be local to the agent,

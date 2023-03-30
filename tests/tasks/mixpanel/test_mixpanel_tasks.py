@@ -5,9 +5,9 @@ import pytest
 import responses
 from unittest.mock import patch
 
-from prefect.tasks.mixpanel import MixpanelExportTask
+from prefectlegacy.tasks.mixpanel import MixpanelExportTask
 
-from prefect.engine.signals import FAIL
+from prefectlegacy.engine.signals import FAIL
 
 
 class TestMixpanelTasks:

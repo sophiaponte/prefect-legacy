@@ -2,7 +2,7 @@ from unittest.mock import MagicMock
 import prometheus_client
 import prometheus_client.exposition
 import pytest
-from prefect.tasks.prometheus.pushgateway import (
+from prefectlegacy.tasks.prometheus.pushgateway import (
     PushAddGaugeToGateway,
     PushGaugeToGateway,
     _GaugeToGatewayBase,

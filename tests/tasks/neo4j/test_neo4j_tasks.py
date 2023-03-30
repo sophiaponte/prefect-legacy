@@ -1,5 +1,5 @@
-from prefect.tasks.neo4j.neo4j_tasks import Neo4jRunCypherQueryTask
-from prefect.engine.signals import FAIL
+from prefectlegacy.tasks.neo4j.neo4j_tasks import Neo4jRunCypherQueryTask
+from prefectlegacy.engine.signals import FAIL
 import pytest
 
 from unittest import mock
@@ -125,8 +125,8 @@ class TestNeo4jRunCypherQueryTask:
                 cypher_query="query",
             )
 
-    @mock.patch("prefect.tasks.neo4j.neo4j_tasks.Graph")
-    @mock.patch("prefect.tasks.neo4j.neo4j_tasks.Graph.run")
+    @mock.patch("prefectlegacy.tasks.neo4j.neo4j_tasks.Graph")
+    @mock.patch("prefectlegacy.tasks.neo4j.neo4j_tasks.Graph.run")
     def test_run_default_return_type(self, mock_run, mock_graph):
         class mockRun:
             def data(self):
@@ -148,8 +148,8 @@ class TestNeo4jRunCypherQueryTask:
 
         assert result == [{"key1": "value1"}, {"key2": "value2"}]
 
-    @mock.patch("prefect.tasks.neo4j.neo4j_tasks.Graph")
-    @mock.patch("prefect.tasks.neo4j.neo4j_tasks.Graph.run")
+    @mock.patch("prefectlegacy.tasks.neo4j.neo4j_tasks.Graph")
+    @mock.patch("prefectlegacy.tasks.neo4j.neo4j_tasks.Graph.run")
     def test_run_dataframe_return_type(self, mock_run, mock_graph):
         import pandas as pd
 

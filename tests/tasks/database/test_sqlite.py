@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from prefect.tasks.database.sqlite import SQLiteQuery, SQLiteScript
+from prefectlegacy.tasks.database.sqlite import SQLiteQuery, SQLiteScript
 
 
 class TestSQLiteQuery:

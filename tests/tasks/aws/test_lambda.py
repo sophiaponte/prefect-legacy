@@ -4,9 +4,9 @@ import pytest
 
 pytest.importorskip("boto3")
 
-import prefect
-from prefect.tasks.aws import LambdaCreate, LambdaDelete, LambdaInvoke, LambdaList
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy.tasks.aws import LambdaCreate, LambdaDelete, LambdaInvoke, LambdaList
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 class TestLambdaCreate:
@@ -31,7 +31,7 @@ class TestLambdaCreate:
         client = MagicMock()
         client.create_function = MagicMock()
         boto3 = MagicMock(client=client)
-        monkeypatch.setattr("prefect.utilities.aws.boto3", boto3)
+        monkeypatch.setattr("prefectlegacy.utilities.aws.boto3", boto3)
         task.run()
 
         client().create_function.assert_called_once_with(
@@ -63,7 +63,7 @@ class TestLambdaDelete:
         client = MagicMock()
         client.delete_function = MagicMock()
         boto3 = MagicMock(client=client)
-        monkeypatch.setattr("prefect.utilities.aws.boto3", boto3)
+        monkeypatch.setattr("prefectlegacy.utilities.aws.boto3", boto3)
         task.run()
 
         client().delete_function.assert_called_once_with(FunctionName="test")
@@ -77,7 +77,7 @@ class TestLambdaInvoke:
         task = LambdaInvoke(function_name="test")
         client = MagicMock()
         boto3 = MagicMock(client=client)
-        monkeypatch.setattr("prefect.utilities.aws.boto3", boto3)
+        monkeypatch.setattr("prefectlegacy.utilities.aws.boto3", boto3)
         task.run()
 
         client().invoke.assert_called_once_with(
@@ -98,7 +98,7 @@ class TestLambdaList:
         task = LambdaList()
         client = MagicMock()
         boto3 = MagicMock(client=client)
-        monkeypatch.setattr("prefect.utilities.aws.boto3", boto3)
+        monkeypatch.setattr("prefectlegacy.utilities.aws.boto3", boto3)
         task.run()
 
         client().list_functions.assert_called_once_with(

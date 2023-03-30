@@ -3,9 +3,9 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from prefect import Flow, context
-from prefect.storage import Azure
-from prefect.utilities.storage import flow_to_bytes_pickle
+from prefectlegacy import Flow, context
+from prefectlegacy.storage import Azure
+from prefectlegacy.utilities.storage import flow_to_bytes_pickle
 
 pytest.importorskip("azure.storage.blob")
 
@@ -116,7 +116,7 @@ def test_build_no_upload_if_file(monkeypatch):
 def test_upload_flow_to_azure(monkeypatch):
     client = MagicMock(upload_blob=MagicMock())
     service = MagicMock(get_blob_client=MagicMock(return_value=client))
-    monkeypatch.setattr("prefect.storage.Azure._azure_block_blob_service", service)
+    monkeypatch.setattr("prefectlegacy.storage.Azure._azure_block_blob_service", service)
 
     storage = Azure(container="container")
 
@@ -131,7 +131,7 @@ def test_upload_flow_to_azure(monkeypatch):
 def test_upload_flow_to_azure_blob_name(monkeypatch):
     client = MagicMock(upload_blob=MagicMock())
     service = MagicMock(get_blob_client=MagicMock(return_value=client))
-    monkeypatch.setattr("prefect.storage.Azure._azure_block_blob_service", service)
+    monkeypatch.setattr("prefectlegacy.storage.Azure._azure_block_blob_service", service)
 
     storage = Azure(container="container", blob_name="name")
 
@@ -147,7 +147,7 @@ def test_upload_flow_to_azure_blob_name(monkeypatch):
 def test_upload_flow_to_azure_blob_overwrite(monkeypatch, overwrite):
     client = MagicMock(upload_blob=MagicMock())
     service = MagicMock(get_blob_client=MagicMock(return_value=client))
-    monkeypatch.setattr("prefect.storage.Azure._azure_block_blob_service", service)
+    monkeypatch.setattr("prefectlegacy.storage.Azure._azure_block_blob_service", service)
 
     storage = Azure(container="container", overwrite=overwrite)
 
@@ -161,7 +161,7 @@ def test_upload_flow_to_azure_blob_overwrite(monkeypatch, overwrite):
 def test_upload_multiple_flows_to_azure_blob_name(monkeypatch):
     client = MagicMock(upload_blob=MagicMock())
     service = MagicMock(get_blob_client=MagicMock(return_value=client))
-    monkeypatch.setattr("prefect.storage.Azure._azure_block_blob_service", service)
+    monkeypatch.setattr("prefectlegacy.storage.Azure._azure_block_blob_service", service)
 
     storage = Azure(container="container", blob_name="name")
 
@@ -177,7 +177,7 @@ def test_upload_multiple_flows_to_azure_blob_name(monkeypatch):
 def test_upload_flow_to_azure_blob_name_format(monkeypatch):
     client = MagicMock(upload_blob=MagicMock())
     service = MagicMock(get_blob_client=MagicMock(return_value=client))
-    monkeypatch.setattr("prefect.storage.Azure._azure_block_blob_service", service)
+    monkeypatch.setattr("prefectlegacy.storage.Azure._azure_block_blob_service", service)
 
     storage = Azure(container="container")
 
@@ -207,7 +207,7 @@ def test_add_flow_to_azure_already_added(monkeypatch):
 def test_get_flow_azure(monkeypatch):
     client = MagicMock(download_blob=MagicMock())
     service = MagicMock(get_blob_client=MagicMock(return_value=client))
-    monkeypatch.setattr("prefect.storage.Azure._azure_block_blob_service", service)
+    monkeypatch.setattr("prefectlegacy.storage.Azure._azure_block_blob_service", service)
 
     f = Flow("test")
 
@@ -226,7 +226,7 @@ def test_get_flow_azure(monkeypatch):
 def test_get_flow_azure_bucket_key(monkeypatch):
     client = MagicMock(download_blob=MagicMock())
     service = MagicMock(get_blob_client=MagicMock(return_value=client))
-    monkeypatch.setattr("prefect.storage.Azure._azure_block_blob_service", service)
+    monkeypatch.setattr("prefectlegacy.storage.Azure._azure_block_blob_service", service)
 
     f = Flow("test")
 
@@ -245,7 +245,7 @@ def test_get_flow_azure_bucket_key(monkeypatch):
 def test_get_flow_azure_runs(monkeypatch):
     client = MagicMock(download_blob=MagicMock())
     service = MagicMock(get_blob_client=MagicMock(return_value=client))
-    monkeypatch.setattr("prefect.storage.Azure._azure_block_blob_service", service)
+    monkeypatch.setattr("prefectlegacy.storage.Azure._azure_block_blob_service", service)
 
     f = Flow("test")
 
@@ -271,13 +271,13 @@ def test_get_flow_azure_runs(monkeypatch):
 def test_get_flow_from_file_azure_runs(monkeypatch):
     client = MagicMock(download_blob=MagicMock())
     service = MagicMock(get_blob_client=MagicMock(return_value=client))
-    monkeypatch.setattr("prefect.storage.Azure._azure_block_blob_service", service)
+    monkeypatch.setattr("prefectlegacy.storage.Azure._azure_block_blob_service", service)
 
     f = Flow("test")
 
     extract_flow_from_file = MagicMock(return_value=f)
     monkeypatch.setattr(
-        "prefect.storage.azure.extract_flow_from_file", extract_flow_from_file
+        "prefectlegacy.storage.azure.extract_flow_from_file", extract_flow_from_file
     )
 
     storage = Azure(container="container", stored_as_script=True)

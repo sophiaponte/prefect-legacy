@@ -6,10 +6,10 @@ replies into Airtable.
 This flow relies heavily on local secrets to authenticate with both Twitter and Airtable.
 """
 
-import prefect
-from prefect import Flow, Parameter, task, unmapped
-from prefect.tasks.airtable import WriteAirtableRow
-from prefect.tasks.twitter import LoadTweetReplies
+import prefectlegacy
+from prefectlegacy import Flow, Parameter, task, unmapped
+from prefectlegacy.tasks.airtable import WriteAirtableRow
+from prefectlegacy.tasks.twitter import LoadTweetReplies
 
 # ------------------------------------------------------------
 # Secrets
@@ -72,7 +72,7 @@ with Flow("Tweets to Airtable") as flow:
 # our credentials, then call flow.run() with our parameter values
 # ------------------------------------------------------------
 # set up the local secrets
-with prefect.context(
+with prefectlegacy.context(
     secrets=dict(
         TWITTER_API_CREDENTIALS=TWITTER_CREDS, AIRTABLE_API_KEY=AIRTABLE_API_KEY
     )

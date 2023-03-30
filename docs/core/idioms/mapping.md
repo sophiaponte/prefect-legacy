@@ -13,7 +13,7 @@ This flow is going to map over the output from the `get_numbers` task, generatin
 ```python
 from random import sample
 
-from prefect import Flow, Parameter, task, unmapped
+from prefectlegacy import Flow, Parameter, task, unmapped
 
 @task
 def get_numbers(total):
@@ -37,7 +37,7 @@ with Flow("unmapped-values") as flow:
 ```python
 from random import sample
 
-from prefect import Flow, Parameter, Task, unmapped
+from prefectlegacy import Flow, Parameter, Task, unmapped
 
 class GetNumbers(Task):
     def run(self, total):

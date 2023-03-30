@@ -53,7 +53,7 @@ module.exports = {
     [
       'sitemap',
       {
-        hostname: 'https://docs.prefect.io'
+        hostname: 'https://docs.prefectlegacy.io'
       }
     ]
   ],
@@ -82,16 +82,16 @@ module.exports = {
           { text: 'Latest (1.2.4)', link: '/api/latest/' },
           { text: '0.15.13', link: '/api/0.15.13/' },
           { text: '0.14.22', link: '/api/0.14.22/' },
-          { text: 'Legacy', link: 'https://docs-legacy.prefect.io' }
+          { text: 'Legacy', link: 'https://docs-legacy.prefectlegacy.io' }
         ]
       },
       {
-        text: 'prefect.io',
-        link: 'https://www.prefect.io'
+        text: 'prefectlegacy.io',
+        link: 'https://www.prefectlegacy.io'
       },
       {
         text: 'Discourse',
-        link: 'https://discourse.prefect.io/'
+        link: 'https://discourse.prefectlegacy.io/'
       }
     ],
     sidebar: {
@@ -109,62 +109,62 @@ module.exports = {
           children: ['triggers']
         },
         {
-          title: 'prefect.backend',
+          title: 'prefectlegacy.backend',
           collapsable: true,
           children: getChildren('docs/api/latest', 'backend')
         },
         {
-          title: 'prefect.client',
+          title: 'prefectlegacy.client',
           collapsable: true,
           children: getChildren('docs/api/latest', 'client')
         },
         {
-          title: 'prefect.cli',
+          title: 'prefectlegacy.cli',
           collapsable: true,
           children: getChildren('docs/api/latest', 'cli')
         },
         {
-          title: 'prefect.core',
+          title: 'prefectlegacy.core',
           collapsable: true,
           children: getChildren('docs/api/latest', 'core')
         },
         {
-          title: 'prefect.engine',
+          title: 'prefectlegacy.engine',
           collapsable: true,
           children: getChildren('docs/api/latest', 'engine')
         },
         {
-          title: 'prefect.executors',
+          title: 'prefectlegacy.executors',
           collapsable: true,
           children: ['executors.md']
         },
         {
-          title: 'prefect.run_configs',
+          title: 'prefectlegacy.run_configs',
           collapsable: true,
           children: ['run_configs.md']
         },
         {
-          title: 'prefect.storage',
+          title: 'prefectlegacy.storage',
           collapsable: true,
           children: ['storage.md']
         },
         {
-          title: 'prefect.tasks',
+          title: 'prefectlegacy.tasks',
           collapsable: true,
           children: getChildren('docs/api/latest', 'tasks')
         },
         {
-          title: 'prefect.schedules',
+          title: 'prefectlegacy.schedules',
           collapsable: true,
           children: getChildren('docs/api/latest', 'schedules')
         },
         {
-          title: 'prefect.agent',
+          title: 'prefectlegacy.agent',
           collapsable: true,
           children: getChildren('docs/api/latest', 'agent')
         },
         {
-          title: 'prefect.utilities',
+          title: 'prefectlegacy.utilities',
           collapsable: true,
           children: getChildren('docs/api/latest', 'utilities')
         }

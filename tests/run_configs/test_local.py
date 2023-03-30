@@ -1,6 +1,6 @@
 import os
 
-from prefect.run_configs import LocalRun
+from prefectlegacy.run_configs import LocalRun
 
 
 def test_no_args():

@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-import prefect
+import prefectlegacy
 
 examples_dir = str(Path(__file__).parents[1] / "examples")
 

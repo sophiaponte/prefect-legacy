@@ -26,15 +26,15 @@ A new state is introduced, `Loop` (or `Rerun` or something else). In addition to
 If a task raises a `Loop` state, the TaskRunner intercepts it and immediately re-runs the task with two modifications:
 
 - the `loop_index` of the taskrun is incremented by one (it defaults to 0)
-- the `Loop` state's `result` attribute is added to context (perhaps `prefect.context.loop_result`).
+- the `Loop` state's `result` attribute is added to context (perhaps `prefectlegacy.context.loop_result`).
 
 If the task does not raise a state, and simply returns as normal, the loop ends.
 
 ```python
 @task
 def accumulate(x, iterations):
-    result = x + prefect.context.get("loop_result", 0)
-	if prefect.context.loop_index < iterations:
+    result = x + prefectlegacy.context.get("loop_result", 0)
+	if prefectlegacy.context.loop_index < iterations:
         raise LOOP(result=result)
     return result
 

@@ -7,15 +7,15 @@ import pendulum
 from click.testing import CliRunner
 from unittest.mock import MagicMock
 
-from prefect import Flow
-from prefect.engine.state import Scheduled, Success, Failed, Submitted
-from prefect.run_configs import UniversalRun
-from prefect.storage import Local as LocalStorage
-from prefect.backend import FlowRunView, FlowView
-from prefect.utilities.executors import run_with_thread_timeout
-from prefect.exceptions import TaskTimeoutSignal
+from prefectlegacy import Flow
+from prefectlegacy.engine.state import Scheduled, Success, Failed, Submitted
+from prefectlegacy.run_configs import UniversalRun
+from prefectlegacy.storage import Local as LocalStorage
+from prefectlegacy.backend import FlowRunView, FlowView
+from prefectlegacy.utilities.executors import run_with_thread_timeout
+from prefectlegacy.exceptions import TaskTimeoutSignal
 
-from prefect.cli.run import load_json_key_values, run
+from prefectlegacy.cli.run import load_json_key_values, run
 
 
 FAILURE_LOCAL_STDOUT = """
@@ -106,7 +106,7 @@ def hello_world_flow_file(tmpdir):
     flow_file = tmpdir.join("flow.py")
     flow_file.write_text(
         """
-        from prefect.hello_world import hello_flow
+        from prefectlegacy.hello_world import hello_flow
         """.strip(),
         encoding="UTF-8",
     )
@@ -119,7 +119,7 @@ def multiflow_file(tmpdir):
     flow_file.write_text(
         textwrap.dedent(
             """
-            from prefect import Flow
+            from prefectlegacy import Flow
             
             flow_a = Flow("a")
             flow_b = Flow("b")
@@ -136,11 +136,11 @@ def context_flow_file(tmpdir):
     flow_file.write_text(
         textwrap.dedent(
             """
-            from prefect import Flow, task
+            from prefectlegacy import Flow, task
             
             @task(log_stdout=True)
             def print_context_x():
-                from prefect import context
+                from prefectlegacy import context
                 print(context.get("x"))
             
             with Flow("context-test-flow") as flow:
@@ -158,7 +158,7 @@ def runtime_failing_flow(tmpdir):
     flow_file.write_text(
         textwrap.dedent(
             """
-            from prefect import Flow, task
+            from prefectlegacy import Flow, task
             
             @task(log_stdout=True)
             def fail_task():
@@ -179,7 +179,7 @@ def at_load_failing_flow(tmpdir):
     flow_file.write_text(
         textwrap.dedent(
             """
-            from prefect import Flow
+            from prefectlegacy import Flow
             
             with Flow("fail-test-flow") as flow:
                 reference_an_unknown_var
@@ -201,17 +201,17 @@ def cloud_mocks(monkeypatch):
         sleep = MagicMock()
 
     mocks = CloudMocks()
-    monkeypatch.setattr("prefect.cli.run.FlowView", mocks.FlowView)
-    monkeypatch.setattr("prefect.cli.run.FlowRunView", mocks.FlowRunView)
-    monkeypatch.setattr("prefect.cli.run.Client", mocks.Client)
-    monkeypatch.setattr("prefect.cli.run.watch_flow_run", mocks.watch_flow_run)
+    monkeypatch.setattr("prefectlegacy.cli.run.FlowView", mocks.FlowView)
+    monkeypatch.setattr("prefectlegacy.cli.run.FlowRunView", mocks.FlowRunView)
+    monkeypatch.setattr("prefectlegacy.cli.run.Client", mocks.Client)
+    monkeypatch.setattr("prefectlegacy.cli.run.watch_flow_run", mocks.watch_flow_run)
     monkeypatch.setattr(
-        "prefect.cli.run.execute_flow_run_in_subprocess",
+        "prefectlegacy.cli.run.execute_flow_run_in_subprocess",
         mocks.execute_flow_run_in_subprocess,
     )
 
     # Mock sleep for faster testing
-    monkeypatch.setattr("prefect.cli.run.time.sleep", mocks.sleep)
+    monkeypatch.setattr("prefectlegacy.cli.run.time.sleep", mocks.sleep)
 
     return mocks
 
@@ -274,7 +274,7 @@ def test_run_wraps_parameter_file_parsing_exception(tmpdir):
     params_file = tmpdir.join("params.json")
     params_file.write_text("not-valid-json", encoding="UTF-8")
     result = CliRunner().invoke(
-        run, ["--module", "prefect.hello_world", "--param-file", str(params_file)]
+        run, ["--module", "prefectlegacy.hello_world", "--param-file", str(params_file)]
     )
     assert result.exit_code
     assert "Failed to parse JSON" in result.output
@@ -283,7 +283,7 @@ def test_run_wraps_parameter_file_parsing_exception(tmpdir):
 def test_run_wraps_parameter_file_not_found_exception(tmpdir):
     params_file = tmpdir.join("params.json")
     result = CliRunner().invoke(
-        run, ["--module", "prefect.hello_world", "--param-file", str(params_file)]
+        run, ["--module", "prefectlegacy.hello_world", "--param-file", str(params_file)]
     )
     assert result.exit_code
     assert "Parameter file does not exist" in result.output
@@ -292,7 +292,7 @@ def test_run_wraps_parameter_file_not_found_exception(tmpdir):
 @pytest.mark.parametrize("kind", ["param", "context"])
 def test_run_wraps_parameter_and_context_json_parsing_exception(tmpdir, kind):
     result = CliRunner().invoke(
-        run, ["--module", "prefect.hello_world", f"--{kind}", 'x="foo"1']
+        run, ["--module", "prefectlegacy.hello_world", f"--{kind}", 'x="foo"1']
     )
     assert result.exit_code
     assert (
@@ -303,7 +303,7 @@ def test_run_wraps_parameter_and_context_json_parsing_exception(tmpdir, kind):
 
 def test_run_automatically_quotes_simple_strings():
     result = CliRunner().invoke(
-        run, ["--module", "prefect.hello_world", "--param", "name=foo"]
+        run, ["--module", "prefectlegacy.hello_world", "--param", "name=foo"]
     )
     assert not result.exit_code
     assert "Parameters: {'name': 'foo'}" in result.output
@@ -311,7 +311,7 @@ def test_run_automatically_quotes_simple_strings():
 
 @pytest.mark.parametrize("kind", ["path", "module"])
 def test_run_local(tmpdir, kind, caplog, hello_world_flow_file):
-    location = hello_world_flow_file if kind == "path" else "prefect.hello_world"
+    location = hello_world_flow_file if kind == "path" else "prefectlegacy.hello_world"
 
     result = CliRunner().invoke(run, [f"--{kind}", location])
     assert not result.exit_code
@@ -359,7 +359,7 @@ def test_run_local_asks_for_name_with_multiple_flows(tmpdir, multiflow_file, kin
 @pytest.mark.parametrize("log_level", ["ERROR", "DEBUG"])
 def test_run_local_log_level(tmpdir, caplog, log_level):
     result = CliRunner().invoke(
-        run, ["--module", "prefect.hello_world", "--log-level", log_level]
+        run, ["--module", "prefectlegacy.hello_world", "--log-level", log_level]
     )
     assert not result.exit_code
     assert "Running flow locally..." in result.output
@@ -375,7 +375,7 @@ def test_run_local_log_level(tmpdir, caplog, log_level):
 
 
 def test_run_local_respects_quiet(caplog):
-    result = CliRunner().invoke(run, ["--module", "prefect.hello_world", "--quiet"])
+    result = CliRunner().invoke(run, ["--module", "prefectlegacy.hello_world", "--quiet"])
     assert not result.exit_code
     # CLI output is not there
     assert "Running flow locally..." not in result.output
@@ -384,7 +384,7 @@ def test_run_local_respects_quiet(caplog):
 
 
 def test_run_local_respects_no_logs(caplog):
-    result = CliRunner().invoke(run, ["--module", "prefect.hello_world", "--no-logs"])
+    result = CliRunner().invoke(run, ["--module", "prefectlegacy.hello_world", "--no-logs"])
     assert not result.exit_code
     # Run output still occurs
     assert "Running flow locally..." in result.output
@@ -395,7 +395,7 @@ def test_run_local_respects_no_logs(caplog):
 
 def test_run_local_passes_parameters(caplog):
     result = CliRunner().invoke(
-        run, ["--module", "prefect.hello_world", "--param", 'name="foo"']
+        run, ["--module", "prefectlegacy.hello_world", "--param", 'name="foo"']
     )
     assert not result.exit_code
     assert "Running flow locally..." in result.output
@@ -410,7 +410,7 @@ def test_run_local_passes_parameters_from_file(caplog, tmpdir):
     params_file = tmpdir.join("params.json")
     params_file.write_text(json.dumps({"name": "foo"}), encoding="UTF-8")
     result = CliRunner().invoke(
-        run, ["--module", "prefect.hello_world", "--param-file", str(params_file)]
+        run, ["--module", "prefectlegacy.hello_world", "--param-file", str(params_file)]
     )
     assert not result.exit_code
     assert "Running flow locally..." in result.output
@@ -492,7 +492,7 @@ def test_run_local_handles_flow_load_failure_with_missing_module(tmpdir):
 
 
 def test_run_local_handles_flow_load_failure_with_missing_module_attr(tmpdir):
-    result = CliRunner().invoke(run, ["--module", "prefect.foobar"])
+    result = CliRunner().invoke(run, ["--module", "prefectlegacy.foobar"])
     assert result.exit_code
     assert "Retrieving local flow... Error" in result.output
     # Instead of a traceback there is a short error
@@ -541,7 +541,7 @@ def test_run_cloud_creates_flow_run(
     if execute_flag:
         # Create a preset unique id for the agentless run label for easy determinism
         monkeypatch.setattr(
-            "prefect.cli.run.uuid.uuid4", MagicMock(return_value="0" * 36)
+            "prefectlegacy.cli.run.uuid.uuid4", MagicMock(return_value="0" * 36)
         )
 
     result = CliRunner().invoke(run, ["--id", "flow-id"] + cli_args + execute_flag)
@@ -784,7 +784,7 @@ def test_run_cloud_execute_respects_quiet(cloud_mocks):
     cloud_mocks.Client().create_flow_run.return_value = "fake-run-id"
 
     def show_a_log(*args, **kwargs):
-        from prefect.utilities.logging import get_logger
+        from prefectlegacy.utilities.logging import get_logger
 
         get_logger().error("LOG MESSAGE!")
 
@@ -800,7 +800,7 @@ def test_run_cloud_execute_respects_no_logs(cloud_mocks):
     cloud_mocks.FlowRunView.from_flow_run_id.return_value = TEST_FLOW_RUN_VIEW
 
     def show_a_log(*args, **kwargs):
-        from prefect.utilities.logging import get_logger
+        from prefectlegacy.utilities.logging import get_logger
 
         get_logger().error("LOG MESSAGE!")
 
@@ -822,7 +822,7 @@ def test_run_local_with_schedule(monkeypatch):
         return mock_flow
 
     monkeypatch.setattr(
-        "prefect.cli.run.get_flow_from_path_or_module",
+        "prefectlegacy.cli.run.get_flow_from_path_or_module",
         mock_get_flow_from_path_or_module,
     )
     CliRunner().invoke(run, ["--path", hello_world_flow_file, "--schedule"])

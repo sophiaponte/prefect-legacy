@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock
 import pytest
 import firebolt.db.connection as fb_conn
-from prefect.tasks.firebolt.firebolt import FireboltQuery
+from prefectlegacy.tasks.firebolt.firebolt import FireboltQuery
 
 
 @pytest.fixture
@@ -17,7 +17,7 @@ def mock_conn(monkeypatch):
     connection.cursor = cursor
     firebolt_connection = MagicMock(connect=firebolt_conn)
     monkeypatch.setattr(
-        "prefect.tasks.firebolt.firebolt.firebolt_conn", firebolt_connection
+        "prefectlegacy.tasks.firebolt.firebolt.firebolt_conn", firebolt_connection
     )
 
     return firebolt_connection, cursor

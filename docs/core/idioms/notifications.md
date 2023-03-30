@@ -13,8 +13,8 @@ This code below makes use of a [Slack Webhook URL](https://api.slack.com/messagi
 :::: tabs
 ::: tab Functional API
 ```python
-from prefect import task, Flow
-from prefect.tasks.notifications import SlackTask
+from prefectlegacy import task, Flow
+from prefectlegacy.tasks.notifications import SlackTask
 
 @task
 def get_value():
@@ -30,8 +30,8 @@ with Flow("slack-test") as flow:
 
 ::: tab Imperative API
 ```python
-from prefect import Task, Flow
-from prefect.tasks.notifications import SlackTask
+from prefectlegacy import Task, Flow
+from prefectlegacy.tasks.notifications import SlackTask
 
 class GetValue(Task):
     def run(self):

@@ -3,11 +3,11 @@ import cloudpickle
 import pytest
 from unittest.mock import MagicMock
 
-import prefect
-from prefect.engine.results import SecretResult
-from prefect.tasks.secrets import SecretBase, PrefectSecret
-from prefect.utilities.configuration import set_temporary_config
-from prefect.exceptions import AuthorizationError, ClientError
+import prefectlegacy
+from prefectlegacy.engine.results import SecretResult
+from prefectlegacy.tasks.secrets import SecretBase, PrefectSecret
+from prefectlegacy.utilities.configuration import set_temporary_config
+from prefectlegacy.exceptions import AuthorizationError, ClientError
 
 
 def test_secret_base_has_no_logic():
@@ -35,14 +35,14 @@ class TestPrefectSecret:
     def test_secret_name_can_be_overwritten(self):
         secret = PrefectSecret(name="test")
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(secrets=dict(test=42, foo="bar")):
+            with prefectlegacy.context(secrets=dict(test=42, foo="bar")):
                 assert secret.run() == 42
                 assert secret.run(name="foo") == "bar"
 
     def test_secret_name_set_at_runtime(self):
         secret = PrefectSecret()
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(secrets=dict(foo="bar")):
+            with prefectlegacy.context(secrets=dict(foo="bar")):
                 assert secret.run(name="foo") == "bar"
 
     def test_secret_raises_if_no_name_provided(self):
@@ -60,7 +60,7 @@ class TestPrefectSecret:
     def test_secret_value_pulled_from_context(self):
         secret = PrefectSecret(name="test")
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(secrets=dict(test=42)):
+            with prefectlegacy.context(secrets=dict(test=42)):
                 assert secret.run() == 42
             with pytest.raises(ValueError):
                 secret.run()
@@ -76,7 +76,7 @@ class TestPrefectSecret:
         with set_temporary_config(
             {"cloud.use_local_secrets": False, "cloud.api-key": None}
         ):
-            with prefect.context(secrets=dict()):
+            with prefectlegacy.context(secrets=dict()):
                 with pytest.raises(ClientError):
                     secret.run()
 
@@ -102,7 +102,7 @@ class TestPrefectSecret:
         with set_temporary_config(
             {"cloud.api_key": "api-key", "cloud.use_local_secrets": False}
         ):
-            with prefect.context(secrets={"the-key": "foo"}):
+            with prefectlegacy.context(secrets={"the-key": "foo"}):
                 my_secret = PrefectSecret(name="the-key")
                 val = my_secret.run()
         assert val == "foo"
@@ -116,7 +116,7 @@ class TestPrefectSecret:
         with set_temporary_config(
             {"cloud.api_key": "api-key", "cloud.use_local_secrets": False}
         ):
-            with prefect.context(secrets={}):
+            with prefectlegacy.context(secrets={}):
                 my_secret = PrefectSecret(name="the-key")
                 val = my_secret.run()
         assert val == "1234"
@@ -156,7 +156,7 @@ class TestPrefectSecret:
     def test_local_secrets_auto_load_json_strings(self):
         secret = PrefectSecret(name="test")
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(secrets=dict(test='{"x": 42}')):
+            with prefectlegacy.context(secrets=dict(test='{"x": 42}')):
                 assert secret.run() == {"x": 42}
             with pytest.raises(ValueError):
                 secret.run()
@@ -164,8 +164,8 @@ class TestPrefectSecret:
     def test_local_secrets_remain_plain_dictionaries(self):
         secret = PrefectSecret(name="test")
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(secrets=dict(test={"x": 42})):
-                assert isinstance(prefect.context.secrets["test"], dict)
+            with prefectlegacy.context(secrets=dict(test={"x": 42})):
+                assert isinstance(prefectlegacy.context.secrets["test"], dict)
                 val = secret.run()
                 assert val == {"x": 42}
                 assert isinstance(val, dict) and not isinstance(val, box.Box)

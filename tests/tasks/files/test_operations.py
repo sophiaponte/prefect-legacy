@@ -3,7 +3,7 @@ import pathlib
 
 import pytest
 
-from prefect.tasks.files import Copy, Glob, Move, Remove
+from prefectlegacy.tasks.files import Copy, Glob, Move, Remove
 
 
 class TestMove:

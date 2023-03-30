@@ -6,7 +6,7 @@ import time
 
 import pendulum
 
-from prefect import Flow, task
+from prefectlegacy import Flow, task
 
 
 def timestamper(task, old_state, new_state):
@@ -31,9 +31,9 @@ def sleeper():
 
 f = Flow("log-task-duration", tasks=[sleeper])
 f.run()
-# INFO - prefect.FlowRunner | Beginning Flow run for 'log-task-duration'
-# INFO - prefect.FlowRunner | Starting flow run.
-# INFO - prefect.TaskRunner | Task 'sleeper': Starting task run...
-# INFO - prefect.Task | 2 seconds passed in between state transitions
-# INFO - prefect.TaskRunner | Task 'sleeper': finished task run for task with final state: 'Success'
-# INFO - prefect.FlowRunner | Flow run SUCCESS: all reference tasks succeeded
+# INFO - prefectlegacy.FlowRunner | Beginning Flow run for 'log-task-duration'
+# INFO - prefectlegacy.FlowRunner | Starting flow run.
+# INFO - prefectlegacy.TaskRunner | Task 'sleeper': Starting task run...
+# INFO - prefectlegacy.Task | 2 seconds passed in between state transitions
+# INFO - prefectlegacy.TaskRunner | Task 'sleeper': finished task run for task with final state: 'Success'
+# INFO - prefectlegacy.FlowRunner | Flow run SUCCESS: all reference tasks succeeded

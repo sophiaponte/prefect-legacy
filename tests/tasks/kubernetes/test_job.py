@@ -3,9 +3,9 @@ from box import Box
 
 import pytest
 
-import prefect
-from prefect.engine import signals
-from prefect.tasks.kubernetes import (
+import prefectlegacy
+from prefectlegacy.engine import signals
+from prefectlegacy.tasks.kubernetes import (
     CreateNamespacedJob,
     DeleteNamespacedJob,
     ListNamespacedJob,
@@ -14,13 +14,13 @@ from prefect.tasks.kubernetes import (
     ReplaceNamespacedJob,
     RunNamespacedJob,
 )
-from prefect.utilities.configuration import set_temporary_config
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 @pytest.fixture
 def kube_secret():
     with set_temporary_config({"cloud.use_local_secrets": True}):
-        with prefect.context(secrets=dict(KUBERNETES_API_KEY="test_key")):
+        with prefectlegacy.context(secrets=dict(KUBERNETES_API_KEY="test_key")):
             yield
 
 
@@ -28,7 +28,7 @@ def kube_secret():
 def api_client(monkeypatch):
     client = MagicMock()
     monkeypatch.setattr(
-        "prefect.tasks.kubernetes.job.get_kubernetes_client",
+        "prefectlegacy.tasks.kubernetes.job.get_kubernetes_client",
         MagicMock(return_value=client),
     )
     return client
@@ -47,7 +47,7 @@ def successful_job_status():
 def read_pod_logs(monkeypatch):
     read_pod_logs = MagicMock(return_value=None)
     monkeypatch.setattr(
-        "prefect.tasks.kubernetes.pod.ReadNamespacedPodLogs.__init__", read_pod_logs
+        "prefectlegacy.tasks.kubernetes.pod.ReadNamespacedPodLogs.__init__", read_pod_logs
     )
     return read_pod_logs
 

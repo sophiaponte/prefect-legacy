@@ -1,4 +1,4 @@
-from prefect.hello_world import hello_flow
+from prefectlegacy.hello_world import hello_flow
 
 
 def test_hello_flow_defaults(caplog):

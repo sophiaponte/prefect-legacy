@@ -1,7 +1,7 @@
 import pendulum
 import pytest
-import prefect
-from prefect.tasks.secrets import EnvVarSecret
+import prefectlegacy
+from prefectlegacy.tasks.secrets import EnvVarSecret
 
 
 def test_init_with_name():

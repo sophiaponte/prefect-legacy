@@ -37,7 +37,7 @@ To set a secret in the UI, visit the [Secrets page](/orchestration/ui/team-setti
 To set a secret with the Prefect Client:
 
 ```python
-from prefect import Client
+from prefectlegacy import Client
 
 client = Client()
 client.set_secret(name="MYSECRET", value="MY SECRET VALUE")
@@ -107,8 +107,8 @@ The standard way to do this is to use a
 secret, and pass the result to your task as an argument.
 
 ```python
-from prefect import task, Flow
-from prefect.tasks.secrets import PrefectSecret
+from prefectlegacy import task, Flow
+from prefectlegacy.tasks.secrets import prefectlegacySecret
 
 @task
 def my_task(credentials):
@@ -126,10 +126,10 @@ with Flow("example") as flow:
 ### Using Secrets Elsewhere
 
 To load secrets in Prefect components other than tasks, you'll need to make use
-of `prefect.client.Secret`:
+of `prefectlegacy.client.Secret`:
 
 ```python
-from prefect.client import Secret
+from prefectlegacy.client import Secret
 
 # Load the value of `MYSECRET`
 my_secret_value = Secret("MYSECRET").get()

@@ -5,7 +5,7 @@ editLink: false
 # Clocks
 ---
  ## Clock
- <div class='class-sig' id='prefect-schedules-clocks-clock'><p class="prefect-sig">class </p><p class="prefect-class">prefect.schedules.clocks.Clock</p>(start_date=None, end_date=None, parameter_defaults=None, labels=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/schedules/clocks.py#L60">[source]</a></span></div>
+ <div class='class-sig' id='prefect-schedules-clocks-clock'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.schedules.clocks.Clock</p>(start_date=None, end_date=None, parameter_defaults=None, labels=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/schedules/clocks.py#L60">[source]</a></span></div>
 
 Base class for Clocks
 
@@ -13,14 +13,14 @@ Base class for Clocks
 
 |methods: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |:----|
- | <div class='method-sig' id='prefect-schedules-clocks-clock-events'><p class="prefect-class">prefect.schedules.clocks.Clock.events</p>(after=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/schedules/clocks.py#L91">[source]</a></span></div>
+ | <div class='method-sig' id='prefect-schedules-clocks-clock-events'><p class="prefect-class">prefectlegacy.schedules.clocks.Clock.events</p>(after=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/schedules/clocks.py#L91">[source]</a></span></div>
 <p class="methods">Generator that emits clock events<br><br>**Args**:     <ul class="args"><li class="args">`after (datetime, optional)`: the first result will be after this date</li></ul> **Returns**:     <ul class="args"><li class="args">`Iterable[datetime]`: the next scheduled events</li></ul></p>|
 
 ---
 <br>
 
  ## IntervalClock
- <div class='class-sig' id='prefect-schedules-clocks-intervalclock'><p class="prefect-sig">class </p><p class="prefect-class">prefect.schedules.clocks.IntervalClock</p>(interval, start_date=None, end_date=None, parameter_defaults=None, labels=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/schedules/clocks.py#L104">[source]</a></span></div>
+ <div class='class-sig' id='prefect-schedules-clocks-intervalclock'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.schedules.clocks.IntervalClock</p>(interval, start_date=None, end_date=None, parameter_defaults=None, labels=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/schedules/clocks.py#L104">[source]</a></span></div>
 
 A clock formed by adding `timedelta` increments to a start_date.
 
@@ -34,14 +34,14 @@ Note that this behavior is different from the `CronClock`.
 
 |methods: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |:----|
- | <div class='method-sig' id='prefect-schedules-clocks-intervalclock-events'><p class="prefect-class">prefect.schedules.clocks.IntervalClock.events</p>(after=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/schedules/clocks.py#L161">[source]</a></span></div>
+ | <div class='method-sig' id='prefect-schedules-clocks-intervalclock-events'><p class="prefect-class">prefectlegacy.schedules.clocks.IntervalClock.events</p>(after=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/schedules/clocks.py#L161">[source]</a></span></div>
 <p class="methods">Generator that emits clock events<br><br>**Args**:     <ul class="args"><li class="args">`after (datetime, optional)`: the first result will be after this date</li></ul> **Returns**:     <ul class="args"><li class="args">`Iterable[ClockEvent]`: the next scheduled events</li></ul></p>|
 
 ---
 <br>
 
  ## CronClock
- <div class='class-sig' id='prefect-schedules-clocks-cronclock'><p class="prefect-sig">class </p><p class="prefect-class">prefect.schedules.clocks.CronClock</p>(cron, start_date=None, end_date=None, parameter_defaults=None, labels=None, day_or=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/schedules/clocks.py#L216">[source]</a></span></div>
+ <div class='class-sig' id='prefect-schedules-clocks-cronclock'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.schedules.clocks.CronClock</p>(cron, start_date=None, end_date=None, parameter_defaults=None, labels=None, day_or=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/schedules/clocks.py#L216">[source]</a></span></div>
 
 Cron clock.
 
@@ -55,14 +55,14 @@ NOTE: `CronClock` respects microseconds meaning for a clock that runs once a day
 
 |methods: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |:----|
- | <div class='method-sig' id='prefect-schedules-clocks-cronclock-events'><p class="prefect-class">prefect.schedules.clocks.CronClock.events</p>(after=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/schedules/clocks.py#L274">[source]</a></span></div>
+ | <div class='method-sig' id='prefect-schedules-clocks-cronclock-events'><p class="prefect-class">prefectlegacy.schedules.clocks.CronClock.events</p>(after=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/schedules/clocks.py#L274">[source]</a></span></div>
 <p class="methods">Generator that emits clock events<br><br>**Args**:     <ul class="args"><li class="args">`after (datetime, optional)`: the first result will be after this date</li></ul> **Returns**:     <ul class="args"><li class="args">`Iterable[ClockEvent]`: the next scheduled events</li></ul></p>|
 
 ---
 <br>
 
  ## DatesClock
- <div class='class-sig' id='prefect-schedules-clocks-datesclock'><p class="prefect-sig">class </p><p class="prefect-class">prefect.schedules.clocks.DatesClock</p>(dates, parameter_defaults=None, labels=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/schedules/clocks.py#L338">[source]</a></span></div>
+ <div class='class-sig' id='prefect-schedules-clocks-datesclock'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.schedules.clocks.DatesClock</p>(dates, parameter_defaults=None, labels=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/schedules/clocks.py#L338">[source]</a></span></div>
 
 Clock that fires on specific dates
 
@@ -70,14 +70,14 @@ Clock that fires on specific dates
 
 |methods: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |:----|
- | <div class='method-sig' id='prefect-schedules-clocks-datesclock-events'><p class="prefect-class">prefect.schedules.clocks.DatesClock.events</p>(after=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/schedules/clocks.py#L365">[source]</a></span></div>
+ | <div class='method-sig' id='prefect-schedules-clocks-datesclock-events'><p class="prefect-class">prefectlegacy.schedules.clocks.DatesClock.events</p>(after=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/schedules/clocks.py#L365">[source]</a></span></div>
 <p class="methods">Generator that emits clock events<br><br>**Args**:     <ul class="args"><li class="args">`after (datetime, optional)`: the first result will be after this date</li></ul> **Returns**:     <ul class="args"><li class="args">`Iterable[ClockEvent]`: the next scheduled events</li></ul></p>|
 
 ---
 <br>
 
  ## RRuleClock
- <div class='class-sig' id='prefect-schedules-clocks-rruleclock'><p class="prefect-sig">class </p><p class="prefect-class">prefect.schedules.clocks.RRuleClock</p>(rrule_obj, start_date=None, end_date=None, parameter_defaults=None, labels=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/schedules/clocks.py#L388">[source]</a></span></div>
+ <div class='class-sig' id='prefect-schedules-clocks-rruleclock'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.schedules.clocks.RRuleClock</p>(rrule_obj, start_date=None, end_date=None, parameter_defaults=None, labels=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/schedules/clocks.py#L388">[source]</a></span></div>
 
 Clock that supports iCal style RRule (recurrence rules).
 
@@ -91,7 +91,7 @@ dateutil rrule module, an implementation of the iCal specification recurrence ru
 
 |methods: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |:----|
- | <div class='method-sig' id='prefect-schedules-clocks-rruleclock-events'><p class="prefect-class">prefect.schedules.clocks.RRuleClock.events</p>(after=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/schedules/clocks.py#L432">[source]</a></span></div>
+ | <div class='method-sig' id='prefect-schedules-clocks-rruleclock-events'><p class="prefect-class">prefectlegacy.schedules.clocks.RRuleClock.events</p>(after=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/schedules/clocks.py#L432">[source]</a></span></div>
 <p class="methods">Generator that emits clock events<br><br>**Args**:     <ul class="args"><li class="args">`after (datetime, optional)`: the first result will be after this date</li></ul> **Returns**:     <ul class="args"><li class="args">`Iterable[datetime]`: the next scheduled events</li></ul></p>|
 
 ---

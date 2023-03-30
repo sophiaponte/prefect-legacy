@@ -1,10 +1,10 @@
 import cloudpickle
 import pytest
 
-from prefect import context, triggers
-from prefect.core.edge import Edge, Task
-from prefect.engine import signals
-from prefect.engine.state import (
+from prefectlegacy import context, triggers
+from prefectlegacy.core.edge import Edge, Task
+from prefectlegacy.engine import signals
+from prefectlegacy.engine.state import (
     Failed,
     Pending,
     Resume,

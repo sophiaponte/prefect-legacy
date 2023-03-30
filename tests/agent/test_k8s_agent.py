@@ -11,20 +11,20 @@ pytest.importorskip("kubernetes")
 
 import yaml
 
-import prefect
-from prefect.agent.kubernetes.agent import KubernetesAgent, read_bytes_from_path
-from prefect.storage import Docker, Local
-from prefect.run_configs import KubernetesRun, LocalRun, UniversalRun
-from prefect.utilities.configuration import set_temporary_config
-from prefect.exceptions import ClientError, ObjectNotFoundError
-from prefect.utilities.graphql import GraphQLResult
-from prefect.utilities import kubernetes
+import prefectlegacy
+from prefectlegacy.agent.kubernetes.agent import KubernetesAgent, read_bytes_from_path
+from prefectlegacy.storage import Docker, Local
+from prefectlegacy.run_configs import KubernetesRun, LocalRun, UniversalRun
+from prefectlegacy.utilities.configuration import set_temporary_config
+from prefectlegacy.exceptions import ClientError, ObjectNotFoundError
+from prefectlegacy.utilities.graphql import GraphQLResult
+from prefectlegacy.utilities import kubernetes
 
 
 @pytest.fixture(autouse=True)
 def mocked_k8s_config(monkeypatch):
     mock = MagicMock()
-    monkeypatch.setattr("prefect.utilities.kubernetes.kube_config", mock)
+    monkeypatch.setattr("prefectlegacy.utilities.kubernetes.kube_config", mock)
     return mock
 
 
@@ -38,7 +38,7 @@ def mocked_k8s_clients(monkeypatch):
 def test_k8s_agent_init(monkeypatch, cloud_api, mocked_k8s_config):
     get_jobs = MagicMock(return_value=[])
     monkeypatch.setattr(
-        "prefect.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
+        "prefectlegacy.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
         get_jobs,
     )
 
@@ -69,7 +69,7 @@ def test_k8s_agent_config_options(monkeypatch, config_with_api_key):
 
     get_jobs = MagicMock(return_value=[])
     monkeypatch.setattr(
-        "prefect.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
+        "prefectlegacy.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
         get_jobs,
     )
 
@@ -86,7 +86,7 @@ def test_k8s_agent_config_options(monkeypatch, config_with_api_key):
 def test_k8s_agent_generate_deployment_yaml(monkeypatch, cloud_api):
     get_jobs = MagicMock(return_value=[])
     monkeypatch.setattr(
-        "prefect.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
+        "prefectlegacy.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
         get_jobs,
     )
 
@@ -120,7 +120,7 @@ def test_k8s_agent_generate_deployment_yaml(monkeypatch, cloud_api):
 def test_k8s_agent_generate_deployment_yaml_env_vars(monkeypatch, cloud_api):
     get_jobs = MagicMock(return_value=[])
     monkeypatch.setattr(
-        "prefect.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
+        "prefectlegacy.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
         get_jobs,
     )
 
@@ -155,11 +155,11 @@ def test_k8s_agent_generate_deployment_yaml_agent_config_id(
 
 def test_k8s_agent_generate_deployment_yaml_backend_default(monkeypatch, server_api):
     c = MagicMock()
-    monkeypatch.setattr("prefect.agent.agent.Client", c)
+    monkeypatch.setattr("prefectlegacy.agent.agent.Client", c)
 
     get_jobs = MagicMock(return_value=[])
     monkeypatch.setattr(
-        "prefect.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
+        "prefectlegacy.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
         get_jobs,
     )
 
@@ -188,7 +188,7 @@ def test_k8s_agent_generate_deployment_yaml_local_version(
 
     get_jobs = MagicMock(return_value=[])
     monkeypatch.setattr(
-        "prefect.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
+        "prefectlegacy.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
         get_jobs,
     )
 
@@ -209,7 +209,7 @@ def test_k8s_agent_generate_deployment_yaml_local_version(
 def test_k8s_agent_generate_deployment_yaml_latest(monkeypatch, cloud_api):
     get_jobs = MagicMock(return_value=[])
     monkeypatch.setattr(
-        "prefect.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
+        "prefectlegacy.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
         get_jobs,
     )
 
@@ -231,7 +231,7 @@ def test_k8s_agent_generate_deployment_yaml_latest(monkeypatch, cloud_api):
 def test_k8s_agent_generate_deployment_yaml_labels(monkeypatch, cloud_api):
     get_jobs = MagicMock(return_value=[])
     monkeypatch.setattr(
-        "prefect.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
+        "prefectlegacy.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
         get_jobs,
     )
 
@@ -260,7 +260,7 @@ def test_k8s_agent_generate_deployment_yaml_no_image_pull_secrets(
 ):
     get_jobs = MagicMock(return_value=[])
     monkeypatch.setattr(
-        "prefect.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
+        "prefectlegacy.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
         get_jobs,
     )
 
@@ -285,7 +285,7 @@ def test_k8s_agent_generate_deployment_yaml_empty_image_pull_secrets(
     """
     get_jobs = MagicMock(return_value=[])
     monkeypatch.setattr(
-        "prefect.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
+        "prefectlegacy.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
         get_jobs,
     )
 
@@ -313,7 +313,7 @@ def test_k8s_agent_generate_deployment_yaml_env_contains_empty_image_pull_secret
     """
     get_jobs = MagicMock(return_value=[])
     monkeypatch.setattr(
-        "prefect.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
+        "prefectlegacy.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
         get_jobs,
     )
     monkeypatch.setenv("IMAGE_PULL_SECRETS", "")
@@ -337,7 +337,7 @@ def test_k8s_agent_generate_deployment_yaml_contains_image_pull_secrets(
 ):
     get_jobs = MagicMock(return_value=[])
     monkeypatch.setattr(
-        "prefect.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
+        "prefectlegacy.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
         get_jobs,
     )
 
@@ -362,7 +362,7 @@ def test_k8s_agent_generate_deployment_yaml_contains_image_pull_secrets(
 def test_k8s_agent_generate_deployment_yaml_contains_resources(monkeypatch, cloud_api):
     get_jobs = MagicMock(return_value=[])
     monkeypatch.setattr(
-        "prefect.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
+        "prefectlegacy.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
         get_jobs,
     )
 
@@ -394,7 +394,7 @@ def test_k8s_agent_generate_deployment_yaml_contains_resources(monkeypatch, clou
 def test_k8s_agent_generate_deployment_yaml_rbac(monkeypatch, cloud_api):
     get_jobs = MagicMock(return_value=[])
     monkeypatch.setattr(
-        "prefect.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
+        "prefectlegacy.agent.kubernetes.agent.KubernetesAgent.manage_jobs",
         get_jobs,
     )
 
@@ -415,8 +415,8 @@ def test_k8s_agent_generate_deployment_yaml_rbac(monkeypatch, cloud_api):
 def test_k8s_agent_manage_jobs_pass(monkeypatch, cloud_api):
     job_mock = MagicMock()
     job_mock.metadata.labels = {
-        "prefect.io/identifier": "id",
-        "prefect.io/flow_run_id": "fr",
+        "prefectlegacy.io/identifier": "id",
+        "prefectlegacy.io/flow_run_id": "fr",
     }
     job_mock.metadata.name = "my_job"
 
@@ -442,12 +442,12 @@ def test_k8s_agent_manage_jobs_handles_missing_flow_runs(
 ):
     Client = MagicMock()
     Client().get_flow_run_state.side_effect = ObjectNotFoundError()
-    monkeypatch.setattr("prefect.agent.agent.Client", Client)
+    monkeypatch.setattr("prefectlegacy.agent.agent.Client", Client)
 
     job_mock = MagicMock()
     job_mock.metadata.labels = {
-        "prefect.io/identifier": "id",
-        "prefect.io/flow_run_id": "fr",
+        "prefectlegacy.io/identifier": "id",
+        "prefectlegacy.io/flow_run_id": "fr",
     }
     job_mock.metadata.name = "my_job"
 
@@ -479,18 +479,18 @@ def test_k8s_agent_manage_jobs_delete_jobs(monkeypatch, cloud_api):
             data=MagicMock(
                 set_flow_run_state=None,
                 write_run_logs=None,
-                get_flow_run_state=prefect.engine.state.Success(),
+                get_flow_run_state=prefectlegacy.engine.state.Success(),
             )
         )
     )
     client = MagicMock()
     client.return_value.graphql = gql_return
-    monkeypatch.setattr("prefect.agent.agent.Client", client)
+    monkeypatch.setattr("prefectlegacy.agent.agent.Client", client)
 
     job_mock = MagicMock()
     job_mock.metadata.labels = {
-        "prefect.io/identifier": "id",
-        "prefect.io/flow_run_id": "fr",
+        "prefectlegacy.io/identifier": "id",
+        "prefectlegacy.io/flow_run_id": "fr",
     }
     job_mock.metadata.name = "my_job"
     job_mock.status.failed = True
@@ -524,18 +524,18 @@ def test_k8s_agent_manage_jobs_does_not_delete_if_disabled(monkeypatch, cloud_ap
             data=MagicMock(
                 set_flow_run_state=None,
                 write_run_logs=None,
-                get_flow_run_state=prefect.engine.state.Success(),
+                get_flow_run_state=prefectlegacy.engine.state.Success(),
             )
         )
     )
     client = MagicMock()
     client.return_value.graphql = gql_return
-    monkeypatch.setattr("prefect.agent.agent.Client", client)
+    monkeypatch.setattr("prefectlegacy.agent.agent.Client", client)
 
     job_mock = MagicMock()
     job_mock.metadata.labels = {
-        "prefect.io/identifier": "id",
-        "prefect.io/flow_run_id": "fr",
+        "prefectlegacy.io/identifier": "id",
+        "prefectlegacy.io/flow_run_id": "fr",
     }
     job_mock.metadata.name = "my_job"
     job_mock.status.failed = True
@@ -568,18 +568,18 @@ def test_k8s_agent_manage_jobs_reports_failed_pods(monkeypatch, cloud_api):
             data=MagicMock(
                 set_flow_run_state=None,
                 write_run_logs=None,
-                get_flow_run_state=prefect.engine.state.Success(),
+                get_flow_run_state=prefectlegacy.engine.state.Success(),
             )
         )
     )
     client = MagicMock()
     client.return_value.graphql = gql_return
-    monkeypatch.setattr("prefect.agent.agent.Client", client)
+    monkeypatch.setattr("prefectlegacy.agent.agent.Client", client)
 
     job_mock = MagicMock()
     job_mock.metadata.labels = {
-        "prefect.io/identifier": "id",
-        "prefect.io/flow_run_id": "fr",
+        "prefectlegacy.io/identifier": "id",
+        "prefectlegacy.io/flow_run_id": "fr",
     }
     job_mock.metadata.name = "my_job"
     job_mock.status.failed = True
@@ -624,18 +624,18 @@ def test_k8s_agent_manage_jobs_reports_empty_status(monkeypatch, cloud_api):
             data=MagicMock(
                 set_flow_run_state=None,
                 write_run_logs=None,
-                get_flow_run_state=prefect.engine.state.Success(),
+                get_flow_run_state=prefectlegacy.engine.state.Success(),
             )
         )
     )
     client = MagicMock()
     client.return_value.graphql = gql_return
-    monkeypatch.setattr("prefect.agent.agent.Client", client)
+    monkeypatch.setattr("prefectlegacy.agent.agent.Client", client)
 
     job_mock = MagicMock()
     job_mock.metadata.labels = {
-        "prefect.io/identifier": "id",
-        "prefect.io/flow_run_id": "fr",
+        "prefectlegacy.io/identifier": "id",
+        "prefectlegacy.io/flow_run_id": "fr",
     }
     job_mock.metadata.name = "my_job"
     job_mock.status.failed = True
@@ -673,12 +673,12 @@ def test_k8s_agent_manage_jobs_client_call(monkeypatch, cloud_api):
     )
     client = MagicMock()
     client.return_value.graphql = gql_return
-    monkeypatch.setattr("prefect.agent.agent.Client", client)
+    monkeypatch.setattr("prefectlegacy.agent.agent.Client", client)
 
     job_mock = MagicMock()
     job_mock.metadata.labels = {
-        "prefect.io/identifier": "id",
-        "prefect.io/flow_run_id": "fr",
+        "prefectlegacy.io/identifier": "id",
+        "prefectlegacy.io/flow_run_id": "fr",
     }
     job_mock.metadata.name = "my_job"
     job_mock.status.failed = False
@@ -712,12 +712,12 @@ def test_k8s_agent_manage_jobs_continues_on_client_error(monkeypatch, cloud_api)
     client = MagicMock()
     client.return_value.graphql = gql_return
     client.return_value.set_flow_run_state = MagicMock(side_effect=ClientError)
-    monkeypatch.setattr("prefect.agent.agent.Client", client)
+    monkeypatch.setattr("prefectlegacy.agent.agent.Client", client)
 
     job_mock = MagicMock()
     job_mock.metadata.labels = {
-        "prefect.io/identifier": "id",
-        "prefect.io/flow_run_id": "fr",
+        "prefectlegacy.io/identifier": "id",
+        "prefectlegacy.io/flow_run_id": "fr",
     }
     job_mock.metadata.name = "my_job"
     job_mock.status.failed = False
@@ -751,12 +751,12 @@ def test_k8s_agent_manage_pending_pods(monkeypatch, cloud_api):
     )
     client = MagicMock()
     client.return_value.graphql = gql_return
-    monkeypatch.setattr("prefect.agent.agent.Client", client)
+    monkeypatch.setattr("prefectlegacy.agent.agent.Client", client)
 
     job_mock = MagicMock()
     job_mock.metadata.labels = {
-        "prefect.io/identifier": "id",
-        "prefect.io/flow_run_id": "fr",
+        "prefectlegacy.io/identifier": "id",
+        "prefectlegacy.io/flow_run_id": "fr",
     }
     job_mock.metadata.name = "my_job"
     job_mock.status.failed = False
@@ -853,7 +853,7 @@ class TestK8sAgentRunConfig:
         )
 
     def read_default_template(self):
-        from prefect.agent.kubernetes.agent import DEFAULT_JOB_TEMPLATE_PATH
+        from prefectlegacy.agent.kubernetes.agent import DEFAULT_JOB_TEMPLATE_PATH
 
         with open(DEFAULT_JOB_TEMPLATE_PATH) as f:
             return yaml.safe_load(f)
@@ -913,7 +913,7 @@ class TestK8sAgentRunConfig:
 
         mocked_read_bytes = MagicMock(wraps=read_bytes_from_path)
         monkeypatch.setattr(
-            "prefect.agent.kubernetes.agent.read_bytes_from_path", mocked_read_bytes
+            "prefectlegacy.agent.kubernetes.agent.read_bytes_from_path", mocked_read_bytes
         )
         job = self.agent.generate_job_spec(flow_run)
         assert job["metadata"]["labels"]["TEST"] == "VALUE"
@@ -937,11 +937,11 @@ class TestK8sAgentRunConfig:
         flow_run = self.build_flow_run(KubernetesRun())
         job = self.agent.generate_job_spec(flow_run)
 
-        identifier = job["metadata"]["labels"]["prefect.io/identifier"]
+        identifier = job["metadata"]["labels"]["prefectlegacy.io/identifier"]
         labels = {
-            "prefect.io/identifier": identifier,
-            "prefect.io/flow_run_id": flow_run.id,
-            "prefect.io/flow_id": flow_run.flow.id,
+            "prefectlegacy.io/identifier": identifier,
+            "prefectlegacy.io/flow_run_id": flow_run.id,
+            "prefectlegacy.io/flow_id": flow_run.flow.id,
         }
 
         assert job["metadata"]["name"]
@@ -1042,7 +1042,7 @@ class TestK8sAgentRunConfig:
         assert env == {
             "PREFECT__BACKEND": backend,
             "PREFECT__CLOUD__AGENT__LABELS": "[]",
-            "PREFECT__CLOUD__API": prefect.config.cloud.api,
+            "PREFECT__CLOUD__API": prefectlegacy.config.cloud.api,
             "PREFECT__CLOUD__AUTH_TOKEN": "",
             "PREFECT__CLOUD__API_KEY": "",
             "PREFECT__CLOUD__TENANT_ID": "",
@@ -1053,8 +1053,8 @@ class TestK8sAgentRunConfig:
             "PREFECT__CLOUD__SEND_FLOW_RUN_LOGS": str(self.agent.log_to_cloud).lower(),
             # Backwards compatibility variable for containers on Prefect <0.15.0
             "PREFECT__LOGGING__LOG_TO_CLOUD": str(self.agent.log_to_cloud).lower(),
-            "PREFECT__ENGINE__FLOW_RUNNER__DEFAULT_CLASS": "prefect.engine.cloud.CloudFlowRunner",
-            "PREFECT__LOGGING__LEVEL": prefect.config.logging.level,
+            "PREFECT__ENGINE__FLOW_RUNNER__DEFAULT_CLASS": "prefectlegacy.engine.cloud.CloudFlowRunner",
+            "PREFECT__LOGGING__LEVEL": prefectlegacy.config.logging.level,
             "CUSTOM1": "VALUE1",
             "CUSTOM2": "OVERRIDE2",  # Agent env-vars override those in template
             "CUSTOM3": "OVERRIDE3",  # RunConfig env-vars override those on agent and template
@@ -1100,7 +1100,7 @@ class TestK8sAgentRunConfig:
         tenant_id = str(uuid.uuid4())
 
         monkeypatch.setattr(
-            "prefect.Client.load_auth_from_disk",
+            "prefectlegacy.Client.load_auth_from_disk",
             MagicMock(return_value={"api_key": "TEST_KEY", "tenant_id": tenant_id}),
         )
 

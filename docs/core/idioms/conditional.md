@@ -35,7 +35,7 @@ The resulting flow looks like:
 ```python
 from random import random
 
-from prefect import task, Flow, case
+from prefectlegacy import task, Flow, case
 
 @task
 def check_condition():
@@ -71,7 +71,7 @@ with Flow("conditional-branches") as flow:
 ```python
 from random import random
 
-from prefect import Task, Flow, case
+from prefectlegacy import Task, Flow, case
 
 class CheckCondition(Task):
     def run(self):
@@ -138,8 +138,8 @@ The resulting flow looks like:
 ```python
 from random import random
 
-from prefect import task, Flow, case
-from prefect.tasks.control_flow import merge
+from prefectlegacy import task, Flow, case
+from prefectlegacy.tasks.control_flow import merge
 
 @task
 def check_condition():
@@ -177,8 +177,8 @@ with Flow("conditional-branches") as flow:
 ```python
 from random import random
 
-from prefect import Task, Flow, case
-from prefect.tasks.control_flow import merge
+from prefectlegacy import Task, Flow, case
+from prefectlegacy.tasks.control_flow import merge
 
 class CheckCondition(Task):
     def run(self):

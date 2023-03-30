@@ -15,9 +15,9 @@ Prefect Cloud and the Prefect Server are two ready-to-use state database and UI 
 
 Prefect Core's server is an open source, lightweight version of our highly-available, production-ready product Prefect Cloud.
 
-Most users get the greatest benefit from signing up for the [free Prefect Cloud Starter tier](https://cloud.prefect.io/). 
+Most users get the greatest benefit from signing up for the [free Prefect Cloud Starter tier](https://cloud.prefectlegacy.io/). 
 
-If your team needs support for additional users, automations, multi-tenant permissions, SSO, and other features, [scale up to a bigger Prefect Cloud license](https://www.prefect.io/pricing/). 
+If your team needs support for additional users, automations, multi-tenant permissions, SSO, and other features, [scale up to a bigger Prefect Cloud license](https://www.prefectlegacy.io/pricing/). 
 
 Prefect Core also includes an open source, locally hosted server.
 
@@ -40,7 +40,7 @@ Prefect Cloud is a fully hosted, production-ready backend for Prefect Core that 
 
 In the Prefect documentation, the <Badge text="Cloud"/> badge indicates features supported only in Prefect Cloud.
 
-To start monitoring and managing your flows in Prefect Cloud, [log in or sign up](https://universal.prefect.io) today.
+To start monitoring and managing your flows in Prefect Cloud, [log in or sign up](https://universal.prefectlegacy.io) today.
 
 ### Prefect Server
 

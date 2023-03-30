@@ -12,8 +12,8 @@ the `Flow` constructor, or set it as an attribute later before calling
 `flow.register`. For example, to configure a flow to use `Local` storage:
 
 ```python
-from prefect import Flow
-from prefect.storage import Local
+from prefectlegacy import Flow
+from prefectlegacy.storage import Local
 
 # Set storage as part of the constructor
 with Flow("example", storage=Local()) as flow:
@@ -41,7 +41,7 @@ time. Anything executed at the top-level of the script will only execute at
 flow *registration* time, not at flow *execution* time.
 
 ```python
-from prefect import Flow
+from prefectlegacy import Flow
 
 # Top-level functionality (like this print statement) runs only at flow
 # *registration* time, it will not run during each flow run. If you want
@@ -116,8 +116,8 @@ in the local filesystem. This means they can only be run by a [local
 agent](/orchestration/agents/local.md) running on the same machine.
 
 ```python
-from prefect import Flow
-from prefect.storage import Local
+from prefectlegacy import Flow
+from prefectlegacy.storage import Local
 
 flow = Flow("local-flow", storage=Local())
 ```
@@ -152,8 +152,8 @@ time (provided the module is installed and importable in the execution
 environment).
 
 ```python
-from prefect import Flow
-from prefect.storage import Module
+from prefectlegacy import Flow
+from prefectlegacy.storage import Module
 
 flow = Flow("module example", storage=Module("mymodule.flows"))
 
@@ -167,8 +167,8 @@ flow = Flow("module example", storage=Module(__name__))
 saves flows to and references flows stored in an AWS S3 bucket.
 
 ```python
-from prefect import Flow
-from prefect.storage import S3
+from prefectlegacy import Flow
+from prefectlegacy.storage import S3
 
 flow = Flow("s3-flow", storage=S3(bucket="<my-bucket>"))
 ```
@@ -194,8 +194,8 @@ proper AWS credential configuration.
 option that saves flows to and references flows stored in an Azure Blob container.
 
 ```python
-from prefect import Flow
-from prefect.storage import Azure
+from prefectlegacy import Flow
+from prefectlegacy.storage import Azure
 
 flow = Flow(
     "azure-flow",
@@ -229,8 +229,8 @@ the class directly.
 that saves flows to and references flows stored in a Google Cloud Storage bucket.
 
 ```python
-from prefect import Flow
-from prefect.storage import GCS
+from prefectlegacy import Flow
+from prefectlegacy.storage import GCS
 
 flow = Flow("gcs-flow", storage=GCS(bucket="<my-bucket>"))
 ```
@@ -263,8 +263,8 @@ stored in a git repository as `.py` files.
 This storage class uses underlying git protocol instead of specific client libraries (such as `PyGithub` for GitHub), superseding other git-based storages.
 
 ```python
-from prefect import Flow
-from prefect.storage import Git
+from prefectlegacy import Flow
+from prefectlegacy.storage import Git
 
 # using https by default
 storage = Git(
@@ -339,8 +339,8 @@ storage = Git(
 option for referencing flows stored in a GitHub repository as `.py` files.
 
 ```python
-from prefect import Flow
-from prefect.storage import GitHub
+from prefectlegacy import Flow
+from prefectlegacy.storage import GitHub
 
 flow = Flow(
     "github-flow",
@@ -369,8 +369,8 @@ from its respective repository.
 option for referencing flows stored in a GitLab repository as `.py` files.
 
 ```python
-from prefect import Flow
-from prefect.storage import GitLab
+from prefectlegacy import Flow
+from prefectlegacy.storage import GitLab
 
 flow = Flow(
     "gitlab-flow",
@@ -402,8 +402,8 @@ instance.
 storage option that uploads flows to a Bitbucket repository as `.py` files.
 
 ```python
-from prefect import Flow
-from prefect.storage import Bitbucket
+from prefectlegacy import Flow
+from prefectlegacy.storage import Bitbucket
 
 flow = Flow(
     "bitbucket-flow",
@@ -437,8 +437,8 @@ pointing to the correct project name.
 storage option for referencing flows stored in a CodeCommit repository as `.py` files.
 
 ```python
-from prefect import Flow
-from prefect.storage import GitLab
+from prefectlegacy import Flow
+from prefectlegacy.storage import GitLab
 
 flow = Flow(
     "codecommit-flow",
@@ -466,8 +466,8 @@ agent](/orchestration/agents/local.md), since Docker images aren't supported
 there.
 
 ```python
-from prefect import Flow
-from prefect.storage import Docker
+from prefectlegacy import Flow
+from prefectlegacy.storage import Docker
 
 flow = Flow(
     "docker-flow",
@@ -504,8 +504,8 @@ services.
 For example, the following code could be used to store flows in DropBox.
 
 ```python
-from prefect import Flow
-from prefect.storage import Webhook
+from prefectlegacy import Flow
+from prefectlegacy.storage import Webhook
 
 flow = Flow(
     "dropbox-flow",
@@ -563,9 +563,9 @@ Our git repository contains two files in the root directory, `flow.py` and `pers
 ```python
 from pathlib import Path
 
-import prefect
-from prefect import task, Flow
-from prefect.storage import Git
+import prefectlegacy
+from prefectlegacy import task, Flow
+from prefectlegacy.storage import Git
 
 # get the path to the flow file using pathlib and __file__
 # this path is dynamically populated when the flow is loaded from storage
@@ -577,7 +577,7 @@ with open(str(file_path) + '/person.txt', 'r') as my_file:
 
 @task
 def say_hello(name):
-        logger = prefect.context.get("logger")
+        logger = prefectlegacy.context.get("logger")
         logger.info(f"Hi {name}")
 
 with Flow("my-hello-flow") as flow:
@@ -604,7 +604,7 @@ When using Docker images, please note the Prefect image does not include an SSH 
 The easiest way to do accomplish this is to add `openssh-client` to a Prefect image.
 
 ```dockerfile
-FROM prefecthq/prefect:latest
+from prefectlegacyhq/prefect:latest
 RUN apt update && apt install -y openssh-client
 ```
 
@@ -656,7 +656,7 @@ spec:
             defaultMode: 0600
 ```
 
-Finally, [configure the agent or flow to use the custom job template](https://docs.prefect.io/orchestration/agents/kubernetes.html#custom-job-template). 
+Finally, [configure the agent or flow to use the custom job template](https://docs.prefectlegacy.io/orchestration/agents/kubernetes.html#custom-job-template). 
 
 
-Creating a [Kubernetes service account](https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/) to permission the Secret properly is recommended. Once configured in Kubernetes, service account can be set either [on agent start or on the run config](https://docs.prefect.io/orchestration/agents/kubernetes.html#service-account).
+Creating a [Kubernetes service account](https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/) to permission the Secret properly is recommended. Once configured in Kubernetes, service account can be set either [on agent start or on the run config](https://docs.prefectlegacy.io/orchestration/agents/kubernetes.html#service-account).

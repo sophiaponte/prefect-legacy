@@ -7,14 +7,14 @@ import logging
 from datetime import timedelta
 from unittest.mock import MagicMock
 
-from prefect.backend import FlowRunView, TaskRunView
-from prefect.backend.flow_run import (
+from prefectlegacy.backend import FlowRunView, TaskRunView
+from prefectlegacy.backend.flow_run import (
     FlowRunLog,
     check_for_compatible_agents,
     watch_flow_run,
 )
-from prefect.engine.state import Scheduled, Success, Running, Submitted
-from prefect.run_configs import UniversalRun
+from prefectlegacy.engine.state import Scheduled, Success, Running, Submitted
+from prefectlegacy.run_configs import UniversalRun
 
 
 FLOW_RUN_DATA_1 = {
@@ -126,7 +126,7 @@ def test_flow_run_view_query_for_flow_run_unpacks_result_singleton(patch_post):
 
 def test_flow_run_view_query_for_flow_run_uses_where_in_query(monkeypatch):
     post = MagicMock(return_value={"data": {"flow_run": [FLOW_RUN_DATA_1]}})
-    monkeypatch.setattr("prefect.client.client.Client.post", post)
+    monkeypatch.setattr("prefectlegacy.client.client.Client.post", post)
 
     FlowRunView._query_for_flow_run(where={"foo": {"_eq": "bar"}})
 
@@ -138,7 +138,7 @@ def test_flow_run_view_query_for_flow_run_uses_where_in_query(monkeypatch):
 
 def test_flow_run_view_query_for_flow_run_includes_all_required_data(monkeypatch):
     graphql = MagicMock(return_value={"data": {"flow_run": [FLOW_RUN_DATA_1]}})
-    monkeypatch.setattr("prefect.client.client.Client.graphql", graphql)
+    monkeypatch.setattr("prefectlegacy.client.client.Client.graphql", graphql)
 
     FlowRunView._query_for_flow_run(where={})
 
@@ -286,7 +286,7 @@ def test_flow_run_view_get_latest_returns_new_instance(patch_post, patch_posts):
 
 def test_flow_run_view_from_flow_run_id_where_clause(monkeypatch):
     post = MagicMock(return_value={"data": {"flow_run": [FLOW_RUN_DATA_1]}})
-    monkeypatch.setattr("prefect.client.client.Client.post", post)
+    monkeypatch.setattr("prefectlegacy.client.client.Client.post", post)
 
     FlowRunView.from_flow_run_id(flow_run_id="id-1", load_static_tasks=False)
 
@@ -307,7 +307,7 @@ def test_check_for_compatible_agents_no_agents_returned(patch_post):
 
 def test_flow_run_view_get_logs(monkeypatch):
     post = MagicMock(return_value={"data": {"flow_run": [FLOW_RUN_DATA_1]}})
-    monkeypatch.setattr("prefect.client.client.Client.post", post)
+    monkeypatch.setattr("prefectlegacy.client.client.Client.post", post)
 
     flow_run_view = FlowRunView._from_flow_run_data(FLOW_RUN_DATA_1)
 
@@ -331,7 +331,7 @@ def test_flow_run_view_get_logs(monkeypatch):
 
 def test_flow_run_view_get_logs_start_and_end_times(monkeypatch):
     post = MagicMock(return_value={"data": {"flow_run": [FLOW_RUN_DATA_1]}})
-    monkeypatch.setattr("prefect.client.client.Client.post", post)
+    monkeypatch.setattr("prefectlegacy.client.client.Client.post", post)
 
     flow_run_view = FlowRunView._from_flow_run_data(FLOW_RUN_DATA_1)
 
@@ -520,14 +520,14 @@ def test_watch_flow_run(monkeypatch):
     MockView = MagicMock()
     MockView.from_flow_run_id.return_value = flow_run
 
-    monkeypatch.setattr("prefect.backend.flow_run.FlowRunView", MockView)
+    monkeypatch.setattr("prefectlegacy.backend.flow_run.FlowRunView", MockView)
     monkeypatch.setattr(
-        "prefect.backend.flow_run.check_for_compatible_agents",
+        "prefectlegacy.backend.flow_run.check_for_compatible_agents",
         MagicMock(return_value="Helpful agent message."),
     )
 
     # Mock sleep so that we do not have a slow test
-    monkeypatch.setattr("prefect.backend.flow_run.time.sleep", MagicMock())
+    monkeypatch.setattr("prefectlegacy.backend.flow_run.time.sleep", MagicMock())
 
     for i, log in enumerate(watch_flow_run("id")):
         # Assert that we get the agent warning a couple times then update the state
@@ -598,10 +598,10 @@ def test_watch_flow_run_default_timeout(monkeypatch):
     MockView = MagicMock()
     MockView.from_flow_run_id.return_value = flow_run
 
-    monkeypatch.setattr("prefect.backend.flow_run.FlowRunView", MockView)
+    monkeypatch.setattr("prefectlegacy.backend.flow_run.FlowRunView", MockView)
 
     # Mock sleep so that we do not have a slow test
-    monkeypatch.setattr("prefect.backend.flow_run.time.sleep", MagicMock())
+    monkeypatch.setattr("prefectlegacy.backend.flow_run.time.sleep", MagicMock())
 
     with pytest.raises(RuntimeError, match="timed out after 12.0 hours of waiting"):
         for log in watch_flow_run("id"):
@@ -617,10 +617,10 @@ def test_watch_flow_run_timeout(monkeypatch):
     MockView = MagicMock()
     MockView.from_flow_run_id.return_value = flow_run
 
-    monkeypatch.setattr("prefect.backend.flow_run.FlowRunView", MockView)
+    monkeypatch.setattr("prefectlegacy.backend.flow_run.FlowRunView", MockView)
 
     # Mock sleep so that we do not have a slow test
-    monkeypatch.setattr("prefect.backend.flow_run.time.sleep", MagicMock())
+    monkeypatch.setattr("prefectlegacy.backend.flow_run.time.sleep", MagicMock())
 
     with pytest.raises(RuntimeError, match="timed out after 36.5 hours of waiting"):
         for log in watch_flow_run(

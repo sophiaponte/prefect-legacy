@@ -4,9 +4,9 @@ from unittest.mock import MagicMock, Mock
 import pytest
 from pandas import DataFrame
 
-import prefect
-from prefect.tasks.azure import DatafactoryCreate, PipelineCreate, PipelineRun
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy.tasks.azure import DatafactoryCreate, PipelineCreate, PipelineRun
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 AZ_CREDENTIALS = dict(
@@ -81,10 +81,10 @@ class TestDatafactoryCreate:
     def test_run(self, monkeypatch):
         datafactory = MagicMock(DataFactoryManagementClient=MockClient)
         monkeypatch.setattr(
-            "prefect.tasks.azure.datafactory.azure.mgmt.datafactory", datafactory
+            "prefectlegacy.tasks.azure.datafactory.azure.mgmt.datafactory", datafactory
         )
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(secrets=dict(AZ_CREDENTIALS=AZ_CREDENTIALS)):
+            with prefectlegacy.context(secrets=dict(AZ_CREDENTIALS=AZ_CREDENTIALS)):
                 task = DatafactoryCreate()
                 result = task.run(
                     datafactory_name="df_name", resource_group_name="rg_name"
@@ -136,10 +136,10 @@ class TestPipelineCreate:
     def test_run(self, monkeypatch):
         datafactory = MagicMock(DataFactoryManagementClient=MockClient)
         monkeypatch.setattr(
-            "prefect.tasks.azure.datafactory.azure.mgmt.datafactory", datafactory
+            "prefectlegacy.tasks.azure.datafactory.azure.mgmt.datafactory", datafactory
         )
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(secrets=dict(AZ_CREDENTIALS=AZ_CREDENTIALS)):
+            with prefectlegacy.context(secrets=dict(AZ_CREDENTIALS=AZ_CREDENTIALS)):
                 task = PipelineCreate()
                 result = task.run(
                     datafactory_name="df_name",
@@ -192,11 +192,11 @@ class TestPipelineRun:
     def test_run(self, monkeypatch):
         datafactory = MagicMock(DataFactoryManagementClient=MockClient)
         monkeypatch.setattr(
-            "prefect.tasks.azure.datafactory.azure.mgmt.datafactory", datafactory
+            "prefectlegacy.tasks.azure.datafactory.azure.mgmt.datafactory", datafactory
         )
         task = PipelineRun()
         with set_temporary_config({"cloud.use_local_secrets": True}):
-            with prefect.context(secrets=dict(AZ_CREDENTIALS=AZ_CREDENTIALS)):
+            with prefectlegacy.context(secrets=dict(AZ_CREDENTIALS=AZ_CREDENTIALS)):
                 result = task.run(
                     datafactory_name="df_name",
                     resource_group_name="rg_name",

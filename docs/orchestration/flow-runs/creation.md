@@ -47,7 +47,7 @@ See `prefect run --help` or [optional settings](#optional-settings) for addition
 Flow runs can be created using the Prefect `Client` interface in the `prefect` core Python library:
 
 ```python
-from prefect import Client
+from prefectlegacy import Client
 
 client = Client()
 client.create_flow_run(flow_id="d7bfb996-b8fe-4055-8d43-2c9f82a1e3c7")
@@ -61,8 +61,8 @@ See [optional settings](#optional-settings) for additional information that can 
 Flow runs can be created from within another flow run using the `create_flow_run` task in the Prefect task library:
 
 ```python
-from prefect import Flow
-from prefect.tasks.prefect import create_flow_run, wait_for_flow_run
+from prefectlegacy import Flow
+from prefectlegacy.tasks.prefect import create_flow_run, wait_for_flow_run
 
 with Flow("parent-flow") as flow:
   # Create the child flow run, look up the flow by name

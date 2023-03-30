@@ -4,9 +4,9 @@ import tempfile
 
 import pytest
 
-import prefect
-from prefect import storage
-from prefect.serialization.storage import (
+import prefectlegacy
+from prefectlegacy import storage
+from prefectlegacy.serialization.storage import (
     AzureSchema,
     DockerSchema,
     GCSSchema,
@@ -24,7 +24,7 @@ def test_all_storage_subclasses_have_schemas():
 
     subclasses = {c.__name__ for c in storage.Storage.__subclasses__()}
     subclasses.add(storage.Storage.__name__)  # add base storage, not a subclass
-    schemas = set(prefect.serialization.storage.StorageSchema().type_schemas.keys())
+    schemas = set(prefectlegacy.serialization.storage.StorageSchema().type_schemas.keys())
     assert subclasses == schemas
 
 
@@ -33,7 +33,7 @@ def test_docker_empty_serialize():
     serialized = DockerSchema().dump(docker)
 
     assert serialized
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert "prefect_version" in serialized
     assert not serialized["image_name"]
     assert not serialized["image_tag"]
@@ -54,7 +54,7 @@ def test_docker_full_serialize():
     serialized = DockerSchema().dump(docker)
 
     assert serialized
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["image_name"] == "name"
     assert serialized["image_tag"] == "tag"
     assert serialized["registry_url"] == "url"
@@ -67,12 +67,12 @@ def test_docker_serialize_with_flows():
     docker = storage.Docker(
         registry_url="url", image_name="name", image_tag="tag", secrets=["FOO"]
     )
-    f = prefect.Flow("test")
+    f = prefectlegacy.Flow("test")
     docker.add_flow(f)
     serialized = DockerSchema().dump(docker)
 
     assert serialized
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["image_name"] == "name"
     assert serialized["image_tag"] == "tag"
     assert serialized["registry_url"] == "url"
@@ -92,12 +92,12 @@ def test_docker_serialize_with_flow_and_custom_prefect_dir():
         secrets=["FOO"],
         prefect_directory="/tmp/something",
     )
-    f = prefect.Flow("test")
+    f = prefectlegacy.Flow("test")
     docker.add_flow(f)
     serialized = DockerSchema().dump(docker)
 
     assert serialized
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["image_name"] == "name"
     assert serialized["image_tag"] == "tag"
     assert serialized["registry_url"] == "url"
@@ -114,7 +114,7 @@ def test_s3_empty_serialize():
     serialized = S3Schema().dump(s3)
 
     assert serialized
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["bucket"]
     assert not serialized["key"]
     assert serialized["secrets"] == []
@@ -131,7 +131,7 @@ def test_s3_full_serialize():
     serialized = S3Schema().dump(s3)
 
     assert serialized
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["bucket"] == "bucket"
     assert serialized["key"] == "key"
     assert serialized["secrets"] == ["hidden", "auth"]
@@ -139,12 +139,12 @@ def test_s3_full_serialize():
 
 def test_s3_serialize_with_flows():
     s3 = storage.S3(bucket="bucket", key="key", secrets=["hidden", "auth"])
-    f = prefect.Flow("test")
+    f = prefectlegacy.Flow("test")
     s3.flows["test"] = "key"
     serialized = S3Schema().dump(s3)
 
     assert serialized
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["bucket"] == "bucket"
     assert serialized["key"] == "key"
     assert serialized["flows"] == {"test": "key"}
@@ -159,7 +159,7 @@ def test_azure_empty_serialize():
     serialized = AzureSchema().dump(azure)
 
     assert serialized
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["container"] == "container"
     assert serialized["blob_name"] is None
     assert serialized["secrets"] == []
@@ -177,7 +177,7 @@ def test_azure_full_serialize():
     serialized = AzureSchema().dump(azure)
 
     assert serialized
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["container"] == "container"
     assert serialized["connection_string_secret"] == "conn"
     assert serialized["blob_name"] == "name"
@@ -191,7 +191,7 @@ def test_azure_creds_not_serialized():
     serialized = AzureSchema().dump(azure)
 
     assert serialized
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["container"] == "container"
     assert serialized["blob_name"] == "name"
     assert serialized["connection_string_secret"] == "conn"
@@ -205,12 +205,12 @@ def test_azure_serialize_with_flows():
         blob_name="name",
         secrets=["foo"],
     )
-    f = prefect.Flow("test")
+    f = prefectlegacy.Flow("test")
     azure.flows["test"] = "key"
     serialized = AzureSchema().dump(azure)
 
     assert serialized
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["container"] == "container"
     assert serialized["blob_name"] == "name"
     assert serialized["connection_string_secret"] == "conn"
@@ -226,7 +226,7 @@ def test_local_empty_serialize():
     serialized = LocalSchema().dump(b)
 
     assert serialized
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["flows"] == dict()
     assert serialized["directory"].endswith(os.path.join(".prefect", "flows"))
     assert serialized["secrets"] == []
@@ -235,7 +235,7 @@ def test_local_empty_serialize():
 def test_local_roundtrip():
     with tempfile.TemporaryDirectory() as tmpdir:
         s = storage.Local(directory=tmpdir, secrets=["AUTH"])
-        s.add_flow(prefect.Flow("test"))
+        s.add_flow(prefectlegacy.Flow("test"))
         serialized = LocalSchema().dump(s)
         deserialized = LocalSchema().load(serialized)
 
@@ -262,7 +262,7 @@ def test_gcs_empty_serialize():
     serialized = GCSSchema().dump(gcs)
 
     assert serialized
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["bucket"]
     assert not serialized["key"]
     assert serialized["secrets"] == []
@@ -280,7 +280,7 @@ def test_gcs_full_serialize():
     serialized = GCSSchema().dump(gcs)
 
     assert serialized
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["bucket"] == "bucket"
     assert serialized["key"] == "key"
     assert serialized["project"] == "project"
@@ -289,12 +289,12 @@ def test_gcs_full_serialize():
 
 def test_gcs_serialize_with_flows():
     gcs = storage.GCS(project="project", bucket="bucket", key="key", secrets=["CREDS"])
-    f = prefect.Flow("test")
+    f = prefectlegacy.Flow("test")
     gcs.flows["test"] = "key"
     serialized = GCSSchema().dump(gcs)
 
     assert serialized
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["bucket"] == "bucket"
     assert serialized["key"] == "key"
     assert serialized["project"] == "project"
@@ -331,13 +331,13 @@ def test_webhook_full_serialize():
         get_flow_request_http_method="POST",
         secrets=["CREDS"],
     )
-    f = prefect.Flow("test")
+    f = prefectlegacy.Flow("test")
     webhook.add_flow(f)
 
     serialized = WebhookSchema().dump(webhook)
 
     assert serialized
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["secrets"] == ["CREDS"]
     assert serialized["build_request_kwargs"] == {
         "url": build_url,
@@ -371,7 +371,7 @@ def test_github_serialize(ref, access_token_secret, base_url):
     if ref is not None:
         github.ref = ref
     serialized = GitHubSchema().dump(github)
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["repo"] == "test/repo"
     assert serialized["path"] == "flow.py"
     assert serialized["ref"] == ref
@@ -383,7 +383,7 @@ def test_github_serialize(ref, access_token_secret, base_url):
 def test_gitlab_empty_serialize():
     gitlab = storage.GitLab(repo="test/repo")
     serialized = GitLabSchema().dump(gitlab)
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["repo"] == "test/repo"
     assert not serialized["host"]
     assert not serialized["path"]
@@ -403,7 +403,7 @@ def test_gitlab_full_serialize(access_token_secret):
     )
 
     serialized = GitLabSchema().dump(gitlab)
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["repo"] == "test/repo"
     assert serialized["host"] == "http://localhost:1234"
     assert serialized["path"] == "path/to/flow.py"
@@ -416,7 +416,7 @@ def test_bitbucket_empty_serialize():
     # Testing that empty serialization occurs without error or weirdness in attributes.
     bitbucket = storage.Bitbucket(project="PROJECT", repo="test-repo")
     serialized = BitbucketSchema().dump(bitbucket)
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["project"] == "PROJECT"
     assert serialized["repo"] == "test-repo"
     assert not serialized["host"]
@@ -438,7 +438,7 @@ def test_bitbucket_full_serialize(access_token_secret):
     )
 
     serialized = BitbucketSchema().dump(bitbucket)
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["project"] == "PROJECT"
     assert serialized["repo"] == "test-repo"
     assert serialized["path"] == "test-flow.py"

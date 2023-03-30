@@ -5,10 +5,10 @@ import pendulum
 import pytest
 from dateutil import rrule
 
-import prefect
-from prefect import __version__
-from prefect.schedules import adjustments, clocks, filters, schedules
-from prefect.serialization.schedule import ScheduleSchema
+import prefectlegacy
+from prefectlegacy import __version__
+from prefectlegacy.schedules import adjustments, clocks, filters, schedules
+from prefectlegacy.serialization.schedule import ScheduleSchema
 
 
 def serialize_and_deserialize(schedule: schedules.Schedule) -> schedules.Schedule:

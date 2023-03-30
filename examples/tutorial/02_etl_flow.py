@@ -1,5 +1,5 @@
 import aircraftlib as aclib
-from prefect import task, Flow
+from prefectlegacy import task, Flow
 
 
 @task

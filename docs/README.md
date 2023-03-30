@@ -1,5 +1,5 @@
 <p align="center" >
-   <img src="https://www.prefect.io/assets/img/prefect-logo-gradient-navy.0cb04f87.svg" width="500" style="max-width: 500px;">
+   <img src="https://www.prefectlegacy.io/assets/img/prefect-logo-gradient-navy.0cb04f87.svg" width="500" style="max-width: 500px;">
 </p>
 
 <p align="center">
@@ -13,15 +13,15 @@
         <img src="https://img.shields.io/badge/code%20style-black-000000.svg">
     </a>
     <a href="https://pypi.org/project/prefect/">
-        <img src="https://img.shields.io/pypi/dm/prefect.svg?color=%2327B1FF&label=installs&logoColor=%234D606E">
+        <img src="https://img.shields.io/pypi/dm/prefectlegacy.svg?color=%2327B1FF&label=installs&logoColor=%234D606E">
     </a>
     <a href="https://hub.docker.com/r/prefecthq/prefect">
-        <img src="https://img.shields.io/docker/pulls/prefecthq/prefect.svg?color=%2327B1FF&logoColor=%234D606E">
+        <img src="https://img.shields.io/docker/pulls/prefecthq/prefectlegacy.svg?color=%2327B1FF&logoColor=%234D606E">
     </a>
-    <a href="https://www.prefect.io/slack">
+    <a href="https://www.prefectlegacy.io/slack">
         <img src="https://img.shields.io/static/v1.svg?label=chat&message=on%20slack&color=27b1ff&style=flat">
     </a>
-    <a href="https://discourse.prefect.io/">
+    <a href="https://discourse.prefectlegacy.io/">
         <img src="https://img.shields.io/static/v1.svg?label=chat&message=on%20discourse&color=27b1ff&style=flat">
     </a>
 </p>
@@ -46,7 +46,7 @@
 
 ## Automate all the things
 
-If you can do it with Python, you can automate it with Prefect.
+If you can do it with Python, you can automate it with prefectlegacy.
 
 </div>
 <div class="feature">
@@ -73,12 +73,12 @@ We've rebuilt data engineering for the data science era.
 
 Prefect is a new workflow management system, designed for modern infrastructure and powered by the open-source Prefect Core workflow engine. Users organize `Tasks` into `Flows`, and Prefect takes care of the rest.
 
-Read the [docs](/core/); get the [code](https://github.com/PrefectHQ/prefect); ask us [anything](https://www.prefect.io/slack); chat with the community via [Prefect Discourse](https://discourse.prefect.io/)!
+Read the [docs](/core/); get the [code](https://github.com/PrefectHQ/prefect); ask us [anything](https://www.prefectlegacy.io/slack); chat with the community via [Prefect Discourse](https://discourse.prefectlegacy.io/)!
 
 ### Hello, world! 👋
 
 ```python
-from prefect import task, Flow, Parameter
+from prefectlegacy import task, Flow, Parameter
 
 
 @task(log_stdout=True)

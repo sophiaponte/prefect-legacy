@@ -8,7 +8,7 @@ This recipe is for storing multiple flows inside a single [Docker storage object
 ### Flow(s) Source
 
 ```python
-from prefect import task, Flow
+from prefectlegacy import task, Flow
 
 # ETL Flow
 
@@ -61,7 +61,7 @@ with Flow("Map / Reduce 🤓") as mr_flow:
 In this code block we manually add our two flows to the same Docker storage object. Then the storage is built once and that new Docker storage object is assigned to both flows. When the flows are registered with the Prefect API, build is set to false (`build=False`) so the storage object is not built again.
 
 ```python
-from prefect.storage import Docker
+from prefectlegacy.storage import Docker
 
 # Create our Docker storage
 storage = Docker(registry_url="gcr.io/dev/", image_name="multi_flows", image_tag="0.1.0")

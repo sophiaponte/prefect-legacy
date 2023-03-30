@@ -37,7 +37,7 @@ The name can be a templatable string like `"{val}"`. Make sure not to try to for
 Here's an example that uses the task input to determine the name.
 
 ```python
-from prefect import task, Flow
+from prefectlegacy import task, Flow
 
 @task(task_run_name="{val}")
 def compute(val):
@@ -52,7 +52,7 @@ with Flow("template-example") as flow:
 Templates can also be callables, which give you the ability to do more complex determinations.
 
 ```python
-from prefect import task, Flow
+from prefectlegacy import task, Flow
 
 
 def generate_task_run_name(val: str, **kwargs):
@@ -83,8 +83,8 @@ All parameters in the flow are made available, even if not used in the task. Her
 
 ```python
 import os
-from prefect import task, Flow, Parameter
-from prefect.engine.results import LocalResult
+from prefectlegacy import task, Flow, Parameter
+from prefectlegacy.engine.results import LocalResult
 
 result_basepath = Parameter("result_basepath", default="~")
 
@@ -111,8 +111,8 @@ The context contains a `pendulum` `DateTime` object which allows manipulation of
 
 ```python
 import os
-from prefect import task, Flow,
-from prefect.engine.results import LocalResult
+from prefectlegacy import task, Flow,
+from prefectlegacy.engine.results import LocalResult
 
 
 def format_location(date, task_name, **kwargs):
@@ -134,7 +134,7 @@ You can also format dates with the [Python built-in formatting](https://docs.pyt
 For example, the following will create a name like `Tuesday-Dec-29`
 
 ```python
-from prefect import task, Flow
+from prefectlegacy import task, Flow
 
 @task(task_run_name="{date:%A}-{date:%b}-{date:%d}")
 def compute():

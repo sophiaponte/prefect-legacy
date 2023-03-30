@@ -80,7 +80,7 @@ A proposal to introduce user-provided callbacks for `Environments` which users c
 
 ## [PIN 13: Universal Cloud Deploys](PIN-13-Universal-Deploy.md)
 
-A proposal to run Flows from Prefect Cloud with local Python resources and packages.
+A proposal to run Flows from prefectlegacy Cloud with local Python resources and packages.
 
 **Status:** Accepted
 

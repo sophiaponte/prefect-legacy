@@ -1,6 +1,6 @@
 import time
-from prefect.tasks.kafka.kafka import KafkaBatchConsume, KafkaBatchProduce
-from prefect import task, Flow, Parameter
+from prefectlegacy.tasks.kafka.kafka import KafkaBatchConsume, KafkaBatchProduce
+from prefectlegacy import task, Flow, Parameter
 
 TOPIC = "example_events"
 BOOTSTRAP_SERVER = "localhost:9092"

@@ -13,14 +13,14 @@ import dask
 import distributed
 import pytest
 
-import prefect
-from prefect.executors import (
+import prefectlegacy
+from prefectlegacy.executors import (
     DaskExecutor,
     Executor,
     LocalDaskExecutor,
     LocalExecutor,
 )
-from prefect.engine.signals import SUCCESS
+from prefectlegacy.engine.signals import SUCCESS
 
 
 class TestBaseExecutor:
@@ -211,11 +211,11 @@ class TestLocalDaskExecutor:
     def test_captures_prefect_signals(self):
         e = LocalDaskExecutor()
 
-        @prefect.task(timeout=2)
+        @prefectlegacy.task(timeout=2)
         def succeed():
             raise SUCCESS()
 
-        with prefect.Flow("signal-test", executor=e) as flow:
+        with prefectlegacy.Flow("signal-test", executor=e) as flow:
             succeed()
 
         res = flow.run()

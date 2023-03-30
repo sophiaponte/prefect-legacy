@@ -1,7 +1,7 @@
 import inspect
 import pickle
 import pytest
-from prefect.tasks.toloka.utils import extract_id, structure_from_conf, with_logger
+from prefectlegacy.tasks.toloka.utils import extract_id, structure_from_conf, with_logger
 from toloka.client import Pool
 from unittest.mock import Mock, patch
 
@@ -49,7 +49,7 @@ class TestExtractId:
             extract_id(pool, Pool)
 
 
-@patch("prefect.context")
+@patch("prefectlegacy.context")
 def test_with_logger(context_mock, pool):
     logger_mock = Mock()
     context_get_mock = Mock(return_value=logger_mock)

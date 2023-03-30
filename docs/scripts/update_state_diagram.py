@@ -4,7 +4,7 @@ Updates `.vuepress/public/state_inheritance_diagram.svg` after a state hierarchy
 import os
 import graphviz
 
-from prefect.engine.state import State
+from prefectlegacy.engine.state import State
 
 
 graph = graphviz.Digraph(format="svg")

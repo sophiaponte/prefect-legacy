@@ -4,10 +4,10 @@ import marshmallow
 import pendulum
 import pytest
 
-import prefect
-from prefect.engine import results, state
-from prefect.engine.result import Result, NoResult
-from prefect.serialization.state import StateSchema
+import prefectlegacy
+from prefectlegacy.engine import results, state
+from prefectlegacy.engine.result import Result, NoResult
+from prefectlegacy.serialization.state import StateSchema
 
 all_states = sorted(
     set(
@@ -63,16 +63,16 @@ def complex_states():
 
 def test_all_states_have_serialization_schemas_in_stateschema():
     """
-    Tests that all State subclasses in prefect.engine.states have corresponding schemas
-    in prefect.serialization.state
+    Tests that all State subclasses in prefectlegacy.engine.states have corresponding schemas
+    in prefectlegacy.serialization.state
     """
     assert set(s.__name__ for s in all_states) == set(StateSchema.type_schemas.keys())
 
 
 def test_all_states_have_deserialization_schemas_in_stateschema():
     """
-    Tests that all State subclasses in prefect.engine.states have corresponding schemas
-    in prefect.serialization.state with that state assigned as the object class
+    Tests that all State subclasses in prefectlegacy.engine.states have corresponding schemas
+    in prefectlegacy.serialization.state with that state assigned as the object class
     so it will be recreated at deserialization
     """
     assert set(all_states) == set(
@@ -88,7 +88,7 @@ def test_serialize_state_with_no_result(cls):
     assert serialized["type"] == cls.__name__
     assert serialized["message"] == "message"
     assert serialized["_result"]["type"] == "NoResultType"
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
 
 
 @pytest.mark.parametrize("cls", [s for s in all_states if s is not state.Mapped])
@@ -101,18 +101,18 @@ def test_serialize_state_with_handled_result(cls):
     assert serialized["message"] == "message"
     assert serialized["_result"]["type"] == "Result"
     assert serialized["_result"]["location"] == "src/place"
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
 
 
 @pytest.mark.parametrize("cls", all_states)
 def test_serialize_state_with_context(cls):
-    with prefect.context(task_tags=set(["foo", "bar"])):
+    with prefectlegacy.context(task_tags=set(["foo", "bar"])):
         s = cls(message="hi")
     serialized = StateSchema().dump(s)
     assert isinstance(serialized, dict)
     assert serialized["type"] == cls.__name__
     assert serialized["message"] == "hi"
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert isinstance(serialized["context"], dict)
     assert set(serialized["context"]["tags"]) == set(["foo", "bar"])
 
@@ -122,14 +122,14 @@ def test_serialize_state_with_context(cls):
 
 
 def test_serialize_scheduled_state_with_context():
-    with prefect.context(task_run_count=42):
+    with prefectlegacy.context(task_run_count=42):
         s = state.Scheduled(message="hi")
 
     serialized = StateSchema().dump(s)
     assert isinstance(serialized, dict)
     assert serialized["type"] == "Scheduled"
     assert serialized["message"] == "hi"
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["context"] == dict(task_run_count=42)
 
     deserialized = StateSchema().load(serialized)
@@ -144,7 +144,7 @@ def test_serialize_state_with_context_allows_for_diverse_values():
     assert isinstance(serialized, dict)
     assert serialized["type"] == "Running"
     assert serialized["message"] == "hi"
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
     assert serialized["context"] == s.context
 
     deserialized = StateSchema().load(serialized)
@@ -162,7 +162,7 @@ def test_serialize_mapped():
     assert "_result" not in serialized
     assert "map_states" not in serialized
     assert serialized["n_map_states"] == 2
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
 
 
 def test_serialize_mapped_uses_set_n_map_states():
@@ -173,7 +173,7 @@ def test_serialize_mapped_uses_set_n_map_states():
     assert "_result" not in serialized
     assert "map_states" not in serialized
     assert serialized["n_map_states"] == 20
-    assert serialized["__version__"] == prefect.__version__
+    assert serialized["__version__"] == prefectlegacy.__version__
 
 
 @pytest.mark.parametrize("cls", [s for s in all_states if s is not state.Mapped])
@@ -333,7 +333,7 @@ class TestNewStyleResults:
             "type": "Success",
             "_result": {
                 "type": "SafeResult",
-                "value": "/src/prefect-result-2020-06-09t15-32-47-297967-00-00",
+                "value": "/src/prefectlegacy-result-2020-06-09t15-32-47-297967-00-00",
                 "__version__": "0.11.5+59.gdba764390",
                 "result_handler": {
                     "dir": "/src",
@@ -347,7 +347,7 @@ class TestNewStyleResults:
             "cached_inputs": {
                 "report": {
                     "type": "SafeResult",
-                    "value": "/src/prefect-result-2020-06-09t15-32-38-403718-00-00",
+                    "value": "/src/prefectlegacy-result-2020-06-09t15-32-38-403718-00-00",
                     "__version__": "0.11.5+59.gdba764390",
                     "result_handler": {
                         "dir": "/src",

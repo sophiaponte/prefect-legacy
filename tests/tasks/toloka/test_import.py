@@ -1,2 +1,2 @@
 def test_import():
-    import prefect.tasks.toloka  # noqa
+    import prefectlegacy.tasks.toloka  # noqa

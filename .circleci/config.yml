@@ -62,12 +62,12 @@ jobs:
           command: python update_changelog.py lint
 
       - run:
-          name: Ensure 'import prefect' is under 1 second
+          name: Ensure 'import prefectlegacy' is under 1 second
           command: |
             apt update && apt install jq bc -y
             # generate pycache
-            python -c 'import prefect'
-            if [[ $(echo "$(profimp 'import prefect'  | jq '.duration' | tee .import-time.txt ) < 1000" | bc -l) -ne 1 ]]; then
+            python -c 'import prefectlegacy'
+            if [[ $(echo "$(profimp 'import prefectlegacy'  | jq '.duration' | tee .import-time.txt ) < 1000" | bc -l) -ne 1 ]]; then
               echo "Prefect import time is too slow"
               cat .import-time.txt
               exit 3

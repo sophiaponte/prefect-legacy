@@ -6,12 +6,12 @@ import textwrap
 import pytest
 import cloudpickle
 
-import prefect
-from prefect import Flow, Task
-from prefect.storage import Docker, Local
-from prefect.exceptions import FlowStorageError
-from prefect.run_configs import DockerRun, UniversalRun
-from prefect.utilities.storage import (
+import prefectlegacy
+from prefectlegacy import Flow, Task
+from prefectlegacy.storage import Docker, Local
+from prefectlegacy.exceptions import FlowStorageError
+from prefectlegacy.run_configs import DockerRun, UniversalRun
+from prefectlegacy.utilities.storage import (
     get_flow_image,
     extract_flow_from_file,
     extract_flow_from_module,
@@ -53,7 +53,7 @@ def test_get_flow_image_raises_on_missing_info():
 class TestExtractFlowFromFile:
     @pytest.fixture
     def flow_path(self, tmpdir):
-        contents = """from prefect import Flow\nf=Flow('flow-1')\nf2=Flow('flow-2')"""
+        contents = """from prefectlegacy import Flow\nf=Flow('flow-1')\nf2=Flow('flow-2')"""
 
         full_path = os.path.join(tmpdir, "flow.py")
 
@@ -65,7 +65,7 @@ class TestExtractFlowFromFile:
     @pytest.fixture
     def flow_path_with_additional_file(self, tmpdir):
         contents = """\
-        from prefect import Flow
+        from prefectlegacy import Flow
         from pathlib import Path
 
         with open(str(Path(__file__).resolve().parent)+"/test.txt", "r") as f:
@@ -134,14 +134,14 @@ class TestExtractFlowFromFile:
 
     @pytest.mark.parametrize("method", ["run", "register"])
     def test_extract_flow_from_file_raises_on_run_register(self, tmpdir, method):
-        contents = f"from prefect import Flow\nf=Flow('test-flow')\nf.{method}()"
+        contents = f"from prefectlegacy import Flow\nf=Flow('test-flow')\nf.{method}()"
 
         full_path = os.path.join(tmpdir, "flow.py")
 
         with open(full_path, "w") as f:
             f.write(contents)
 
-        with prefect.context({"loading_flow": True}):
+        with prefectlegacy.context({"loading_flow": True}):
             with pytest.warns(Warning):
                 extract_flow_from_file(file_path=full_path)
 

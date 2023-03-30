@@ -3,8 +3,8 @@ import datetime
 import pendulum
 import pytest
 
-import prefect
-from prefect.engine.signals import (
+import prefectlegacy
+from prefectlegacy.engine.signals import (
     FAIL,
     LOOP,
     PAUSE,
@@ -16,7 +16,7 @@ from prefect.engine.signals import (
     PrefectStateSignal,
     signal_from_state,
 )
-from prefect.engine.state import (
+from prefectlegacy.engine.state import (
     Failed,
     Looped,
     Paused,
@@ -27,7 +27,7 @@ from prefect.engine.state import (
     TriggerFailed,
     ValidationFailed,
 )
-from prefect.exceptions import PrefectSignal
+from prefectlegacy.exceptions import prefectlegacySignal
 
 
 def test_exceptions_are_displayed_with_messages():
@@ -71,14 +71,14 @@ def test_retry_signals_accept_run_count():
 
 
 def test_retry_signals_take_run_count_from_context():
-    with prefect.context(task_run_count=5):
+    with prefectlegacy.context(task_run_count=5):
         with pytest.raises(PrefectStateSignal) as exc:
             raise RETRY()
     assert exc.value.state.run_count == 5
 
 
 def test_retry_signals_prefer_supplied_run_count_to_context():
-    with prefect.context(task_run_count=5):
+    with prefectlegacy.context(task_run_count=5):
         with pytest.raises(PrefectStateSignal) as exc:
             raise RETRY(run_count=6)
     assert exc.value.state.run_count == 6

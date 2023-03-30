@@ -7,7 +7,7 @@ Very often, workflows require sensitive information to run: API keys, passwords,
 Prefect provides a mechanism called `Secrets` for working with sensitive information.
 
 - `Secret` tasks, which are special tasks that can be used in your flow when working with sensitive information. Unlike regular tasks, `Secret` tasks are designed to access sensitive information at runtime and use a special `SecretResult` to ensure the results are not stored.
-- The `prefect.client.secrets` API, which provides a lower-level interface for working with sensitive information. This API can be used where tasks are unavailable, including notifications, state handlers, and result handlers.
+- The `prefectlegacy.client.secrets` API, which provides a lower-level interface for working with sensitive information. This API can be used where tasks are unavailable, including notifications, state handlers, and result handlers.
 
 The most common case for secrets is to authenticate to third-party systems. For more information on best practices to do so, see our deployment recipe on [Third Party Authentication](../../orchestration/recipes/third_party_auth.md).
 
@@ -19,14 +19,14 @@ Though Prefect takes steps to ensure that `Secret` objects do not reveal sensiti
 
 ### Local Context
 
-The base `Secret` class first checks for secrets in local context, under `prefect.context.secrets`. This is useful for local testing, as secrets can be added to context by setting environment variables matching the configuration syntax `PREFECT__CONTEXT__SECRETS__{SECRETNAME}={SECRETVALUE}`. (Learn more about configuration in our [Configuration concept docs](configuration.md).)
+The base `Secret` class first checks for secrets in local context, under `prefectlegacy.context.secrets`. This is useful for local testing, as secrets can be added to context by setting environment variables matching the configuration syntax `PREFECT__CONTEXT__SECRETS__{SECRETNAME}={SECRETVALUE}`. (Learn more about configuration in our [Configuration concept docs](configuration.md).)
 
 For example, given an environment with the environment variable `PREFECT__CONTEXT__SECRETS__FOO=mypassword`, the value `"mypassword"` could be retrieved by using a `PrefectSecret` task or by using the secrets API directly, as shown below.
 
 :::: tabs
 ::: tab PrefectSecret
 ```python
->>> from prefect.tasks.secrets import PrefectSecret
+>>> from prefectlegacy.tasks.secrets import prefectlegacySecret
 >>> p = PrefectSecret('foo')
 >>> p.run()
 'mypassword'
@@ -34,7 +34,7 @@ For example, given an environment with the environment variable `PREFECT__CONTEX
 :::
 ::: tab Secret API
 ```python
->>> from prefect.client.secrets import Secret
+>>> from prefectlegacy.client.secrets import Secret
 >>> s = Secret("FOO")
 >>> s.get()
 'mypassword'
@@ -47,8 +47,8 @@ For example, given an environment with the environment variable `PREFECT__CONTEX
 The `EnvVarSecret` task class reads secret values directly from environment variables.
 
 ```python
-from prefect import task, Flow
-from prefect.tasks.secrets import EnvVarSecret
+from prefectlegacy import task, Flow
+from prefectlegacy.tasks.secrets import EnvVarSecret
 
 @task
 def print_value(x):
@@ -116,7 +116,7 @@ export PREFECT__CONTEXT__SECRETS__VAULT_CREDENTIALS='{"VAULT_TOKEN": "<token>"}'
 ```
 
 ```python
-from prefect.tasks.secrets.vault_secret import VaultSecret
+from prefectlegacy.tasks.secrets.vault_secret import VaultSecret
 
 secret = VaultSecret("secret/test/path/to/secret").run()
 ```

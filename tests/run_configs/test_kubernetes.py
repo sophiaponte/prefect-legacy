@@ -2,7 +2,7 @@ import sys
 import pytest
 import yaml
 
-from prefect.run_configs import KubernetesRun
+from prefectlegacy.run_configs import KubernetesRun
 
 
 def test_no_args():

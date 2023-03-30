@@ -4,13 +4,13 @@ from unittest.mock import ANY, MagicMock
 
 import pytest
 
-import prefect
-from prefect import context
-from prefect.agent.docker.agent import DockerAgent, _stream_container_logs
-from prefect.run_configs import DockerRun, LocalRun, UniversalRun
-from prefect.storage import Docker, Local
-from prefect.utilities.configuration import set_temporary_config
-from prefect.utilities.graphql import GraphQLResult
+import prefectlegacy
+from prefectlegacy import context
+from prefectlegacy.agent.docker.agent import DockerAgent, _stream_container_logs
+from prefectlegacy.run_configs import DockerRun, LocalRun, UniversalRun
+from prefectlegacy.storage import Docker, Local
+from prefectlegacy.utilities.configuration import set_temporary_config
+from prefectlegacy.utilities.graphql import GraphQLResult
 
 docker = pytest.importorskip("docker")
 
@@ -23,7 +23,7 @@ def api(monkeypatch):
     client.create_host_config.return_value = {"AutoRemove": True}
     client.version.return_value = {"Version": "20.10.0"}  # Our recommend min version
     monkeypatch.setattr(
-        "prefect.agent.docker.agent.DockerAgent._get_docker_client",
+        "prefectlegacy.agent.docker.agent.DockerAgent._get_docker_client",
         MagicMock(return_value=client),
     )
     return client
@@ -47,7 +47,7 @@ def test_docker_agent_init(api):
 def test_docker_agent_config_options(platform, url, monkeypatch, config_with_api_key):
     api = MagicMock()
     monkeypatch.setattr("docker.APIClient", api)
-    monkeypatch.setattr("prefect.agent.docker.agent.platform", platform)
+    monkeypatch.setattr("prefectlegacy.agent.docker.agent.platform", platform)
 
     agent = DockerAgent(name="test")
     assert agent.name == "test"
@@ -121,7 +121,7 @@ def test_populate_env_vars(api, backend):
     if backend == "server":
         cloud_api = "http://host.docker.internal:4200"
     else:
-        cloud_api = prefect.config.cloud.api
+        cloud_api = prefectlegacy.config.cloud.api
 
     expected_vars = {
         "PREFECT__BACKEND": backend,
@@ -137,7 +137,7 @@ def test_populate_env_vars(api, backend):
         "PREFECT__CLOUD__SEND_FLOW_RUN_LOGS": "true",
         "PREFECT__LOGGING__LOG_TO_CLOUD": "true",
         "PREFECT__LOGGING__LEVEL": "INFO",
-        "PREFECT__ENGINE__FLOW_RUNNER__DEFAULT_CLASS": "prefect.engine.cloud.CloudFlowRunner",
+        "PREFECT__ENGINE__FLOW_RUNNER__DEFAULT_CLASS": "prefectlegacy.engine.cloud.CloudFlowRunner",
     }
 
     assert env_vars == expected_vars
@@ -179,7 +179,7 @@ def test_environment_has_api_key_from_disk(api, monkeypatch):
     tenant_id = str(uuid.uuid4())
 
     monkeypatch.setattr(
-        "prefect.Client.load_auth_from_disk",
+        "prefectlegacy.Client.load_auth_from_disk",
         MagicMock(
             return_value={
                 "api_key": "TEST_KEY",
@@ -307,7 +307,7 @@ def test_api_url_uses_server_network(api, backend):
     if backend == "server":
         assert env_vars["PREFECT__CLOUD__API"] == "http://apollo:4200"
     else:
-        assert env_vars["PREFECT__CLOUD__API"] == "https://api.prefect.io"
+        assert env_vars["PREFECT__CLOUD__API"] == "https://api.prefectlegacy.io"
 
 
 @pytest.mark.parametrize(
@@ -384,9 +384,9 @@ def test_docker_agent_deploy_flow(core_version, command, api):
     assert api.create_container.call_args[1]["command"] == command
     assert api.create_container.call_args[1]["host_config"]["AutoRemove"] is True
     assert api.create_container.call_args[1]["labels"] == {
-        "io.prefect.flow-id": "foo",
-        "io.prefect.flow-name": "flow-name",
-        "io.prefect.flow-run-id": "id",
+        "io.prefectlegacy.flow-id": "foo",
+        "io.prefectlegacy.flow-name": "flow-name",
+        "io.prefectlegacy.flow-run-id": "id",
     }
     assert api.start.call_args[1]["container"] == "container_id"
 
@@ -742,7 +742,7 @@ def test_docker_agent_deploy_flow_show_flow_logs(api, monkeypatch):
 
 
 def test_docker_agent_shutdown_terminates_child_processes(monkeypatch, api):
-    monkeypatch.setattr("prefect.agent.agent.Client", MagicMock())
+    monkeypatch.setattr("prefectlegacy.agent.agent.Client", MagicMock())
 
     proc = MagicMock(is_alive=MagicMock(return_value=True))
     agent = DockerAgent(show_flow_logs=True)
@@ -840,7 +840,7 @@ def test_docker_agent_init_volume_empty_options(api):
     ],
 )
 def test_docker_agent_is_named_volume_unix(monkeypatch, api, path, result):
-    monkeypatch.setattr("prefect.agent.docker.agent.platform", "osx")
+    monkeypatch.setattr("prefectlegacy.agent.docker.agent.platform", "osx")
 
     agent = DockerAgent()
 
@@ -858,7 +858,7 @@ def test_docker_agent_is_named_volume_unix(monkeypatch, api, path, result):
     ],
 )
 def test_docker_agent_is_named_volume_win32(monkeypatch, api, path, result):
-    monkeypatch.setattr("prefect.agent.docker.agent.platform", "win32")
+    monkeypatch.setattr("prefectlegacy.agent.docker.agent.platform", "win32")
 
     agent = DockerAgent()
 

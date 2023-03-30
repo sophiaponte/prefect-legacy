@@ -3,7 +3,7 @@
 Parameters are special tasks that can receive user inputs whenever a flow is run. Setting a default is optional. 
 
 ```python
-from prefect import task, Flow, Parameter
+from prefectlegacy import task, Flow, Parameter
 
 @task
 def print_plus_one(x):

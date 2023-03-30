@@ -23,7 +23,7 @@ Don't worry about passing large data objects between tasks. As long as it fits i
 :::
 
 ```python
-from prefect import task
+from prefectlegacy import task
 
 @task
 def extract():
@@ -50,7 +50,7 @@ It may look like we're calling our ETL functions, but nothing is actually being 
 :::
 
 ```python
-from prefect import Flow
+from prefectlegacy import Flow
 
 with Flow('ETL') as flow:
     e = extract()
@@ -71,7 +71,7 @@ We love Prefect's **functional API**, but some users might prefer a more explici
 Here's an identical Flow, built with the imperative API:
 
 ```python
-from prefect import Flow
+from prefectlegacy import Flow
 
 flow = Flow('ETL')
 flow.set_dependencies(transform, keyword_tasks=dict(data=extract))

@@ -1,7 +1,7 @@
 from click.testing import CliRunner
 
-from prefect.cli.create import create
-from prefect.utilities.configuration import set_temporary_config
+from prefectlegacy.cli.create import create
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 def test_create_init():

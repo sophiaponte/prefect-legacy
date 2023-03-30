@@ -16,7 +16,7 @@ Now that our Aircraft ETL flow is trustworthy enough, we want to be able to run 
 
 ```python{1,2,6,11}
 from datetime import timedelta, datetime
-from prefect.schedules import IntervalSchedule
+from prefectlegacy.schedules import IntervalSchedule
 
 # ... task definitions ...
 

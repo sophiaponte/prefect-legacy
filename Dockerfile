@@ -12,11 +12,11 @@ ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 
 # Image Labels
-LABEL maintainer="help@prefect.io"
-LABEL io.prefect.python-version=${PYTHON_VERSION}
+LABEL maintainer="help@prefectlegacy.io"
+LABEL io.prefectlegacy.python-version=${PYTHON_VERSION}
 LABEL org.label-schema.schema-version = "1.0"
 LABEL org.label-schema.name="prefect"
-LABEL org.label-schema.url="https://www.prefect.io/"
+LABEL org.label-schema.url="https://www.prefectlegacy.io/"
 LABEL org.label-schema.version=${PREFECT_VERSION}
 LABEL org.label-schema.vcs-ref=${GIT_SHA}
 LABEL org.label-schema.build-date=${BUILD_DATE}
@@ -25,7 +25,7 @@ RUN apt update && \
     apt install -y gcc git tini build-essential libffi-dev && \
     mkdir /root/.prefect/ && \
     pip install "pip==20.2.4" && \
-    pip install --no-cache-dir git+https://github.com/PrefectHQ/prefect.git@${PREFECT_VERSION}#egg=prefect[${EXTRAS}] && \
+    pip install --no-cache-dir git+https://github.com/PrefectHQ/prefectlegacy.git@${PREFECT_VERSION}#egg=prefect[${EXTRAS}] && \
     apt remove -y git && \
     apt clean && apt autoremove -y && \
     rm -rf /var/lib/apt/lists/*

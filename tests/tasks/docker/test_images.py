@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 import docker
 import pytest
 
-from prefect.tasks.docker import (
+from prefectlegacy.tasks.docker import (
     BuildImage,
     ListImages,
     PullImage,

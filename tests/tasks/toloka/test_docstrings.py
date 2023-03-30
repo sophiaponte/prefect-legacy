@@ -1,8 +1,8 @@
 import inspect
 import pytest
 import re
-from prefect.core import Task
-from prefect.tasks.toloka import operations as tlk
+from prefectlegacy.core import Task
+from prefectlegacy.tasks.toloka import operations as tlk
 
 
 TASKS = {

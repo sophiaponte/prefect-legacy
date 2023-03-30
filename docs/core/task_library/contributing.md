@@ -40,8 +40,8 @@ with Flow("shell_commands") as flow:
 This snippet below is the general structure of a task contained in the task library.
 
 ```python
-from prefect import Task
-from prefect.utilities.tasks import defaults_from_attrs
+from prefectlegacy import Task
+from prefectlegacy.utilities.tasks import defaults_from_attrs
 
 class YourTask(Task):
     """
@@ -82,7 +82,7 @@ and is not set again at runtime then the value set at initialization will be use
 runtime value. However, values set at runtime will always override those set during initialization.
 
 For more examples of how the other tasks in the task library look check out the directory
-containing all of the [task library code](https://github.com/PrefectHQ/prefect/tree/master/src/prefect/tasks).
+containing all of the [task library code](https://github.com/PrefectHQ/prefect/tree/master/src/prefectlegacy/tasks).
 
 For more information on contributing to the Prefect library as whole check out the
 [development documentation](/core/development/overview.html).
@@ -113,9 +113,9 @@ class YourTask(Task):
 This allows users of the task to use Prefect Secrets to securely pass sensitive information to the task using whatever secret storage mechanism they prefer:
 
 ```python
-from prefect import Flow
-from prefect.tasks.secrets import PrefectSecret
-from prefect.tasks.your_framework import YourTask
+from prefectlegacy import Flow
+from prefectlegacy.tasks.secrets import prefectlegacySecret
+from prefectlegacy.tasks.your_framework import YourTask
 
 your_task = YourTask(your_kwarg="init kwarg")
 
@@ -141,7 +141,7 @@ out the [tasks testing directory](https://github.com/PrefectHQ/prefect/tree/mast
 Tasks in the task library follow Prefect's standard documentation practices as outlined in the development
 [page on Documentation](/core/development/documentation.html). This means that kwargs in the task's
 `__init__` and `run` function must be documented in the docstring. Check out any of the other
-[tasks in the task library](https://github.com/PrefectHQ/prefect/tree/master/src/prefect/tasks) as a
+[tasks in the task library](https://github.com/PrefectHQ/prefect/tree/master/src/prefectlegacy/tasks) as a
 point of reference!
 
 In order for new tasks to appear in the API documentation they need to be added to the
@@ -151,6 +151,6 @@ directory:
 ```toml
 [pages.tasks.your_task]
 title = "Your Task"
-module = "prefect.tasks.your_task"
+module = "prefectlegacy.tasks.your_task"
 classes = ["YourTask"]
 ```

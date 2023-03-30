@@ -1,7 +1,7 @@
 import pytest
 
-from prefect import Flow, context
-from prefect.tasks.templates import StringFormatter
+from prefectlegacy import Flow, context
+from prefectlegacy.tasks.templates import StringFormatter
 
 
 def test_string_formatter_simply_formats():

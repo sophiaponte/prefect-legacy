@@ -4,7 +4,7 @@ from datetime import timedelta
 import pendulum
 import pytest
 
-from prefect.engine.cache_validators import (
+from prefectlegacy.engine.cache_validators import (
     all_inputs,
     all_parameters,
     duration_only,
@@ -12,8 +12,8 @@ from prefect.engine.cache_validators import (
     partial_inputs_only,
     partial_parameters_only,
 )
-from prefect.engine.result import Result
-from prefect.engine.state import Cached
+from prefectlegacy.engine.result import Result
+from prefectlegacy.engine.state import Cached
 
 all_validators = [all_inputs, all_parameters, never_use, duration_only]
 stateful_validators = [partial_inputs_only, partial_parameters_only]

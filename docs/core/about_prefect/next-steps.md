@@ -7,7 +7,7 @@ sidebarDepth: 0
 In the [introduction](thinking-prefectly.md), we took a look at creating tasks and combining them into flows. Prefect's functional and imperative APIs make that easy, but the result was a fairly vanilla data pipeline. In this section, we're going to explore how Prefect enables advanced mechanisms for overlaying complex business logic on your workflow.
 
 
-You can also check out our [full tutorial](/core/tutorial/01-etl-before-prefect.html) on building real-world data applications.
+You can also check out our [full tutorial](/core/tutorial/01-etl-before-prefectlegacy.html) on building real-world data applications.
 
 
 ## Triggers
@@ -21,7 +21,7 @@ Prefect introduces a concept called [`triggers`](../concepts/execution.html#trig
 Let's set up our Spark cluster flow, using obvious pseudocode where appropriate:
 
 ```python
-from prefect import task, Flow
+from prefectlegacy import task, Flow
 
 @task
 def create_cluster():
@@ -53,7 +53,7 @@ When we run this flow, everything will work perfectly as long as the Spark job r
 To fix this, we simply adjust the trigger when defining the task. In this case we can use the `always_run` trigger, which is an alias for `all_finished`:
 
 ```python
-@task(trigger=prefect.triggers.always_run)  # one new line
+@task(trigger=prefectlegacy.triggers.always_run)  # one new line
 def tear_down_cluster(cluster):
     tear_down(cluster)
 ```
@@ -99,7 +99,7 @@ When a task is skipped, it's usually treated as if it ran successfully. This is 
 To raise a signal, simply use it inside your task's run() function:
 
 ```python
-from prefect.engine import signals
+from prefectlegacy.engine import signals
 
 @task
 def signal_task(message):

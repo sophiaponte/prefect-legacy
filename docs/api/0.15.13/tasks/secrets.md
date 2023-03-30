@@ -10,7 +10,7 @@ The base implementation uses Prefect Cloud secrets, but users are encouraged to 
 class for interacting with other secret providers. Secrets always use a special kind of result handler that
 prevents the persistence of sensitive information.
  ## SecretBase
- <div class='class-sig' id='prefect-tasks-secrets-base-secretbase'><p class="prefect-sig">class </p><p class="prefect-class">prefect.tasks.secrets.base.SecretBase</p>(**kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/tasks/secrets/base.py#L6">[source]</a></span></div>
+ <div class='class-sig' id='prefect-tasks-secrets-base-secretbase'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.tasks.secrets.base.SecretBase</p>(**kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/tasks/secrets/base.py#L6">[source]</a></span></div>
 
 Base Secrets Task.  This task does not perform any action but rather serves as the base task class which should be inherited from when writing new Secret Tasks.
 
@@ -23,7 +23,7 @@ Users should subclass this Task and override its `run` method for plugging into 
 <br>
 
  ## PrefectSecret
- <div class='class-sig' id='prefect-tasks-secrets-base-prefectsecret'><p class="prefect-sig">class </p><p class="prefect-class">prefect.tasks.secrets.base.PrefectSecret</p>(name=None, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/tasks/secrets/base.py#L30">[source]</a></span></div>
+ <div class='class-sig' id='prefect-tasks-secrets-base-prefectsecret'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.tasks.secrets.base.PrefectSecret</p>(name=None, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/tasks/secrets/base.py#L30">[source]</a></span></div>
 
 Prefect Secrets Task.  This task retrieves the underlying secret through the Prefect Secrets API (which has the ability to toggle between local vs. Cloud secrets).
 
@@ -31,14 +31,14 @@ Prefect Secrets Task.  This task retrieves the underlying secret through the Pre
 
 |methods: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |:----|
- | <div class='method-sig' id='prefect-tasks-secrets-base-prefectsecret-run'><p class="prefect-class">prefect.tasks.secrets.base.PrefectSecret.run</p>(name=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/tasks/secrets/base.py#L47">[source]</a></span></div>
+ | <div class='method-sig' id='prefect-tasks-secrets-base-prefectsecret-run'><p class="prefect-class">prefectlegacy.tasks.secrets.base.PrefectSecret.run</p>(name=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/tasks/secrets/base.py#L47">[source]</a></span></div>
 <p class="methods">The run method for Secret Tasks.  This method actually retrieves and returns the underlying secret value using the `Secret.get()` method.  Note that this method first checks context for the secret value, and if not found either raises an error or queries Prefect Cloud, depending on whether `config.cloud.use_local_secrets` is `True` or `False`.<br><br>**Args**:     <ul class="args"><li class="args">`name (str, optional)`: the name of the underlying Secret to retrieve. Defaults         to the name provided at initialization.</li></ul> **Returns**:     <ul class="args"><li class="args">`Any`: the underlying value of the Prefect Secret</li></ul></p>|
 
 ---
 <br>
 
  ## EnvVarSecret
- <div class='class-sig' id='prefect-tasks-secrets-env-var-envvarsecret'><p class="prefect-sig">class </p><p class="prefect-class">prefect.tasks.secrets.env_var.EnvVarSecret</p>(name=None, cast=None, raise_if_missing=False, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/tasks/secrets/env_var.py#L7">[source]</a></span></div>
+ <div class='class-sig' id='prefect-tasks-secrets-env-var-envvarsecret'><p class="prefect-sig">class </p><p class="prefect-class">prefectlegacy.tasks.secrets.env_var.EnvVarSecret</p>(name=None, cast=None, raise_if_missing=False, **kwargs)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/tasks/secrets/env_var.py#L7">[source]</a></span></div>
 
 A `Secret` task that retrieves a value from an environment variable.
 
@@ -46,7 +46,7 @@ A `Secret` task that retrieves a value from an environment variable.
 
 |methods: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |:----|
- | <div class='method-sig' id='prefect-tasks-secrets-env-var-envvarsecret-run'><p class="prefect-class">prefect.tasks.secrets.env_var.EnvVarSecret.run</p>(name=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefect/tasks/secrets/env_var.py#L31">[source]</a></span></div>
+ | <div class='method-sig' id='prefect-tasks-secrets-env-var-envvarsecret-run'><p class="prefect-class">prefectlegacy.tasks.secrets.env_var.EnvVarSecret.run</p>(name=None)<span class="source"><a href="https://github.com/PrefectHQ/prefect/blob/master/src/prefectlegacy/tasks/secrets/env_var.py#L31">[source]</a></span></div>
 <p class="methods">Returns the value of an environment variable after applying an optional `cast` function.<br><br>**Args**:     <ul class="args"><li class="args">`name (str, optional)`: the name of the underlying environment variable to         retrieve. Defaults to the name provided at initialization.</li></ul> **Returns**:     <ul class="args"><li class="args">`Any`: the (optionally type-cast) value of the environment variable</li></ul> **Raises**:     <ul class="args"><li class="args">`ValueError`: if `raise_is_missing` is `True` and the environment variable was not found</li></ul></p>|
 
 ---

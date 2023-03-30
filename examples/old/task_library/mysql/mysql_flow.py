@@ -1,5 +1,5 @@
-from prefect.tasks.mysql.mysql import MySQLFetch, MySQLExecute
-from prefect import Flow, task
+from prefectlegacy.tasks.mysql.mysql import MySQLFetch, MySQLExecute
+from prefectlegacy import Flow, task
 
 EXAMPLE_TABLE = "user"
 HOST = "localhost"

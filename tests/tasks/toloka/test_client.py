@@ -1,10 +1,10 @@
 import inspect
 import re
 
-import prefect
+import prefectlegacy
 import pytest
 import responses
-from prefect.tasks.toloka.utils import (
+from prefectlegacy.tasks.toloka.utils import (
     DEFAULT_TOLOKA_ENV,
     DEFAULT_TOLOKA_SECRET_NAME,
     with_toloka_client,
@@ -25,7 +25,7 @@ def secrets_mock():
         DEFAULT_TOLOKA_SECRET_NAME: DEFAULT_TOKEN,
         OTHER_SECRET_NAME: OTHER_TOKEN,
     }
-    with prefect.context(secrets=secrets):
+    with prefectlegacy.context(secrets=secrets):
         yield
 
 

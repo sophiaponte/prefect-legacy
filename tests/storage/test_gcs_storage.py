@@ -3,9 +3,9 @@ from unittest.mock import MagicMock, patch, call
 
 import pytest
 
-from prefect import Flow
-from prefect.storage import GCS
-from prefect.utilities.storage import flow_to_bytes_pickle, flow_from_bytes_pickle
+from prefectlegacy import Flow
+from prefectlegacy.storage import GCS
+from prefectlegacy.utilities.storage import flow_to_bytes_pickle, flow_from_bytes_pickle
 
 
 class TestGCSStorage:
@@ -18,10 +18,10 @@ class TestGCSStorage:
                 "google.oauth2.service_account": MagicMock(),
             },
         ):
-            from prefect.utilities.gcp import get_storage_client  # noqa
+            from prefectlegacy.utilities.gcp import get_storage_client  # noqa
 
             client_util = MagicMock()
-            monkeypatch.setattr("prefect.utilities.gcp.get_storage_client", client_util)
+            monkeypatch.setattr("prefectlegacy.utilities.gcp.get_storage_client", client_util)
             yield client_util
 
     def test_create_gcs_storage(self):
@@ -110,7 +110,7 @@ class TestGCSStorage:
         f2 = Flow("flow-2")
         flow_content = textwrap.dedent(
             """
-            from prefect import Flow
+            from prefectlegacy import Flow
             f1 = Flow('flow-1')
             f2 = Flow('flow-2')
             """

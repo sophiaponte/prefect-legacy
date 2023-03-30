@@ -5,7 +5,7 @@ pytest.importorskip("boto3")
 from unittest.mock import MagicMock
 
 from botocore.waiter import WaiterModel
-from prefect.tasks.aws import AWSClientWait
+from prefectlegacy.tasks.aws import AWSClientWait
 
 
 TEST_WAITERS = {
@@ -38,7 +38,7 @@ TEST_WAITERS = {
 def boto_client(monkeypatch):
     boto_client = MagicMock()
     boto3 = MagicMock(client=MagicMock(return_value=boto_client))
-    monkeypatch.setattr("prefect.utilities.aws.boto3", boto3)
+    monkeypatch.setattr("prefectlegacy.utilities.aws.boto3", boto3)
     yield boto_client
 
 
@@ -55,7 +55,7 @@ def test_required_args():
 def test_waiter_custom_definition(monkeypatch, boto_client):
     waiter = MagicMock()
     monkeypatch.setattr(
-        "prefect.tasks.aws.client_waiter.create_waiter_with_client",
+        "prefectlegacy.tasks.aws.client_waiter.create_waiter_with_client",
         MagicMock(return_value=waiter),
     )
     batch_wait_task = AWSClientWait(client="batch", waiter_definition=TEST_WAITERS)
@@ -101,7 +101,7 @@ def test_prefect_batch_waiters_success(monkeypatch, boto_client):
     batch_wait_task = AWSClientWait(client="batch")
     create_waiter_mock = MagicMock()
     monkeypatch.setattr(
-        "prefect.tasks.aws.client_waiter.create_waiter_with_client", create_waiter_mock
+        "prefectlegacy.tasks.aws.client_waiter.create_waiter_with_client", create_waiter_mock
     )
 
     for i, waiter_name in enumerate(["JobExists", "JobComplete", "JobRunning"]):

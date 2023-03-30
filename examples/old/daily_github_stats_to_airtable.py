@@ -6,11 +6,11 @@ import datetime
 
 import pendulum
 
-from prefect import Flow, task
-from prefect.schedules import CronSchedule
-from prefect.tasks.airtable import WriteAirtableRow
-from prefect.tasks.github import GetRepoInfo
-from prefect.triggers import any_failed
+from prefectlegacy import Flow, task
+from prefectlegacy.schedules import CronSchedule
+from prefectlegacy.tasks.airtable import WriteAirtableRow
+from prefectlegacy.tasks.github import GetRepoInfo
+from prefectlegacy.triggers import any_failed
 
 repo_stats = GetRepoInfo(
     name="Pull star counts",

@@ -1,5 +1,5 @@
-from prefect.tasks.databricks import DatabricksGetJobID, DatabricksRunNow
-from prefect.tasks.databricks.databricks_hook import DatabricksHook
+from prefectlegacy.tasks.databricks import DatabricksGetJobID, DatabricksRunNow
+from prefectlegacy.tasks.databricks.databricks_hook import DatabricksHook
 
 
 class DatabricksHookTestOverride(DatabricksHook):

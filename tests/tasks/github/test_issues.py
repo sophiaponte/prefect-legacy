@@ -1,8 +1,8 @@
 import pytest
 
-import prefect
-from prefect.tasks.github import OpenGitHubIssue
-from prefect.utilities.configuration import set_temporary_config
+import prefectlegacy
+from prefectlegacy.tasks.github import OpenGitHubIssue
+from prefectlegacy.utilities.configuration import set_temporary_config
 
 
 class TestOpenGithubIssueInitialization:

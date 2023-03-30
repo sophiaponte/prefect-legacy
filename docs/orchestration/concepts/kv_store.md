@@ -10,7 +10,7 @@ Key value pairs can be configured via the Prefect CLI, Python library, API, and 
 
 ## UI
 
-You can view, update, and delete key value pairs on the [KV Store page](https://cloud.prefect.io/team/kv) of the UI.  
+You can view, update, and delete key value pairs on the [KV Store page](https://cloud.prefectlegacy.io/team/kv) of the UI.  
 
 ## Setting key value pairs
 
@@ -19,7 +19,7 @@ Setting a key value pair will overwrite the existing value if the key exists.
 :::: tabs
 ::: tab Python client
 ```python
-from prefect.backend import set_key_value
+from prefectlegacy.backend import set_key_value
 key_value_uuid = set_key_value(key="foo", value="bar")
 ```
 :::
@@ -45,7 +45,7 @@ mutation {
 :::: tabs
 ::: tab Python client
 ```python
-from prefect.backend import get_key_value
+from prefectlegacy.backend import get_key_value
 value = get_key_value(key="foo")
 ```
 :::
@@ -71,7 +71,7 @@ query {
 :::: tabs
 ::: tab Python client
 ```python
-from prefect.backend import delete_key
+from prefectlegacy.backend import delete_key
 success = delete_key(key="foo")
 ```
 :::
@@ -97,7 +97,7 @@ mutation {
 :::: tabs
 ::: tab Python client
 ```python
-from prefect.backend import list_keys
+from prefectlegacy.backend import list_keys
 my_keys = list_keys()
 ```
 :::
@@ -130,9 +130,9 @@ For example, let's say we wanted to track the last date a flow has been executed
 
 ```python
 from datetime import datetime, timedelta
-import prefect
-from prefect import task, Flow
-from prefect.backend import set_key_value, get_key_value
+import prefectlegacy
+from prefectlegacy import task, Flow
+from prefectlegacy.backend import set_key_value, get_key_value
 
 LAST_EXECUTED_KEY = 'my-flow-last-executed'
 
@@ -143,7 +143,7 @@ def get_last_execution_date():
 
 @task
 def run_etl(start_date):
-    logger = prefect.context.get("logger")
+    logger = prefectlegacy.context.get("logger")
     while start_date <= datetime.today():
         logger.info(f"Running ETL for date {start_date.strftime('%Y-%m-%d')}")
         # do some etl

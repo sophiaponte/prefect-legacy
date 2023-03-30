@@ -180,8 +180,8 @@ Released on April 5, 2021.
 ### Enhancements
 
 - Add terminal flow state handler override  - [#4198](https://github.com/PrefectHQ/prefect/issues/4198)
-- When manually set, `prefect.context.date` will be used to determine dependent values - [#4295](https://github.com/PrefectHQ/prefect/pull/4295)
-- `prefect.context.date` will be cast to a `DateTime` object if given a parsable string - [#4295](https://github.com/PrefectHQ/prefect/pull/4295)
+- When manually set, `prefectlegacy.context.date` will be used to determine dependent values - [#4295](https://github.com/PrefectHQ/prefect/pull/4295)
+- `prefectlegacy.context.date` will be cast to a `DateTime` object if given a parsable string - [#4295](https://github.com/PrefectHQ/prefect/pull/4295)
 - Expand logging for `DaskExecutor`, including the cluster dashboard address (if available) - [#4321](https://github.com/PrefectHQ/prefect/pull/4321)
 - Add ability to stream ShellTask logs with level INFO - [#4322](https://github.com/PrefectHQ/prefect/pull/4322)
 - Add architecture diagram to docs - [#4187](https://github.com/PrefectHQ/prefect/issues/4187)
@@ -245,7 +245,7 @@ Released on March 24, 2021.
 
 ### Fixes
 
-- Fix bug where sometimes the global `prefect.context` wouldn't be respected during a flow run - [#4287](https://github.com/PrefectHQ/prefect/pull/4287)
+- Fix bug where sometimes the global `prefectlegacy.context` wouldn't be respected during a flow run - [#4287](https://github.com/PrefectHQ/prefect/pull/4287)
 
 ### Deprecations
 
@@ -405,7 +405,7 @@ Released on February 10, 2021.
 ### Breaking Changes
 
 - Remove unused `Storage.get_env_runner` method - [#4059](https://github.com/PrefectHQ/prefect/pull/4059)
-- Remove private utilities in `prefect.utilities.git` - [#4059](https://github.com/PrefectHQ/prefect/pull/4059)
+- Remove private utilities in `prefectlegacy.utilities.git` - [#4059](https://github.com/PrefectHQ/prefect/pull/4059)
 
 ### Contributors
 
@@ -538,7 +538,7 @@ Released on January 6, 2021.
 - Remove unused `description` field on `Task` serializer - [#3917](https://github.com/PrefectHQ/prefect/pull/3917)
 - Fix edge case in `apply_map` that resulted in cycles in the `Flow` graph - [#3920](https://github.com/PrefectHQ/prefect/pull/3920)
 - Support storing multiple local flows with the same name when using `Local` storage - [#3923](https://github.com/PrefectHQ/prefect/pull/3923)
-- Fix bug in `prefect.context` contextmanager that resulted in context fields reverting to their initially configured values - [#3924](https://github.com/PrefectHQ/prefect/pull/3924)
+- Fix bug in `prefectlegacy.context` contextmanager that resulted in context fields reverting to their initially configured values - [#3924](https://github.com/PrefectHQ/prefect/pull/3924)
 
 ### Contributors
 
@@ -568,7 +568,7 @@ Released on December 16, 2020.
 
 ### Features
 
-- New flow run configuration system based on `RunConfig` types, see [here](https://docs.prefect.io/orchestration/flow_config/overview.html) for more info
+- New flow run configuration system based on `RunConfig` types, see [here](https://docs.prefectlegacy.io/orchestration/flow_config/overview.html) for more info
 
 ### Enhancements
 
@@ -599,8 +599,8 @@ Released on December 16, 2020.
 
 ### Deprecations
 
-- Storage classes have been moved from `prefect.environments.storage` to `prefect.storage`, the old import paths have been deprecated accordingly - [#3796](https://github.com/PrefectHQ/prefect/pull/3796)
-- Executor classes have been moved from `prefect.engine.executors` to `prefect.executors`, the old import paths have been deprecated accordingly - [#3798](https://github.com/PrefectHQ/prefect/pull/3798)
+- Storage classes have been moved from `prefectlegacy.environments.storage` to `prefectlegacy.storage`, the old import paths have been deprecated accordingly - [#3796](https://github.com/PrefectHQ/prefect/pull/3796)
+- Executor classes have been moved from `prefectlegacy.engine.executors` to `prefectlegacy.executors`, the old import paths have been deprecated accordingly - [#3798](https://github.com/PrefectHQ/prefect/pull/3798)
 - Deprecated use of `storage_labels` boolean kwarg on local agent - [#3800](https://github.com/PrefectHQ/prefect/pull/3800)
 - Deprecated use of `--storage-labels` option from agent `start` CLI command - [#3800](https://github.com/PrefectHQ/prefect/pull/3800)
 - Deprecates all `Environment` classes - users should transition to setting `flow.run_config` instead of `flow.environment` - [#3811](https://github.com/PrefectHQ/prefect/pull/3811)
@@ -616,7 +616,7 @@ Released on December 16, 2020.
 - Remove deprecated `prefect execute cloud-flow` CLI command - [#3803](https://github.com/PrefectHQ/prefect/pull/3803)
 - Stop building the `prefecthq/prefect:all_extras` image and switch flow deployment default to using `prefecthq/prefect:{core_version}` - [#3804](https://github.com/PrefectHQ/prefect/pull/3804)
 - Flows now use `RunConfig` based deployments by default - legacy `Environment` based deployments are now opt-in only - [#3806](https://github.com/PrefectHQ/prefect/pull/3806)
-- Remove deprecated `prefect.contrib` module - [#3813](https://github.com/PrefectHQ/prefect/pull/3813)
+- Remove deprecated `prefectlegacy.contrib` module - [#3813](https://github.com/PrefectHQ/prefect/pull/3813)
 - Remove all references to result handlers and safe results - [#3838](https://github.com/PrefectHQ/prefect/pull/3838)
 - Remove option to enable deprecated Kubernetes resource manager in agent install CLI command - [#3840](https://github.com/PrefectHQ/prefect/pull/3840)
 
@@ -638,7 +638,7 @@ Released on December 8, 2020.
 - Surface pod failures and container errors in jobs deployed with the Kubernetes Agent - [3747](https://github.com/PrefectHQ/prefect/issues/3747)
 - Support timeout option in GCS tasks - [#3732](https://github.com/PrefectHQ/prefect/pull/3732)
 - Added storage option for AWS CodeCommit - [#3733](https://github.com/PrefectHQ/prefect/pull/3733)
-- Add the image used for a flow-run to the flow run environment as `prefect.context.image` - [#3746](https://github.com/PrefectHQ/prefect/pull/3746)
+- Add the image used for a flow-run to the flow run environment as `prefectlegacy.context.image` - [#3746](https://github.com/PrefectHQ/prefect/pull/3746)
 - Add `UniversalRun` run-config that works with all agents - [#3750](https://github.com/PrefectHQ/prefect/pull/3750)
 - Support flows that have no run-config or environment - [#3750](https://github.com/PrefectHQ/prefect/pull/3750)
 - Allow Docker storage environment vars to be used in commands - [#3755](https://github.com/PrefectHQ/prefect/pull/3755)
@@ -811,7 +811,7 @@ Released on November 5, 2020.
 - Display exception information on `prefect create project` failure - [#3589](https://github.com/PrefectHQ/prefect/pull/3589)
 - `prefect diagnostics` no longer displays keys that have values matching the default config - [#3593](https://github.com/PrefectHQ/prefect/pull/3593)
 - Allow use of multiple image pull secrets in `KubernetesAgent`, `DaskKubernetesEnvironment` - [#3596](https://github.com/PrefectHQ/prefect/pull/3596)
-- Added FROM to explicitly chain exceptions in src/prefect/tasks/twitter - [#3602](https://github.com/PrefectHQ/prefect/pull/3602)
+- Added FROM to explicitly chain exceptions in src/prefectlegacy/tasks/twitter - [#3602](https://github.com/PrefectHQ/prefect/pull/3602)
 - Add UTC offset to default logging.datefmt; logging timestamp converter now follows Python default behavior  - [#3607](https://github.com/PrefectHQ/prefect/pull/3607)
 - Improve error message when API responds with 400 status code - [#3615](https://github.com/PrefectHQ/prefect/pull/3615)
 
@@ -959,7 +959,7 @@ Released on October 6, 2020.
 - Add `flow.run_config`, an *experimental* design for configuring deployed flows - [#3333](https://github.com/PrefectHQ/prefect/pull/3333)
 - Allow python path in Local storage - [#3351](https://github.com/PrefectHQ/prefect/pull/3351)
 - Enable agent registration for server users - [#3385](https://github.com/PrefectHQ/prefect/pull/3385)
-- Added FROM to explicitly chain exceptions in src/prefect/utilities - [#3429](https://github.com/PrefectHQ/prefect/pull/3429)
+- Added FROM to explicitly chain exceptions in src/prefectlegacy/utilities - [#3429](https://github.com/PrefectHQ/prefect/pull/3429)
 
 ### Task Library
 
@@ -1027,14 +1027,14 @@ Released on September 22, 2020.
 
 - Fix issue with constants when copying Flows - [#3319](https://github.com/PrefectHQ/prefect/issues/3319)
 - Fix `DockerAgent` with `--show-flow-logs` to work on windows/osx (with python >= 3.8) - [#3339](https://github.com/PrefectHQ/prefect/pull/3339)
-- Fix mypy type checking for tasks created with `prefect.task` - [#3346](https://github.com/PrefectHQ/prefect/pull/3346)
+- Fix mypy type checking for tasks created with `prefectlegacy.task` - [#3346](https://github.com/PrefectHQ/prefect/pull/3346)
 - Fix bug in `flow.visualize()` where no output would be generated when running with `PYTHONOPTIMIZE=1` - [#3352](https://github.com/PrefectHQ/prefect/pull/3352)
 - Fix typo in `DaskCloudProviderEnvironment` logs - [#3354](https://github.com/PrefectHQ/prefect/pull/3354)
 
 ### Deprecations
 
 - Deprecate the use of the `/contrib` directory - [#3360](https://github.com/PrefectHQ/prefect/pull/3360)
-- Deprecate importing `Databricks` and `MySQL` tasks from `prefect.contrib.tasks`, should use `prefect.tasks` instead - [#3360](https://github.com/PrefectHQ/prefect/pull/3360)
+- Deprecate importing `Databricks` and `MySQL` tasks from `prefectlegacy.contrib.tasks`, should use `prefectlegacy.tasks` instead - [#3360](https://github.com/PrefectHQ/prefect/pull/3360)
 
 ### Contributors
 
@@ -1303,7 +1303,7 @@ Released on July 28, 2020.
 
 ### Deprecations
 
-- `prefect.utilities.tasks.unmapped` moved to `prefect.utilities.edges.unmapped` - [#2898](https://github.com/PrefectHQ/prefect/pull/2898)
+- `prefectlegacy.utilities.tasks.unmapped` moved to `prefectlegacy.utilities.edges.unmapped` - [#2898](https://github.com/PrefectHQ/prefect/pull/2898)
 
 ### Breaking Changes
 
@@ -1579,7 +1579,7 @@ Released on June 17, 2020.
 
 ### Deprecations
 
-- Accessing `prefect.core.task.Parameter` is deprecated in favor of `prefect.core.parameter.Parameter` - [#2758](https://github.com/PrefectHQ/prefect/pull/2758)
+- Accessing `prefectlegacy.core.task.Parameter` is deprecated in favor of `prefectlegacy.core.parameter.Parameter` - [#2758](https://github.com/PrefectHQ/prefect/pull/2758)
 
 ### Breaking Changes
 
@@ -1681,7 +1681,7 @@ Released on May 27, 2020.
 
 ### Breaking Changes
 
-- Kubernetes labels associated with Prefect flow runs now have a `prefect.io/` prefix (e.g. `prefect.io/identifier`) - [#2641](https://github.com/PrefectHQ/prefect/pull/2641)
+- Kubernetes labels associated with Prefect flow runs now have a `prefectlegacy.io/` prefix (e.g. `prefectlegacy.io/identifier`) - [#2641](https://github.com/PrefectHQ/prefect/pull/2641)
 
 ### Contributors
 
@@ -1699,7 +1699,7 @@ Released on May 19, 2020.
 ### Enhancements
 
 - Allow log configuration in Fargate Agent - [#2589](https://github.com/PrefectHQ/prefect/pull/2589)
-- Reuse `prefect.context` for opening `Flow` contexts - [#2581](https://github.com/PrefectHQ/prefect/pull/2581)
+- Reuse `prefectlegacy.context` for opening `Flow` contexts - [#2581](https://github.com/PrefectHQ/prefect/pull/2581)
 - Show a warning when tasks are created in a flow context but not added to a flow - [#2584](https://github.com/PrefectHQ/prefect/pull/2584)
 
 ### Server
@@ -1746,7 +1746,7 @@ Released on May 14, 2020.
 
 ### Features
 
-- Introducing new [Results](https://docs.prefect.io/core/concepts/results.html) interface for working with task results - [#2507](https://github.com/PrefectHQ/prefect/pull/2507)
+- Introducing new [Results](https://docs.prefectlegacy.io/core/concepts/results.html) interface for working with task results - [#2507](https://github.com/PrefectHQ/prefect/pull/2507)
 
 ### Enhancements
 
@@ -1754,8 +1754,8 @@ Released on May 14, 2020.
 - Support using `case` for control flow with the imperative api - [#2546](https://github.com/PrefectHQ/prefect/pull/2546)
 - `flow.visualize` is now able to accept a `format` argument to specify the output file type - [#2447](https://github.com/PrefectHQ/prefect/issues/2447)
 - Docker storage now writes flows to `/opt` dir to remove need for root permissions - [#2025](https://github.com/PrefectHQ/prefect/issues/2025)
-- Add option to [set secrets on Storage objects](https://docs.prefect.io/orchestration/recipes/third_party_auth.html#declaring-secrets-on-storage) - [#2507](https://github.com/PrefectHQ/prefect/pull/2507)
-- Add reserved [default Secret names](https://docs.prefect.io/orchestration/recipes/third_party_auth.html#list-of-default-secret-names) and formats for working with cloud platforms - [#2507](https://github.com/PrefectHQ/prefect/pull/2507)
+- Add option to [set secrets on Storage objects](https://docs.prefectlegacy.io/orchestration/recipes/third_party_auth.html#declaring-secrets-on-storage) - [#2507](https://github.com/PrefectHQ/prefect/pull/2507)
+- Add reserved [default Secret names](https://docs.prefectlegacy.io/orchestration/recipes/third_party_auth.html#list-of-default-secret-names) and formats for working with cloud platforms - [#2507](https://github.com/PrefectHQ/prefect/pull/2507)
 - Add unique naming option to the jobs created by the `KubernetesJobEnvironment` - [#2553](https://github.com/PrefectHQ/prefect/pull/2553)
 - Use `ast.literal_eval` for configuration values - [#2536](https://github.com/PrefectHQ/prefect/issues/2536)
 - Prevent local cycles even if flow validation is deferred - [#2565](https://github.com/PrefectHQ/prefect/pull/2565)
@@ -1769,7 +1769,7 @@ Released on May 14, 2020.
 
 - Add tasks to create issues for Jira and Jira Service Desk [#2431](https://github.com/PrefectHQ/prefect/pull/2431)
 - Add `DbtShellTask`, an extension of ShellTask for working with data build tool (dbt) - [#2526](https://github.com/PrefectHQ/prefect/pull/2526)
-- Add `prefect.tasks.gcp.bigquery.BigQueryLoadFile` - [#2423](https://github.com/PrefectHQ/prefect/issues/2423)
+- Add `prefectlegacy.tasks.gcp.bigquery.BigQueryLoadFile` - [#2423](https://github.com/PrefectHQ/prefect/issues/2423)
 
 ### Fixes
 
@@ -1784,7 +1784,7 @@ Released on May 14, 2020.
 
 - Allow for setting docker daemon at build time using DOCKER_HOST env var to override base_url in docker storage - [#2482](https://github.com/PrefectHQ/prefect/pull/2482)
 - Ensure all calls to `flow.run()` use the same execution logic - [#1994](https://github.com/PrefectHQ/prefect/pull/1994)
-- Moved `prefect.tasks.cloud` to `prefect.tasks.prefect` - [#2404](https://github.com/PrefectHQ/prefect/pull/2404)
+- Moved `prefectlegacy.tasks.cloud` to `prefectlegacy.tasks.prefect` - [#2404](https://github.com/PrefectHQ/prefect/pull/2404)
 - Trigger signature now accepts a dictionary of `[Edge, State]` to allow for more customizable trigger behavior - [#2298](https://github.com/PrefectHQ/prefect/issues/2298)
 - Remove all uses of `credentials_secret` from task library in favor of `PrefectSecret` tasks - [#2507](https://github.com/PrefectHQ/prefect/pull/2507)
 - Remove `Bytes` and `Memory` storage objects - [#2507](https://github.com/PrefectHQ/prefect/pull/2507)
@@ -1897,7 +1897,7 @@ Released on Apr 28, 2020.
 ### Task Library
 
 - Add Pushbullet notification task to send notifications to mobile - [#2366](https://github.com/PrefectHQ/prefect/pull/2366)
-- Add support for Docker volumes and filtering in `prefect.tasks.docker` - [#2384](https://github.com/PrefectHQ/prefect/pull/2384)
+- Add support for Docker volumes and filtering in `prefectlegacy.tasks.docker` - [#2384](https://github.com/PrefectHQ/prefect/pull/2384)
 
 ### Fixes
 
@@ -2035,7 +2035,7 @@ Released on Apr 7, 2020.
 ### Task Library
 
 - Make `project_name` optional for `FlowRunTask` to allow for use with Prefect Core's server - [#2266](https://github.com/PrefectHQ/prefect/pull/2266)
-- Adds `prefect.tasks.docker.container.RemoveContainer`
+- Adds `prefectlegacy.tasks.docker.container.RemoveContainer`
 
 ### Fixes
 
@@ -2440,7 +2440,7 @@ Released on Dec 17, 2019.
 - Agents mark Flow Runs as `Failed` if a deployment error occurs - [#1848](https://github.com/PrefectHQ/prefect/pull/1848)
 - `Submitted` states from Agents include deployment identifier information - [#1848](https://github.com/PrefectHQ/prefect/pull/1848)
 - Update heartbeats to respect Cloud flow settings - [#1851](https://github.com/PrefectHQ/prefect/pull/1851)
-- Add flow run name to `prefect.context` - [#1855](https://github.com/PrefectHQ/prefect/pull/1855)
+- Add flow run name to `prefectlegacy.context` - [#1855](https://github.com/PrefectHQ/prefect/pull/1855)
 - Add `--namespace` option for Kubernetes Agent start CLI command - [#1859](https://github.com/PrefectHQ/prefect/pull/1859)
 - Add Prefect job resource configuration for Kubernetes Agent - [#1859](https://github.com/PrefectHQ/prefect/pull/1859)
 
@@ -2646,7 +2646,7 @@ Released October 29, 2019
 ### Enhancements
 
 - Add the ability to delete task tag limits using the client - [#1622](https://github.com/PrefectHQ/prefect/pull/1622)
-- Adds an "Ask for help" button with a link to the prefect.io support page - [#1637](https://github.com/PrefectHQ/prefect/pull/1637)
+- Adds an "Ask for help" button with a link to the prefectlegacy.io support page - [#1637](https://github.com/PrefectHQ/prefect/pull/1637)
 - Reduces the size of the `prefecthq/prefect` Docker image by ~400MB, which is now the base Docker image used in Flows - [#1648](https://github.com/PrefectHQ/prefect/pull/1648)
 - Add a new healthcheck for environment dependencies - [#1653](https://github.com/PrefectHQ/prefect/pull/1653)
 - Add default 30 second timeout to Client requests - [#1672](https://github.com/PrefectHQ/prefect/pull/1672)
@@ -2945,7 +2945,7 @@ Released August 8, 2019
 
 ### Breaking Changes
 
-- `prefect.Client.graphql()` and `prefect.Client.post()` now use an explicit keyword, not `**kwargs`, for variables or parameters - [#1259](https://github.com/PrefectHQ/prefect/pull/1259)
+- `prefectlegacy.Client.graphql()` and `prefectlegacy.Client.post()` now use an explicit keyword, not `**kwargs`, for variables or parameters - [#1259](https://github.com/PrefectHQ/prefect/pull/1259)
 - `auth add` CLI command replaced with `auth login` - [#1319](https://github.com/PrefectHQ/prefect/pull/1319)
 
 ### Contributors
@@ -3208,7 +3208,7 @@ Released March 24, 2019
 - Environments follow new hierarchy (PIN-3) - [#670](https://github.com/PrefectHQ/prefect/pull/670)
 - Add `OneTimeSchedule` for one-time execution at a specified time - [#680](https://github.com/PrefectHQ/prefect/pull/680)
 - `flow.run` is now a blocking call which will run the Flow, on its schedule, and execute full state-based execution (including retries) - [#690](https://github.com/PrefectHQ/prefect/issues/690)
-- Pre-populate `prefect.context` with various formatted date strings during execution - [#704](https://github.com/PrefectHQ/prefect/pull/704)
+- Pre-populate `prefectlegacy.context` with various formatted date strings during execution - [#704](https://github.com/PrefectHQ/prefect/pull/704)
 - Add ability to overwrite task attributes such as "name" when calling tasks in the functional API - [#717](https://github.com/PrefectHQ/prefect/issues/717)
 - Release Prefect Core under the Apache 2.0 license - [#762](https://github.com/PrefectHQ/prefect/pull/762)
 
@@ -3328,7 +3328,7 @@ Released January 31, 2019
 
 ### Breaking Changes
 
-- Move `prefect.client.result_handlers` to `prefect.engine.result_handlers` - [#512](https://github.com/PrefectHQ/prefect/pull/512)
+- Move `prefectlegacy.client.result_handlers` to `prefectlegacy.engine.result_handlers` - [#512](https://github.com/PrefectHQ/prefect/pull/512)
 - Removed `inputs` kwarg from `TaskRunner.run()` - [#546](https://github.com/PrefectHQ/prefect/pull/546)
 - Moves the `start_task_ids` argument from `FlowRunner.run()` to `Environment.run()` - [#544](https://github.com/PrefectHQ/prefect/issues/544), [#545](https://github.com/PrefectHQ/prefect/pull/545)
 - Convert `timeout` kwarg from `timedelta` to `integer` - [#540](https://github.com/PrefectHQ/prefect/issues/540)
@@ -3394,14 +3394,14 @@ Released January 8, 2019
 - Remove `NoSchedule` and `DateSchedule` schedule classes - [#324](https://github.com/PrefectHQ/prefect/pull/324)
 - Change `serialize()` method to use schemas rather than custom dict - [#318](https://github.com/PrefectHQ/prefect/pull/318)
 - Remove `timestamp` property from `State` classes - [#305](https://github.com/PrefectHQ/prefect/pull/305)
-- Remove the custom JSON encoder library at `prefect.utilities.json` - [#336](https://github.com/PrefectHQ/prefect/pull/336)
+- Remove the custom JSON encoder library at `prefectlegacy.utilities.json` - [#336](https://github.com/PrefectHQ/prefect/pull/336)
 - `flow.parameters` now returns a set of parameters instead of a dictionary - [#337](https://github.com/PrefectHQ/prefect/pull/337)
 - Renamed `to_dotdict` -> `as_nested_dict` - [#339](https://github.com/PrefectHQ/prefect/pull/339)
-- Moved `prefect.utilities.collections.GraphQLResult` to `prefect.utilities.graphql.GraphQLResult` - [#371](https://github.com/PrefectHQ/prefect/pull/371)
+- Moved `prefectlegacy.utilities.collections.GraphQLResult` to `prefectlegacy.utilities.graphql.GraphQLResult` - [#371](https://github.com/PrefectHQ/prefect/pull/371)
 - `SynchronousExecutor` now does _not_ do depth first execution for mapped tasks - [#373](https://github.com/PrefectHQ/prefect/pull/373)
-- Renamed `prefect.utilities.serialization.JSONField` -> `JSONCompatible`, removed its `max_size` feature, and no longer automatically serialize payloads as strings - [#376](https://github.com/PrefectHQ/prefect/pull/376)
-- Renamed `prefect.utilities.serialization.NestedField` -> `Nested` - [#376](https://github.com/PrefectHQ/prefect/pull/376)
-- Renamed `prefect.utilities.serialization.NestedField.dump_fn` -> `NestedField.value_selection_fn` for clarity - [#377](https://github.com/PrefectHQ/prefect/pull/377)
+- Renamed `prefectlegacy.utilities.serialization.JSONField` -> `JSONCompatible`, removed its `max_size` feature, and no longer automatically serialize payloads as strings - [#376](https://github.com/PrefectHQ/prefect/pull/376)
+- Renamed `prefectlegacy.utilities.serialization.NestedField` -> `Nested` - [#376](https://github.com/PrefectHQ/prefect/pull/376)
+- Renamed `prefectlegacy.utilities.serialization.NestedField.dump_fn` -> `NestedField.value_selection_fn` for clarity - [#377](https://github.com/PrefectHQ/prefect/pull/377)
 - Local secrets are now pulled from `secrets` in context instead of `_secrets` - [#382](https://github.com/PrefectHQ/prefect/pull/382)
 - Remove Task and Flow descriptions, Flow project & version attributes - [#383](https://github.com/PrefectHQ/prefect/issues/383)
 - Changed `Schedule` parameter from `on_or_after` to `after` - [#396](https://github.com/PrefectHQ/prefect/issues/396)
@@ -3412,7 +3412,7 @@ Released January 8, 2019
 - `IntervalSchedule` rejects intervals of less than one minute - [#427](https://github.com/PrefectHQ/prefect/pull/427)
 - `FlowRunner` returns a `Running` state, not a `Pending` state, when flows do not finish - [#433](https://github.com/PrefectHQ/prefect/pull/433)
 - Remove the `task_contexts` argument from `FlowRunner.run()` - [#440](https://github.com/PrefectHQ/prefect/pull/440)
-- Remove the leading underscore from Prefect-set context keys - [#446](https://github.com/PrefectHQ/prefect/pull/446)
+- Remove the leading underscore from prefectlegacy-set context keys - [#446](https://github.com/PrefectHQ/prefect/pull/446)
 - Removed throttling tasks within the local cluster - [#470](https://github.com/PrefectHQ/prefect/pull/470)
 - Even `start_tasks` will not run before their state's `start_time` (if the state is `Scheduled`) - [#474](https://github.com/PrefectHQ/prefect/pull/474)
 - `DaskExecutor`'s "processes" keyword argument was renamed "local_processes" - [#477](https://github.com/PrefectHQ/prefect/pull/477)
