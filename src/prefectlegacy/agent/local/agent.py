@@ -145,7 +145,7 @@ class LocalAgent(Agent):
         # show flow logs, these log entries will continue to stream to the users terminal
         # until these child processes exit, even if the agent has already exited.
         p = Popen(
-            [sys.executable, "-m", "prefect", "execute", "flow-run"],
+            [sys.executable, "-m", "prefectlegacy", "execute", "flow-run"],
             stdout=stdout,
             stderr=STDOUT,
             env=env,
