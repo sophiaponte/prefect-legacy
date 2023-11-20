@@ -137,7 +137,7 @@ extras["base_library_ci"] = (
 cmdclass = {
     "verify_version": VerifyVersionCommand,
 }
-cmdclass.update(versioneer.get_cmdclass())
+# cmdclass.update(versioneer.get_cmdclass())
 
 setup(
     name="prefectlegacy",
