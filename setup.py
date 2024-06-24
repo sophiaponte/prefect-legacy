@@ -13,7 +13,7 @@ class VerifyVersionCommand(install):
     description = "verify that the git tag matches our package version"
 
     def run(self):
-        version = versioneer.get_version()
+        version = "1.2.5"  # versioneer.get_version()
         tag = os.getenv("CIRCLE_TAG")
 
         if tag != version:
@@ -137,11 +137,11 @@ extras["base_library_ci"] = (
 cmdclass = {
     "verify_version": VerifyVersionCommand,
 }
-cmdclass.update(versioneer.get_cmdclass())
+# cmdclass.update(versioneer.get_cmdclass())
 
 setup(
     name="prefectlegacy",
-    version=versioneer.get_version(),
+    version="1.2.5",  # versioneer.get_version(),
     cmdclass=cmdclass,
     install_requires=install_requires,
     extras_require=extras,
